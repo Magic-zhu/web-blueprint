@@ -16,7 +16,7 @@
         "./src"
       ]
     },
-    "target": "es5", // 编译的目标是什么版本的
+    "target": "es6", // 编译的目标是什么版本的
     "declaration": true, // 是否自动创建类型声明文件
     "outDir": "./dist/",
     "allowJs": true, // 允许编译javascript文件。

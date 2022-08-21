@@ -5,17 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="../dist/index.iife.js"></script>
+    <script src="../dist/blueprint-iife.min.js"></script>
+    <link rel="stylesheet" href="../src/style/theme.css">
 </head>
 <style>
-
+#app{
+    width: 800px;
+    height: 800px;
+}
 </style>
 
 <body>
     <div id='app'></div>
 </body>
 <script>
-
+    const {BaseNode,BluePrintEditor} = blueprint
+    const editor = new BluePrintEditor(document.getElementById('app'))
+    editor._scene.add(new BaseNode())
 </script>
 
 </html>
