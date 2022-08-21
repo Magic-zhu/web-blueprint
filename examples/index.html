@@ -23,9 +23,12 @@
     const editor = new BluePrintEditor(document.getElementById('app'))
     for (let i = 0; i < 10; i++) {
         const node = new BaseNode({ nodeName: "测试节点" })
-        node.position.set(Math.random() * 100 - 100, 0, Math.random() * 100 - 100)
+        node.position.set(Math.random() * 200 - 100, 0, Math.random() * 200 - 100)
         editor.add(node)
     }
+    const node = new BaseNode({ nodeName: "定位节点", color: "lightgrey" })
+    node.position.set(100, 0, 100)
+    editor.add(node)
 
 </script>
 

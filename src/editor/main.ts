@@ -1,14 +1,20 @@
 import { BaseNode } from "src/blueprint/baseNode"
 import { GridHelper, PerspectiveCamera, Scene, WebGLRenderer, sRGBEncoding, Object3D } from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
-import { TransformControls } from "three/examples/jsm/controls/TransformControls"
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
+import IO from "src/blueprint/IO"
 export class BluePrintEditor {
     container: Element
     _scene: Scene
     constructor(container) {
         this.container = container
         container.style.position = 'relative'
+        this.container.addEventListener('mouseup',(ev)=>{
+            IO.emit('mouseup', ev)
+        })
+        this.container.addEventListener('mousemove',(ev)=>{
+            IO.emit('mousemove', ev)
+        })
         this.init()
     }
 
@@ -33,15 +39,6 @@ export class BluePrintEditor {
         // * 视角控制器
         const orbitControls = new OrbitControls(camera, cssRenderer.domElement);
         orbitControls.enableRotate = false;
-        // * 拖动控制器
-        const transformController = new TransformControls(
-            camera,
-            cssRenderer.domElement
-        );
-        transformController.addEventListener("dragging-changed", function (event) {
-            orbitControls.enabled = !event.value;
-        });
-        scene.add(transformController);
         // * 相机参数设置
         camera.position.set(0, 200, 0); //设置相机位置
         camera.lookAt(scene.position);
@@ -69,11 +66,7 @@ export class BluePrintEditor {
             // 场景渲染
             renderer.render(scene, camera);
             cssRenderer.render(scene, camera);
-            // 刷新帧数
-            // if (options.fps) {
-            //     stats.update();
-            // }
-        };
+        }
 
         render();
     }

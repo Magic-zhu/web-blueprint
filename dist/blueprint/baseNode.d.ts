@@ -3,6 +3,7 @@ import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 export interface NodeParams {
     nodeName: string;
     headerClass?: string;
+    color?: string;
 }
 export declare class BaseNode extends Object3D {
     container: HTMLElement;
@@ -20,10 +21,15 @@ export declare class BaseNode extends Object3D {
     nextNode: BaseNode[];
     headerClass: string;
     nodeName: string;
+    color: string;
+    selected: boolean;
+    active: boolean;
     constructor(params: NodeParams);
     initContainer(): void;
     initHeader(): void;
     initBody(): void;
     initPrePoint(): void;
     initNextPoint(): void;
+    onClick(): void;
+    onMouseMove(): void;
 }
