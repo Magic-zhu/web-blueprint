@@ -1,4 +1,5 @@
-import { GridHelper, PerspectiveCamera, Scene, WebGLRenderer, sRGBEncoding} from "three"
+import { BaseNode } from "src/blueprint/baseNode"
+import { GridHelper, PerspectiveCamera, Scene, WebGLRenderer, sRGBEncoding, Object3D } from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { TransformControls } from "three/examples/jsm/controls/TransformControls"
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
@@ -16,7 +17,7 @@ export class BluePrintEditor {
         const scene = new Scene();
         this._scene = scene
         // * 辅助网格
-        const gridHelper = new GridHelper(300, 50, 0x111111 , 0x111111);
+        const gridHelper = new GridHelper(300, 50, 0x111111, 0x111111);
         scene.add(gridHelper);
         // * 相机
         // ! 为了避免z-fighting问题 初始near设置的较大
@@ -75,5 +76,9 @@ export class BluePrintEditor {
         };
 
         render();
+    }
+
+    add(node: BaseNode) {
+        this._scene.add(node)
     }
 }
