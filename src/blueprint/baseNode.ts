@@ -132,8 +132,4 @@ export class BaseNode extends Object3D {
     onMouseMove() {
 
     }
-
-    set color(newValue: string) {
-
-    }
 }
