@@ -1,11 +1,10 @@
 import { Object3D } from "three";
-import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 export interface NodeParams {
     nodeName: string;
     headerClass?: string;
     color?: string;
 }
-export declare class BaseNode extends Object3D {
+export declare class BaseNode {
     container: HTMLElement;
     header: HTMLElement;
     body: HTMLElement;
@@ -15,7 +14,6 @@ export declare class BaseNode extends Object3D {
     nextPoint: SVGElement;
     inputPoints: [];
     outPutPoints: [];
-    _self: CSS2DObject;
     v: Object3D;
     preNode: BaseNode[];
     nextNode: BaseNode[];

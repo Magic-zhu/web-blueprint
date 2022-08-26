@@ -1,7 +1,7 @@
 {
-  "name": "obiusm",
+  "name": "web-blueprint",
   "version": "0.0.01",
-  "description": "an animation framework",
+  "description": "web-blueprint",
   "main": "./dist/obiusm-umd.min.js",
   "module": "./dist/obiusm-ems.min.js",
   "types": "./dist/index.d.ts",
@@ -23,7 +23,7 @@
     "typescript",
     "javascript"
   ],
-  "author": "朱睿家",
+  "author": "magic-zhu",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Magic-zhu/obiusm/issues"
@@ -43,8 +43,5 @@
     "tslib": "^2.0.3",
     "typescript": "^4.1.2"
   },
-  "dependencies": {
-    "@types/three": "^0.143.1",
-    "three": "^0.143.0"
-  }
+  "files": ["dist/*"]
 }
