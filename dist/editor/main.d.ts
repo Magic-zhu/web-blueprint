@@ -1,8 +1,8 @@
-import { BaseNode } from "src/blueprint/baseNode";
+import { Node } from "src";
 export declare class BluePrintEditor {
     container: HTMLElement;
     scale: number;
     constructor(container: any);
     init(): void;
-    add(node: BaseNode): void;
+    add(node: Node): void;
 }

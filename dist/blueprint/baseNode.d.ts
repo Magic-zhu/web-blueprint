@@ -1,33 +1,18 @@
-import { Object3D } from "three";
-export interface NodeParams {
-    nodeName: string;
-    headerClass?: string;
-    color?: string;
+interface BasePoint {
+    key: string;
+    value: any;
+    type: string;
 }
 export declare class BaseNode {
-    container: HTMLElement;
-    header: HTMLElement;
-    body: HTMLElement;
-    leftBody: HTMLElement;
-    rightBody: HTMLElement;
-    prePoint: SVGElement;
-    nextPoint: SVGElement;
-    inputPoints: [];
+    inputPoints: BasePoint[];
     outPutPoints: [];
-    v: Object3D;
+    variables: any;
+    func: (inputPoints: BasePoint[]) => {};
+    nodeName: string;
+    async: boolean;
     preNode: BaseNode[];
     nextNode: BaseNode[];
-    headerClass: string;
-    nodeName: string;
-    color: string;
-    selected: boolean;
-    active: boolean;
-    constructor(params: NodeParams);
-    initContainer(): void;
-    initHeader(): void;
-    initBody(): void;
-    initPrePoint(): void;
-    initNextPoint(): void;
-    onClick(): void;
-    onMouseMove(): void;
+    constructor();
+    execute(): void;
 }
+export {};

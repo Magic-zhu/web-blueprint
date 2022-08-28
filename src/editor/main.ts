@@ -1,4 +1,4 @@
-import { BaseNode } from "src/blueprint/baseNode"
+import { Node } from "src"
 import IO from "src/blueprint/IO"
 export class BluePrintEditor {
     container: HTMLElement
@@ -31,7 +31,7 @@ export class BluePrintEditor {
 
     }
 
-    add(node: BaseNode): void {
+    add(node: Node): void {
         this.container.appendChild(node.container)
     }
 }

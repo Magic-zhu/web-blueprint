@@ -19,10 +19,14 @@
     <div id='app'></div>
 </body>
 <script>
-    const { BaseNode, BluePrintEditor } = blueprint
+    const { Node, BluePrintEditor } = blueprint
     const editor = new BluePrintEditor(document.getElementById('app'))
-    const node = new BaseNode({ nodeName: "定位节点1", color: "rgba(88,88,88,0.5)" })
-    const node2 = new BaseNode({ nodeName: "定位节点2", color: "rgba(88,88,88,0.5)" })
+    const node = new Node({ nodeName: "定位节点1", color: "rgba(88,88,88,0.5)" })
+    const node2 = new Node({ nodeName: "定位节点2", color: "rgba(88,88,88,0.5)" })
+    node.func = (input) => {
+        console.log(input);
+    } 
+    node.execute()
     editor.add(node)
     editor.add(node2)
 </script>
