@@ -12,6 +12,7 @@ class Line extends BaseLine {
     Path.setAttribute('stroke-width', '2px')
     Path.setAttribute('stroke', 'white')
     Path.setAttribute('fill', 'none')
+    Path.setAttribute('path', path)
     svg.appendChild(Path)
     this.instance = svg
   }
