@@ -1,45 +1,43 @@
-import IO from "./IO"
+import IO from './IO'
 
 export interface BasePoint {
-    key: string
-    value: any
-    type: string
+  key: string
+  value: any
+  type: string
 }
 
 export enum StaticInputType {
-    string = 'string',
-    number = 'number',
-    boolean = 'boolean',
+  string = 'string',
+  number = 'number',
+  boolean = 'boolean',
 }
 
-export type InputType = StaticInputType| string
+export type InputType = StaticInputType | string
 
 export class BaseNode {
+  inputPoints: BasePoint[] = []
+  outPutPoints: BasePoint[] = []
+  variables: any = {}
+  // the fucntion need to execute
+  func: (inputPoints: BasePoint[]) => {}
 
-    inputPoints: BasePoint[] = []
-    outPutPoints: [] = []
-    variables: any = {}
-    // the fucntion need to execute
-    func:(inputPoints: BasePoint[])=>{}
+  // * base attribute
+  nodeName: string = 'Function Name'
+  async: boolean = false
+  _x: number = 0
+  _y: number = 0
 
-    // * base attribute
-    nodeName: string = "Function Name"
-    async: boolean = false
+  // * LINK NODES
+  preNode: BaseNode[] = []
+  nextNode: BaseNode[] = []
 
-    // * LINK NODES
-    preNode: BaseNode[] = []
-    nextNode: BaseNode[] = []
+  constructor() {}
 
+  execute() {
+    this.func(this.inputPoints)
+    this.nextNode.forEach((item) => {
+      item.execute()
+    })
+  }
 
-    constructor() {
-        
-    }
-
-    execute() {
-        console.log(this);
-        this.func(this.inputPoints)
-        this.nextNode.forEach(item=>{
-            item.execute()
-        })
-    }
 }

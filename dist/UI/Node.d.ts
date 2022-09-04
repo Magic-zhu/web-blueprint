@@ -1,8 +1,11 @@
-import { BaseNode } from "src/blueprint/BaseNode";
+import { BaseNode } from 'src/blueprint/BaseNode';
 export interface NodeParams {
     nodeName: string;
     headerClass?: string;
     color?: string;
+    input?: [];
+    x?: number;
+    y?: number;
 }
 export declare class Node extends BaseNode {
     container: HTMLElement;
@@ -22,6 +25,10 @@ export declare class Node extends BaseNode {
     initBody(): void;
     initPrePoint(): void;
     initNextPoint(): void;
-    initInput(): void;
+    initInput(type: string): SVGElement;
     addInput(): void;
+    get x(): number;
+    set x(value: number);
+    get y(): number;
+    set y(value: number);
 }
