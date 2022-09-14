@@ -1,13 +1,13 @@
 import {BaseNode} from 'src/blueprint/BaseNode'
-import {createDiv, createSvg} from 'src/dom/create'
+import {createDiv, createSvg} from 'src/UI/dom/create'
 
 export interface NodeParams {
   nodeName: string
   headerClass?: string
   color?: string
   input?: []
-  x?:number
-  y?:number
+  x?: number
+  y?: number
 }
 
 export class Node extends BaseNode {
@@ -117,21 +117,7 @@ export class Node extends BaseNode {
     circle.setAttribute('r', '4')
     circle.setAttribute('stroke-width', '1px')
     circle.setAttribute('fill', 'none')
-    let color
-    switch (type) {
-      case 'string':
-        color = '#f703cf'
-        break
-      case 'boolean':
-        color = '#8e020b'
-        break
-      case 'object':
-        color = '#20a5e8'
-        break
-      case 'number':
-        color = '#a4fa60'
-        break
-    }
+    const color = this.getColor(type)
     circle.setAttribute('stroke', color)
     svg.appendChild(circle)
     return svg
@@ -155,5 +141,24 @@ export class Node extends BaseNode {
   set y(value) {
     this._y = value
     this.container.style.top = `${this._y}px`
+  }
+
+  getColor(type: string) {
+    let color: string
+    switch (type) {
+      case 'string':
+        color = '#f703cf'
+        break
+      case 'boolean':
+        color = '#8e020b'
+        break
+      case 'object':
+        color = '#20a5e8'
+        break
+      case 'number':
+        color = '#a4fa60'
+        break
+    }
+    return color
   }
 }

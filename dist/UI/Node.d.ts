@@ -31,4 +31,5 @@ export declare class Node extends BaseNode {
     set x(value: number);
     get y(): number;
     set y(value: number);
+    getColor(type: string): string;
 }

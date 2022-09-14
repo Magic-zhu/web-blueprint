@@ -1,4 +1,4 @@
-import {createSvg} from 'src/dom/create'
+import {createSvg} from 'src/UI/dom/create'
 
 class Line extends BaseLine {
   instance: SVGAElement
@@ -18,8 +18,4 @@ class Line extends BaseLine {
   }
 
   update() {}
-
-  getControlPoint(begin: number[], end: number[]): number[] {
-    return []
-  }
 }
