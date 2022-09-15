@@ -1,4 +1,4 @@
-import {Node} from 'src'
+import {Line, Node} from 'src'
 import IO from 'src/blueprint/IO'
 export class BluePrintEditor {
   container: HTMLElement
@@ -35,6 +35,10 @@ export class BluePrintEditor {
 
   add(node: Node): void {
     this.container.appendChild(node.container)
+  }
+
+  addLine(line: Line): void {
+    this.container.appendChild(line.instance)
   }
 
   resize(scale: number) {

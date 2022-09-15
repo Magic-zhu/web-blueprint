@@ -1,4 +1,4 @@
-import { Node } from 'src';
+import { Line, Node } from 'src';
 export declare class BluePrintEditor {
     container: HTMLElement;
     scale: number;
@@ -6,5 +6,6 @@ export declare class BluePrintEditor {
     constructor(container: any);
     init(): void;
     add(node: Node): void;
+    addLine(line: Line): void;
     resize(scale: number): void;
 }

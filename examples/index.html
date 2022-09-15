@@ -1,61 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="../dist/blueprint-iife.min.js"></script>
-    <link rel="stylesheet" href="../src/style/theme.css">
-</head>
-<style>
+    <link rel="stylesheet" href="../src/style/theme.css" />
+  </head>
+  <style>
     #box {
-        width: 800px;
-        height: 800px;
-        overflow: hidden;
-        background-color: #333333;
+      width: 800px;
+      height: 800px;
+      overflow: hidden;
+      background-color: #333333;
     }
     #app {
-        width: 800px;
-        height: 800px;
-        position: relative;
+      width: 800px;
+      height: 800px;
+      position: relative;
     }
-</style>
+  </style>
 
-<body>
+  <body>
     <div id="box">
-        <div id='app'></div>
+      <div id="app"></div>
     </div>
-</body>
-<script>
-    const { Node, BluePrintEditor } = blueprint
+  </body>
+  <script>
+    const {Node, BluePrintEditor, Line, Point} = blueprint
     const editor = new BluePrintEditor(document.getElementById('app'))
     const node = new Node({
-        x:100,
-        y:100, 
-        nodeName: "定位节点1", 
-        input:[
-            {
-                type:'string'
-            },
-            {
-                type:'number'
-            },
-            {
-                type:'object'
-            },
-            {
-                type:'boolean'
-            },
-        ] 
+      x: 100,
+      y: 100,
+      nodeName: '定位节点1',
+      input: [
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+        {
+          type: 'object',
+        },
+        {
+          type: 'boolean',
+        },
+      ],
     })
-    const node2 = new Node({ nodeName: "定位节点2", color: "rgba(88,88,88,0.5)" })
+    const node2 = new Node({nodeName: '定位节点2', color: 'rgba(88,88,88,0.5)'})
     node.func = (input) => {
-        console.log(input);
-    } 
+      console.log(input)
+    }
     node.execute()
     editor.add(node)
     editor.add(node2)
-</script>
-
+    editor.addLine(new Line(new Point(200, 200), new Point(400, 400)))
+  </script>
 </html>

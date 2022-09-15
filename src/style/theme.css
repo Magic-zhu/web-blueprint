@@ -11,6 +11,7 @@
     flex-direction: column;
     box-sizing: border-box;
     position: absolute;
+    z-index: 10;
 }
 
 .theme-container-base:hover {
