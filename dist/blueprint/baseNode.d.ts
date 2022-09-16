@@ -15,6 +15,8 @@ export declare class BaseNode {
     variables: any;
     func: (inputPoints: BasePoint[]) => {};
     nodeName: string;
+    nodeType: string;
+    readonly nodeId: string;
     async: boolean;
     _x: number;
     _y: number;

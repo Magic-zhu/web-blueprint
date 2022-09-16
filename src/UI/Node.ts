@@ -1,5 +1,5 @@
 import {BaseNode} from 'src/blueprint/BaseNode'
-import {createDiv, createSvg} from 'src/UI/dom/create'
+import {createDiv, createSvg} from 'src/dom/create'
 
 export interface NodeParams {
   nodeName: string
@@ -93,6 +93,12 @@ export class Node extends BaseNode {
     polygon.setAttribute('stroke', 'white')
     polygon.setAttribute('fill', 'none')
     svg.appendChild(polygon)
+    svg.addEventListener('mousedown', (ev: MouseEvent) => {
+      IO.emit('click_prePoint', {
+        x: ev.clientX,
+        y: ev.clientY,
+      })
+    })
     this.prePoint = svg
   }
 

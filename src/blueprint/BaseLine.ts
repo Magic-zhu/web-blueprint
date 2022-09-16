@@ -8,7 +8,17 @@ export class BaseLine {
   _height: number
 
   _getControlPoint(begin: Point, end: Point): number[] {
-    return [begin.x + 100, begin.y, end.x - 100, end.y]
+    const middlePoint = begin.middileWith(end)
+    if (begin.x < end.x) {
+      return [middlePoint.x, begin.y, middlePoint.x, end.y]
+    } else {
+      return [
+        begin.x + begin.x - middlePoint.x,
+        begin.y,
+        end.x - (middlePoint.x - end.x),
+        end.y,
+      ]
+    }
   }
 
   _setSize() {

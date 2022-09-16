@@ -1,4 +1,5 @@
 import IO from './IO'
+import {v4 as uuidv4} from 'uuid'
 
 export interface BasePoint {
   key: string
@@ -23,6 +24,9 @@ export class BaseNode {
 
   // * base attribute
   nodeName: string = 'Function Name'
+  nodeType: string = 'Function'
+  readonly nodeId: string = uuidv4()
+  // * base attribute
   async: boolean = false
   _x: number = 0
   _y: number = 0
@@ -39,5 +43,4 @@ export class BaseNode {
       item.execute()
     })
   }
-
 }
