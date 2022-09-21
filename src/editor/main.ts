@@ -11,7 +11,12 @@ export enum MouseDownType {
 export enum EditorEventType {
   'Normal' = 'normal',
   'NodeSelected' = 'NodeSelected',
+  // @ 节点被按下
   'NodeActive' = 'NodeActive',
+  // @ 开始连线的第一个点
+  'LineBegin' = 'LineBegin',
+  // @ 连线时的结束点
+  'LineEnd' = 'LineEnd',
 }
 
 export interface ITransform {
@@ -38,10 +43,12 @@ export class BluePrintEditor {
     translate: [0, 0],
     transformOrigin: '0px 0px',
   }
+
   // @ 当前画布事件状态
   private currentEventType: EditorEventType = EditorEventType.Normal
   // @ 当前操作对象
   private currentTarget: Node
+
 
   constructor(container) {
     // # hook
@@ -59,6 +66,9 @@ export class BluePrintEditor {
     IO.on('NodeInactive', () => {
       this.currentEventType = EditorEventType.Normal
       this.currentTarget = null
+    })
+    IO.on('ConnectPointClick',()=>{
+      this.currentEventType = 
     })
     // preventDefault
     container.oncontextmenu = function () {
