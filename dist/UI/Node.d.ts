@@ -27,9 +27,9 @@ export declare class Node extends BaseNode {
     initNextPoint(): void;
     initInput(type: string): SVGElement;
     addInput(): void;
+    getColor(type: string): string;
     get x(): number;
     set x(value: number);
     get y(): number;
     set y(value: number);
-    getColor(type: string): string;
 }

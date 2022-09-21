@@ -1,5 +1,4 @@
-import IO from './IO'
-import {v4 as uuidv4} from 'uuid'
+import {uuid} from './UUID'
 
 export interface BasePoint {
   key: string
@@ -7,13 +6,13 @@ export interface BasePoint {
   type: string
 }
 
-export enum StaticInputType {
-  string = 'string',
-  number = 'number',
-  boolean = 'boolean',
-}
+// export enum StaticInputType {
+//   string = 'string',
+//   number = 'number',
+//   boolean = 'boolean',
+// }
 
-export type InputType = StaticInputType | string
+// export type InputType = StaticInputType | string
 
 export class BaseNode {
   inputPoints: BasePoint[] = []
@@ -25,7 +24,7 @@ export class BaseNode {
   // * base attribute
   nodeName: string = 'Function Name'
   nodeType: string = 'Function'
-  readonly nodeId: string = uuidv4()
+  readonly nodeId: string = uuid()
   // * base attribute
   async: boolean = false
   _x: number = 0

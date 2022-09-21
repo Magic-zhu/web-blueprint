@@ -125,6 +125,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/uuid@^8.3.4":
+  "integrity" "sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw=="
+  "resolved" "https://registry.npmjs.org/@types/uuid/-/uuid-8.3.4.tgz"
+  "version" "8.3.4"
+
 "@typescript-eslint/eslint-plugin@^5.3.1":
   "integrity" "sha512-cFImaoIr5Ojj358xI/SDhjog57OK2NqlpxwdcgyxDA3bJlZcJq5CPzUXtpD7CxI2Hm6ATU7w5fQnnkVnmwpHqw=="
   "resolved" "https://registry.npmmirror.com/@typescript-eslint/eslint-plugin/download/@typescript-eslint/eslint-plugin-5.3.1.tgz"
@@ -397,6 +402,11 @@
   "resolved" "https://registry.nlark.com/eslint-config-google/download/eslint-config-google-0.14.0.tgz"
   "version" "0.14.0"
 
+"eslint-config-prettier@^8.5.0":
+  "integrity" "sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q=="
+  "resolved" "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-8.5.0.tgz"
+  "version" "8.5.0"
+
 "eslint-scope@^5.1.1":
   "integrity" "sha1-54blmmbLkrP2wfsNUIqrF0hI9Iw="
   "resolved" "https://registry.nlark.com/eslint-scope/download/eslint-scope-5.1.1.tgz"
@@ -430,7 +440,7 @@
   "resolved" "https://registry.npmmirror.com/eslint-visitor-keys/download/eslint-visitor-keys-3.1.0.tgz?cache=0&sync_timestamp=1636378421298&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Feslint-visitor-keys%2Fdownload%2Feslint-visitor-keys-3.1.0.tgz"
   "version" "3.1.0"
 
-"eslint@*", "eslint@^6.0.0 || ^7.0.0 || ^8.0.0", "eslint@^8.2.0", "eslint@>=5", "eslint@>=5.16.0":
+"eslint@*", "eslint@^6.0.0 || ^7.0.0 || ^8.0.0", "eslint@^8.2.0", "eslint@>=5", "eslint@>=5.16.0", "eslint@>=7.0.0":
   "integrity" "sha1-RNP7UG0PhmpQbZeg/A6Q7m0GqBU="
   "resolved" "https://registry.npmmirror.com/eslint/download/eslint-8.2.0.tgz?cache=0&sync_timestamp=1636156033142&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Feslint%2Fdownload%2Feslint-8.2.0.tgz"
   "version" "8.2.0"
@@ -1088,6 +1098,13 @@
   "version" "2.8.2"
   dependencies:
     "estree-walker" "^0.6.1"
+
+"rollup@^1.20.0||^2.0.0", "rollup@^2.0.0", "rollup@^2.14.0", "rollup@^2.34.2", "rollup@>=1.11.0", "rollup@>=1.12.0", "rollup@>=1.26.3":
+  "integrity" "sha512-x4KsrCgwQ7ZJPcFA/SUu6QVcYlO7uRLfLAy0DSA4NS2eG8japdbpM50ToH7z4iObodRYOJ0soneF0iaQRJ6zhA=="
+  "resolved" "https://registry.npmjs.org/rollup/-/rollup-2.79.0.tgz"
+  "version" "2.79.0"
+  optionalDependencies:
+    "fsevents" "~2.3.2"
 
 "run-parallel@^1.1.9":
   "integrity" "sha1-ZtE2jae9+SHrnZW9GpIp5/IaQ+4="

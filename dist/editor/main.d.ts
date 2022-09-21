@@ -4,6 +4,11 @@ export declare enum MouseDownType {
     'RIGHT' = 2,
     'NONE' = -1
 }
+export declare enum EditorEventType {
+    'Normal' = "normal",
+    'NodeSelected' = "NodeSelected",
+    'NodeActive' = "NodeActive"
+}
 export interface ITransform {
     transformOrigin?: string;
     translate?: number[];
@@ -11,12 +16,16 @@ export interface ITransform {
 export declare class BluePrintEditor {
     container: HTMLElement;
     lineContainer: SVGAElement;
+    graph: Node[];
+    lineGraph: Line[];
     private scale;
     private _orginSize;
     private _mouseDownType;
     private _mouseDownPosition;
     private _translateLast;
     private _transform;
+    private currentEventType;
+    private currentTarget;
     constructor(container: any);
     private init;
     add(node: Node): void;
@@ -26,4 +35,6 @@ export declare class BluePrintEditor {
     private setMouseDownType;
     private recordPosition;
     private initLineContainer;
+    private PreNodeHandler;
+    private ScaleHandler;
 }

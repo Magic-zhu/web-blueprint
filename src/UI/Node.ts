@@ -1,5 +1,6 @@
 import {BaseNode} from 'src/blueprint/BaseNode'
 import {createDiv, createSvg} from 'src/dom/create'
+import IO from 'src/blueprint/IO'
 
 export interface NodeParams {
   nodeName: string
@@ -19,7 +20,7 @@ export class Node extends BaseNode {
   rightBody: HTMLElement
   prePoint: SVGElement
   nextPoint: SVGElement
-  headerClass: string = 'theme-container-base-header'
+  headerClass: string = 'wb-container-base-header'
   color: string
 
   // * status attribte
@@ -56,8 +57,27 @@ export class Node extends BaseNode {
 
   initContainer() {
     const div = createDiv()
-    div.className = 'theme-container-base'
+    div.className = 'wb-container-base'
     this.container = div
+    // this.container.addEventListener('click', () => {
+    //   if (this.selected) {
+    //     // !! attention to the white space
+    //     this.container.className = this.container.className.replace(
+    //       ' selected',
+    //       '',
+    //     )
+    //   } else {
+    //     this.container.className = this.container.className + ' selected'
+    //   }
+    //   this.selected = !this.selected
+    //   IO.emit('NodeSelected', this)
+    // })
+    this.container.addEventListener('mousedown', () => {
+      IO.emit('NodeActive', this)
+    })
+    this.container.addEventListener('mouseup', () => {
+      IO.emit('NodeInactive', this)
+    })
   }
 
   initHeader() {
@@ -72,11 +92,11 @@ export class Node extends BaseNode {
 
   initBody() {
     const div = createDiv()
-    div.className = 'theme-container-base-body'
+    div.className = 'wb-container-base-body'
     const left = createDiv()
-    left.className = 'theme-container-base-body-left'
+    left.className = 'wb-container-base-body-left'
     const right = createDiv()
-    right.className = 'theme-container-base-body-right'
+    right.className = 'wb-container-base-body-right'
     div.appendChild(left)
     div.appendChild(right)
     this.leftBody = left
@@ -116,7 +136,7 @@ export class Node extends BaseNode {
 
   initInput(type: string) {
     const svg: SVGElement = createSvg('svg')
-    svg.setAttribute('class', 'theme-inputPoint-' + type)
+    svg.setAttribute('class', 'wb-inputPoint-' + type)
     const circle = createSvg('circle')
     circle.setAttribute('cx', '5')
     circle.setAttribute('cy', '5')
@@ -130,24 +150,6 @@ export class Node extends BaseNode {
   }
 
   addInput() {}
-
-  get x() {
-    return this._x
-  }
-
-  set x(value) {
-    this._x = value
-    this.container.style.left = `${this._x}px`
-  }
-
-  get y() {
-    return this._x
-  }
-
-  set y(value) {
-    this._y = value
-    this.container.style.top = `${this._y}px`
-  }
 
   getColor(type: string) {
     let color: string
@@ -166,5 +168,23 @@ export class Node extends BaseNode {
         break
     }
     return color
+  }
+
+  get x(): number {
+    return this._x
+  }
+
+  set x(value: number) {
+    this._x = value
+    this.container.style.left = `${this._x}px`
+  }
+
+  get y(): number {
+    return this._y
+  }
+
+  set y(value: number) {
+    this._y = value
+    this.container.style.top = `${this._y}px`
   }
 }

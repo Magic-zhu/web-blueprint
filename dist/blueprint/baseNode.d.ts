@@ -3,12 +3,6 @@ export interface BasePoint {
     value: any;
     type: string;
 }
-export declare enum StaticInputType {
-    string = "string",
-    number = "number",
-    boolean = "boolean"
-}
-export declare type InputType = StaticInputType | string;
 export declare class BaseNode {
     inputPoints: BasePoint[];
     outPutPoints: BasePoint[];
