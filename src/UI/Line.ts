@@ -23,4 +23,8 @@ export class Line extends BaseLine {
     const path = `M${begin.x},${begin.y} C${cp[0]},${cp[1]} ${cp[2]},${cp[3]} ${end.x},${end.y}`
     this.instance.setAttribute('d', path)
   }
+
+  destory() {
+    this.instance.parentNode.removeChild(this.instance)
+  }
 }

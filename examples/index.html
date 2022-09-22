@@ -27,6 +27,7 @@
     </div>
   </body>
   <script>
+    // @ts-ignore
     const {Node, BluePrintEditor, Line, Point} = blueprint
     const editor = new BluePrintEditor(document.getElementById('app'))
     const node = new Node({
@@ -48,7 +49,12 @@
         },
       ],
     })
-    const node2 = new Node({nodeName: '定位节点2', color: 'rgba(88,88,88,0.5)'})
+    const node2 = new Node({
+      nodeName: '定位节点2',
+      color: 'rgba(88,88,88,0.5)',
+      x: 400,
+      y: 200,
+    })
     node.func = (input) => {
       console.log(input)
     }

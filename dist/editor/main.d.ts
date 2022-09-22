@@ -6,7 +6,6 @@ export declare enum MouseDownType {
 }
 export declare enum EditorEventType {
     'Normal' = "normal",
-    'NodeSelected' = "NodeSelected",
     'NodeActive' = "NodeActive",
     'LineBegin' = "LineBegin",
     'LineEnd' = "LineEnd"
@@ -14,6 +13,11 @@ export declare enum EditorEventType {
 export interface ITransform {
     transformOrigin?: string;
     translate?: number[];
+}
+export interface EventInfo {
+    node?: Node;
+    pos?: number[];
+    isPre?: boolean;
 }
 export declare class BluePrintEditor {
     container: HTMLElement;
@@ -28,6 +32,7 @@ export declare class BluePrintEditor {
     private _transform;
     private currentEventType;
     private currentTarget;
+    private beginNode;
     private currentLine;
     constructor(container: any);
     private init;
@@ -41,4 +46,5 @@ export declare class BluePrintEditor {
     private PreNodeHandler;
     private ScaleHandler;
     private NodeMoveHandler;
+    private NodeActiveHandler;
 }

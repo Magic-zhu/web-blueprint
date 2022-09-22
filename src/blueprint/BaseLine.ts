@@ -1,3 +1,4 @@
+import {Node} from 'src/UI/Node'
 import {Point} from './Point'
 
 export class BaseLine {
@@ -6,6 +7,8 @@ export class BaseLine {
   color: string = 'white'
   _width: number
   _height: number
+  beginNode: Node
+  endNode: Node
 
   _getControlPoint(begin: Point, end: Point): number[] {
     const middlePoint = begin.middileWith(end)

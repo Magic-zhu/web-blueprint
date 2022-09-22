@@ -1,4 +1,4 @@
-import { Line } from 'src'
+import {Line} from 'src'
 import {uuid} from './UUID'
 
 export interface BasePoint {
@@ -47,6 +47,10 @@ export class BaseNode {
   }
 
   getPrePointPosition() {
-    return [this._x + 10,this._y + 32 + 10]
+    return [this._x + 10, this._y + 32 + 10 + 5]
+  }
+
+  getNextPointPosition() {
+    return [this._x + 200 - 10, this._y + 32 + 10 + 5]
   }
 }

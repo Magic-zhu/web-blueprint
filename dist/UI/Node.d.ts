@@ -7,6 +7,10 @@ export interface NodeParams {
     x?: number;
     y?: number;
 }
+export interface Position {
+    x: number;
+    y: number;
+}
 export declare class Node extends BaseNode {
     container: HTMLElement;
     header: HTMLElement;
@@ -32,4 +36,8 @@ export declare class Node extends BaseNode {
     set x(value: number);
     get y(): number;
     set y(value: number);
+    get position(): Position;
+    set position(pos: Position);
+    connect(info: any): void;
+    updateRelativeLines(x: number, y: number): void;
 }

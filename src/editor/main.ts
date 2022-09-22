@@ -10,7 +10,6 @@ export enum MouseDownType {
 
 export enum EditorEventType {
   'Normal' = 'normal',
-  'NodeSelected' = 'NodeSelected',
   // @ 节点被按下
   'NodeActive' = 'NodeActive',
   // @ 开始连线的第一个点
@@ -22,6 +21,12 @@ export enum EditorEventType {
 export interface ITransform {
   transformOrigin?: string
   translate?: number[]
+}
+
+export interface EventInfo {
+  node?: Node
+  pos?: number[]
+  isPre?: boolean
 }
 export class BluePrintEditor {
   container: HTMLElement
@@ -48,39 +53,69 @@ export class BluePrintEditor {
   private currentEventType: EditorEventType = EditorEventType.Normal
   // @ 当前操作对象
   private currentTarget: Node
+  // @ 连线断点对象
+  private beginNode: Node
   // @ 当前操作的线
   private currentLine: Line
 
   constructor(container) {
     // # hook
     IO.emit('beforeCreated')
-    IO.on('NodeSelected', () => {})
-    IO.on('NodeActive', (node: Node) => {
-      this.currentEventType = EditorEventType.NodeActive
-      this.currentTarget = node
-      this._mouseDownPosition[0] = 0
-      this._mouseDownPosition[1] = 0
-      this._mouseDownPosition[2] = node.x
-      this._mouseDownPosition[3] = node.y
-    })
-    IO.on('NodeInactive', () => {
-      this.currentEventType = EditorEventType.Normal
-      this.currentTarget = null
-    })
-    IO.on('ConnectPointClick', (info: any) => {
-      this.currentTarget = info.node
-      if (this.currentEventType !== EditorEventType.LineBegin) {
-        this.currentEventType = EditorEventType.LineBegin
-        const t = new Line(
-          new Point(info.pos[0], info.pos[1]),
-          new Point(info.pos[0], info.pos[1]),
-        )
-        this.currentLine = t
-        this.addLine(t)
-      } else {
-        this.currentEventType = EditorEventType.LineEnd
-      }
-    })
+    IO.on(
+      'NodeActive',
+      (node: Node) => {
+        if (this.currentEventType === EditorEventType.LineBegin) return
+        this.NodeActiveHandler(node)
+      },
+      {only: true},
+    )
+    IO.on(
+      'NodeInactive',
+      () => {
+        if (this.currentEventType !== EditorEventType.LineBegin) {
+          this.currentEventType = EditorEventType.Normal
+        }
+        this.currentTarget = null
+      },
+      {only: true},
+    )
+    IO.on(
+      'ConnectPointClick',
+      (info: any) => {
+        this.currentTarget = info.node
+        if (this.currentEventType !== EditorEventType.LineBegin) {
+          this.currentEventType = EditorEventType.LineBegin
+          //@ 记录一下开始端点
+          this.beginNode = info.node
+
+          const t = new Line(
+            new Point(info.pos[0], info.pos[1]),
+            new Point(info.pos[0], info.pos[1]),
+          )
+          this.currentLine = t
+          this.addLine(t)
+        } else {
+          this.currentEventType = EditorEventType.LineEnd
+          this.currentLine.update(
+            this.currentLine._begin,
+            new Point(info.pos[0], info.pos[1]),
+          )
+          this.lineGraph.push(this.currentLine)
+          // @ 连接信息注入
+          info.node = this.beginNode
+          info.line = this.currentLine
+          this.currentTarget.connect(info)
+          info.isPre = !info.isPre
+          info.node = this.currentTarget
+          info.node = this.beginNode.connect(info)
+          this.beginNode = null
+          this.currentLine = null
+          this.currentEventType = EditorEventType.Normal
+        }
+      },
+      {only: true},
+    )
+    IO.on('ConnectPointEnter', (info) => {}, {only: true})
     // preventDefault
     container.oncontextmenu = function () {
       return false
@@ -98,17 +133,19 @@ export class BluePrintEditor {
     this.container.addEventListener('mousedown', (ev: MouseEvent) => {
       this.setMouseDownType(ev.button)
       this.recordPosition(ev.clientX, ev.clientY)
-      console.log(ev)
     })
     this.container.addEventListener('mouseup', (ev) => {
       this._mouseDownType = -1
       this._transform.translate = [...this._translateLast]
       this._mouseDownPosition = []
-      IO.emit('mouseup', ev)
+      if (this.currentEventType === EditorEventType.LineBegin) {
+        this.currentLine.destory()
+        this.currentLine = null
+        this.currentEventType = EditorEventType.Normal
+      }
     })
     // @ 处理鼠标移动事件
     this.container.addEventListener('mousemove', (ev) => {
-      IO.emit('mousemove', ev)
       // @ 移动画布
       if (this._mouseDownType == MouseDownType.RIGHT) {
         this.translate(ev)
@@ -144,7 +181,6 @@ export class BluePrintEditor {
 
   addLine(line: Line): void {
     this.lineContainer.appendChild(line.instance)
-    this.lineGraph.push(line)
   }
 
   translate(ev: MouseEvent) {
@@ -189,6 +225,7 @@ export class BluePrintEditor {
   // @ 画布缩放
   private ScaleHandler(ev: WheelEvent) {
     if (ev.deltaY < 0) {
+      if (this.scale >= 1) return
       this.scale += 0.1
       this.container.style.transformOrigin = `${ev.x}px ${ev.y}px`
       this.container.style.transform = `translate(${this._transform.translate[0]}px, ${this._transform.translate[1]}px) scale(${this.scale})`
@@ -200,9 +237,18 @@ export class BluePrintEditor {
   }
 
   private NodeMoveHandler(ev: MouseEvent) {
-    this.currentTarget.x =
-      ev.clientX - this._mouseDownPosition[0] + this._mouseDownPosition[2]
-    this.currentTarget.y =
-      ev.clientY - this._mouseDownPosition[1] + this._mouseDownPosition[3]
+    this.currentTarget.position = {
+      x: ev.clientX - this._mouseDownPosition[0] + this._mouseDownPosition[2],
+      y: ev.clientY - this._mouseDownPosition[1] + this._mouseDownPosition[3],
+    }
+  }
+
+  private NodeActiveHandler(node: Node) {
+    this.currentEventType = EditorEventType.NodeActive
+    this.currentTarget = node
+    this._mouseDownPosition[0] = 0
+    this._mouseDownPosition[1] = 0
+    this._mouseDownPosition[2] = node.x
+    this._mouseDownPosition[3] = node.y
   }
 }

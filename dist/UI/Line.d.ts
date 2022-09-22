@@ -4,4 +4,5 @@ export declare class Line extends BaseLine {
     instance: SVGAElement;
     constructor(begin: Point, end: Point);
     update(begin: Point, end: Point): void;
+    destory(): void;
 }

@@ -1,6 +1,8 @@
 import {BaseNode} from 'src/blueprint/BaseNode'
 import {createDiv, createSvg} from 'src/dom/create'
 import IO from 'src/blueprint/IO'
+import {Line} from './Line'
+import {Point} from 'src/blueprint/Point'
 
 export interface NodeParams {
   nodeName: string
@@ -9,6 +11,11 @@ export interface NodeParams {
   input?: []
   x?: number
   y?: number
+}
+
+export interface Position {
+  x: number
+  y: number
 }
 
 export class Node extends BaseNode {
@@ -113,11 +120,30 @@ export class Node extends BaseNode {
     polygon.setAttribute('stroke', 'white')
     polygon.setAttribute('fill', 'none')
     svg.appendChild(polygon)
+    svg.addEventListener('mousedown', (ev: MouseEvent) => {
+      ev.cancelBubble = true
+    })
+    svg.addEventListener('mouseup', (ev: MouseEvent) => {
+      ev.cancelBubble = true
+    })
     svg.addEventListener('click', (ev: MouseEvent) => {
       ev.cancelBubble = true
       IO.emit('ConnectPointClick', {
         pos: this.getPrePointPosition(),
         node: this,
+        isPre: true,
+      })
+    })
+    svg.addEventListener('mouseenter', () => {
+      IO.emit('ConnectPointEnter', {
+        node: this,
+        isPre: true,
+      })
+    })
+    svg.addEventListener('mouseleave', () => {
+      IO.emit('ConnectPointLeave', {
+        node: this,
+        isPre: true,
       })
     })
     this.prePoint = svg
@@ -132,6 +158,20 @@ export class Node extends BaseNode {
     polygon.setAttribute('stroke', 'white')
     polygon.setAttribute('fill', 'none')
     svg.appendChild(polygon)
+    svg.addEventListener('mousedown', (ev: MouseEvent) => {
+      ev.cancelBubble = true
+    })
+    svg.addEventListener('mouseup', (ev: MouseEvent) => {
+      ev.cancelBubble = true
+    })
+    svg.addEventListener('click', (ev: MouseEvent) => {
+      ev.cancelBubble = true
+      IO.emit('ConnectPointClick', {
+        pos: this.getNextPointPosition(),
+        node: this,
+        isPre: false,
+      })
+    })
     this.nextPoint = svg
   }
 
@@ -187,5 +227,53 @@ export class Node extends BaseNode {
   set y(value: number) {
     this._y = value
     this.container.style.top = `${this._y}px`
+  }
+
+  get position() {
+    return {
+      x: this._x,
+      y: this._y,
+    }
+  }
+
+  set position(pos: Position) {
+    this.x = pos.x
+    this.y = pos.y
+    this.updateRelativeLines(pos.x, pos.y)
+  }
+
+  connect(info) {
+    if (info.isPre) {
+      this.preNodes.push(info.node)
+      const inside: any = this.prePoint.childNodes[0]
+      inside.setAttribute('fill', 'white')
+      this.preLines.push(info.line)
+      info.line.endNode = this
+    } else {
+      this.nextNodes.push(info.node)
+      const inside: any = this.nextPoint.childNodes[0]
+      inside.setAttribute('fill', 'white')
+      this.nextLines.push(info.line)
+      info.line.beginNode = this
+    }
+  }
+
+  updateRelativeLines(x: number, y: number) {
+    const [ix, iy] = this.getPrePointPosition()
+    this.preLines.forEach((line: Line) => {
+      if (line.beginNode.nodeId === this.nodeId) {
+        line.update(new Point(ix, iy), line._end)
+      } else {
+        line.update(line._begin, new Point(ix, iy))
+      }
+    })
+    this.nextLines.forEach((line: Line) => {
+      const [ix, iy] = this.getNextPointPosition()
+      if (line.beginNode.nodeId === this.nodeId) {
+        line.update(new Point(ix, iy), line._end)
+      } else {
+        line.update(line._begin, new Point(ix, iy))
+      }
+    })
   }
 }
