@@ -47,4 +47,5 @@ export declare class BluePrintEditor {
     private ScaleHandler;
     private NodeMoveHandler;
     private NodeActiveHandler;
+    private getOffset;
 }

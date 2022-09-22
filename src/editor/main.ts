@@ -161,9 +161,15 @@ export class BluePrintEditor {
       }
       // @ 连线模式
       if (this.currentEventType === EditorEventType.LineBegin) {
+        console.log(ev);
+        
+        const [ox, oy] = this.getOffset()
         this.currentLine.update(
           this.currentLine._begin,
-          new Point(ev.clientX, ev.clientY),
+          new Point(
+            ev.clientX - this._translateLast[0] - ox,
+            ev.clientY - this._translateLast[1] - oy,
+          ),
         )
       }
     })
@@ -193,8 +199,8 @@ export class BluePrintEditor {
   }
 
   resize(scale: number) {
-    this.container.style.width = this._orginSize[0] * scale + 'px'
-    this.container.style.height = this._orginSize[1] * scale + 'px'
+    // this.container.style.width = this._orginSize[0] / scale + 'px'
+    // this.container.style.height = this._orginSize[1] / scale + 'px'
   }
 
   private setMouseDownType(type: MouseDownType): void {
@@ -228,10 +234,13 @@ export class BluePrintEditor {
       if (this.scale >= 1) return
       this.scale += 0.1
       this.container.style.transformOrigin = `${ev.x}px ${ev.y}px`
+      this._transform.transformOrigin = `${ev.x}px ${ev.y}px`
       this.container.style.transform = `translate(${this._transform.translate[0]}px, ${this._transform.translate[1]}px) scale(${this.scale})`
     } else {
+      if (this.scale < 0.3) return
       this.scale -= 0.1
       this.container.style.transformOrigin = `${ev.x}px ${ev.y}px`
+      this._transform.transformOrigin = `${ev.x}px ${ev.y}px`
       this.container.style.transform = `translate(${this._transform.translate[0]}px, ${this._transform.translate[1]}px) scale(${this.scale})`
     }
   }
@@ -250,5 +259,16 @@ export class BluePrintEditor {
     this._mouseDownPosition[1] = 0
     this._mouseDownPosition[2] = node.x
     this._mouseDownPosition[3] = node.y
+  }
+
+  // @ 获取坐标偏移量
+  private getOffset() {
+    const originOffset: string[] = this._transform.transformOrigin
+      .replace(/px/g, '')
+      .split(' ')
+    
+    const ox = 0
+    const oy = 0
+    return [ox, oy]
   }
 }

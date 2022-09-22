@@ -22,4 +22,5 @@ export declare class BaseNode {
     constructor();
     execute(): void;
     getPrePointPosition(): number[];
+    getNextPointPosition(): number[];
 }
