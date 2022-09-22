@@ -1,3 +1,4 @@
+import { Line } from 'src';
 export interface BasePoint {
     key: string;
     value: any;
@@ -14,8 +15,11 @@ export declare class BaseNode {
     async: boolean;
     _x: number;
     _y: number;
-    preNode: BaseNode[];
-    nextNode: BaseNode[];
+    preNodes: BaseNode[];
+    nextNodes: BaseNode[];
+    preLines: Line[];
+    nextLines: Line[];
     constructor();
     execute(): void;
+    getPrePointPosition(): number[];
 }

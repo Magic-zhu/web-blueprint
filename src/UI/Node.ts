@@ -114,7 +114,11 @@ export class Node extends BaseNode {
     polygon.setAttribute('fill', 'none')
     svg.appendChild(polygon)
     svg.addEventListener('click', (ev: MouseEvent) => {
-      IO.emit('ConnectPointClick', this)
+      ev.cancelBubble = true
+      IO.emit('ConnectPointClick', {
+        pos: this.getPrePointPosition(),
+        node: this,
+      })
     })
     this.prePoint = svg
   }

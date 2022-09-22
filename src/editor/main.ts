@@ -1,4 +1,4 @@
-import {Line, Node} from 'src'
+import {Line, Node, Point} from 'src'
 import IO from 'src/blueprint/IO'
 import {createSvg} from 'src/dom/create'
 
@@ -48,7 +48,8 @@ export class BluePrintEditor {
   private currentEventType: EditorEventType = EditorEventType.Normal
   // @ 当前操作对象
   private currentTarget: Node
-
+  // @ 当前操作的线
+  private currentLine: Line
 
   constructor(container) {
     // # hook
@@ -61,14 +62,24 @@ export class BluePrintEditor {
       this._mouseDownPosition[1] = 0
       this._mouseDownPosition[2] = node.x
       this._mouseDownPosition[3] = node.y
-      console.log(this._mouseDownPosition)
     })
     IO.on('NodeInactive', () => {
       this.currentEventType = EditorEventType.Normal
       this.currentTarget = null
     })
-    IO.on('ConnectPointClick',()=>{
-      this.currentEventType = 
+    IO.on('ConnectPointClick', (info: any) => {
+      this.currentTarget = info.node
+      if (this.currentEventType !== EditorEventType.LineBegin) {
+        this.currentEventType = EditorEventType.LineBegin
+        const t = new Line(
+          new Point(info.pos[0], info.pos[1]),
+          new Point(info.pos[0], info.pos[1]),
+        )
+        this.currentLine = t
+        this.addLine(t)
+      } else {
+        this.currentEventType = EditorEventType.LineEnd
+      }
     })
     // preventDefault
     container.oncontextmenu = function () {
@@ -109,10 +120,14 @@ export class BluePrintEditor {
         this.currentEventType == EditorEventType.NodeActive &&
         this._mouseDownPosition[0] != 0
       ) {
-        this.currentTarget.x =
-          ev.clientX - this._mouseDownPosition[0] + this._mouseDownPosition[2]
-        this.currentTarget.y =
-          ev.clientY - this._mouseDownPosition[1] + this._mouseDownPosition[3]
+        this.NodeMoveHandler(ev)
+      }
+      // @ 连线模式
+      if (this.currentEventType === EditorEventType.LineBegin) {
+        this.currentLine.update(
+          this.currentLine._begin,
+          new Point(ev.clientX, ev.clientY),
+        )
       }
     })
     // @ 处理滚轮事件
@@ -182,5 +197,12 @@ export class BluePrintEditor {
       this.container.style.transformOrigin = `${ev.x}px ${ev.y}px`
       this.container.style.transform = `translate(${this._transform.translate[0]}px, ${this._transform.translate[1]}px) scale(${this.scale})`
     }
+  }
+
+  private NodeMoveHandler(ev: MouseEvent) {
+    this.currentTarget.x =
+      ev.clientX - this._mouseDownPosition[0] + this._mouseDownPosition[2]
+    this.currentTarget.y =
+      ev.clientY - this._mouseDownPosition[1] + this._mouseDownPosition[3]
   }
 }

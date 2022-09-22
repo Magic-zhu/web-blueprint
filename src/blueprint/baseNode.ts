@@ -1,3 +1,4 @@
+import { Line } from 'src'
 import {uuid} from './UUID'
 
 export interface BasePoint {
@@ -31,15 +32,21 @@ export class BaseNode {
   _y: number = 0
 
   // * LINK NODES
-  preNode: BaseNode[] = []
-  nextNode: BaseNode[] = []
+  preNodes: BaseNode[] = []
+  nextNodes: BaseNode[] = []
+  preLines: Line[] = []
+  nextLines: Line[] = []
 
   constructor() {}
 
   execute() {
     this.func(this.inputPoints)
-    this.nextNode.forEach((item) => {
+    this.nextNodes.forEach((item) => {
       item.execute()
     })
+  }
+
+  getPrePointPosition() {
+    return [this._x + 10,this._y + 32 + 10]
   }
 }

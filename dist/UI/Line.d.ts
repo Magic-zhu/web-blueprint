@@ -3,5 +3,5 @@ import { Point } from 'src/blueprint/Point';
 export declare class Line extends BaseLine {
     instance: SVGAElement;
     constructor(begin: Point, end: Point);
-    update(): void;
+    update(begin: Point, end: Point): void;
 }
