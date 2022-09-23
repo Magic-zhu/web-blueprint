@@ -4,7 +4,7 @@ import {Point} from './Point'
 export class BaseLine {
   _begin: Point
   _end: Point
-  color: string = 'white'
+  _color: string = 'white'
   _width: number
   _height: number
   beginNode: Node

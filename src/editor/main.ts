@@ -1,6 +1,7 @@
 import {Line, Node, Point} from 'src'
 import IO from 'src/blueprint/IO'
 import {createSvg} from 'src/dom/create'
+import {mat3, vec2} from 'gl-matrix'
 
 export enum MouseDownType {
   'LEFT' = 0,
@@ -82,6 +83,7 @@ export class BluePrintEditor {
     IO.on(
       'ConnectPointClick',
       (info: any) => {
+        console.log(info)
         this.currentTarget = info.node
         if (this.currentEventType !== EditorEventType.LineBegin) {
           this.currentEventType = EditorEventType.LineBegin
@@ -161,16 +163,11 @@ export class BluePrintEditor {
       }
       // @ 连线模式
       if (this.currentEventType === EditorEventType.LineBegin) {
-        console.log(ev);
-        
-        const [ox, oy] = this.getOffset()
-        this.currentLine.update(
-          this.currentLine._begin,
-          new Point(
-            ev.clientX - this._translateLast[0] - ox,
-            ev.clientY - this._translateLast[1] - oy,
-          ),
+        const [ox, oy] = this.getScaleOffset(
+          ev.clientX - this._translateLast[0],
+          ev.clientY - this._translateLast[1],
         )
+        this.currentLine.update(this.currentLine._begin, new Point(ox, oy))
       }
     })
     // @ 处理滚轮事件
@@ -262,13 +259,22 @@ export class BluePrintEditor {
   }
 
   // @ 获取坐标偏移量
-  private getOffset() {
+  private getScaleOffset(x: number, y: number) {
     const originOffset: string[] = this._transform.transformOrigin
       .replace(/px/g, '')
       .split(' ')
-    
-    const ox = 0
-    const oy = 0
-    return [ox, oy]
+    const xc = +originOffset[0]
+    const yc = +originOffset[1]
+    // @ 先平移到缩放中心再平移回来
+    const m1: mat3 = [1, 0, 0, 0, 1, 0, xc, yc, 1]
+    const m2: mat3 = [1 / this.scale, 0, 0, 0, 1 / this.scale, 0, 0, 0, 1]
+    const m3: mat3 = [1, 0, 0, 0, 1, 0, -xc, -yc, 1]
+    let m4: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    let m5: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    mat3.multiply(m4, m1, m2)
+    mat3.multiply(m5, m4, m3)
+    const r: vec2 = [0, 0]
+    vec2.transformMat3(r, [x, y], m5)
+    return [...r]
   }
 }

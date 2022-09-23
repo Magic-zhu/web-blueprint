@@ -3,7 +3,7 @@ import { Point } from './Point';
 export declare class BaseLine {
     _begin: Point;
     _end: Point;
-    color: string;
+    _color: string;
     _width: number;
     _height: number;
     beginNode: Node;

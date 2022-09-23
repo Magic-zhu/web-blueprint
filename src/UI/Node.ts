@@ -176,6 +176,7 @@ export class Node extends BaseNode {
   }
 
   initInput(type: string) {
+    const box = createDiv()
     const svg: SVGElement = createSvg('svg')
     svg.setAttribute('class', 'wb-inputPoint-' + type)
     const circle = createSvg('circle')
@@ -187,7 +188,8 @@ export class Node extends BaseNode {
     const color = this.getColor(type)
     circle.setAttribute('stroke', color)
     svg.appendChild(circle)
-    return svg
+    box.appendChild(svg)
+    return box
   }
 
   addInput() {}

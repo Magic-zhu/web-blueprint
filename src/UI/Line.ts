@@ -2,17 +2,30 @@ import {BaseLine} from 'src/blueprint/BaseLine'
 import {Point} from 'src/blueprint/Point'
 import {createSvg} from 'src/dom/create'
 
+interface LineOptions {
+  color?: string
+}
 export class Line extends BaseLine {
   instance: SVGAElement
 
-  constructor(begin: Point, end: Point) {
+  constructor(begin: Point, end: Point, options: LineOptions = {}) {
     super()
+    if (options.color) this._color = options.color
     const Path = createSvg('path')
     this.instance = Path
     Path.setAttribute('stroke-width', '2px')
-    Path.setAttribute('stroke', 'white')
+    Path.setAttribute('stroke', this.color)
     Path.setAttribute('fill', 'none')
     this.update(begin, end)
+  }
+
+  get color() {
+    return this._color
+  }
+
+  set color(value: string) {
+    this._color = value
+    this.instance.setAttribute('stroke', value)
   }
 
   update(begin: Point, end: Point) {

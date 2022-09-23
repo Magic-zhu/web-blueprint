@@ -29,7 +29,7 @@ export declare class Node extends BaseNode {
     initBody(): void;
     initPrePoint(): void;
     initNextPoint(): void;
-    initInput(type: string): SVGElement;
+    initInput(type: string): HTMLElement;
     addInput(): void;
     getColor(type: string): string;
     get x(): number;
