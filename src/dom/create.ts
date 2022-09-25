@@ -21,3 +21,8 @@ export const createInputTextBox = (): HTMLInputElement => {
   input.setAttribute('type', 'text')
   return input
 }
+
+
+export const createSpan = ():HTMLSpanElement => {
+  return createDom('span')
+}

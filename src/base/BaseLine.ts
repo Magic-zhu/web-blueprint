@@ -1,4 +1,4 @@
-import {Node} from 'src/UI/Node'
+import {Node} from 'src/node/Node'
 import {Point} from './Point'
 
 export class BaseLine {

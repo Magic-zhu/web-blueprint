@@ -1,5 +1,5 @@
-import {BaseLine} from 'src/blueprint/BaseLine'
-import {Point} from 'src/blueprint/Point'
+import {BaseLine} from 'src/base/BaseLine'
+import {Point} from 'src/base/Point'
 import {createSvg} from 'src/dom/create'
 
 interface LineOptions {

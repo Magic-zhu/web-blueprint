@@ -1,4 +1,5 @@
 import { BaseNode } from 'src/base/BaseNode';
+import { Param } from './Param';
 export interface NodeParams {
     nodeName: string;
     headerClass?: string;
@@ -29,9 +30,8 @@ export declare class Node extends BaseNode {
     initBody(): void;
     initPrePoint(): void;
     initNextPoint(): void;
-    initInput(type: string): HTMLElement;
-    addInput(): void;
-    getColor(type: string): string;
+    initInput(type: string): Param;
+    addInput(param: Param): void;
     get x(): number;
     set x(value: number);
     get y(): number;

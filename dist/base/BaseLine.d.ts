@@ -1,0 +1,13 @@
+import { Node } from 'src/node/Node';
+import { Point } from './Point';
+export declare class BaseLine {
+    _begin: Point;
+    _end: Point;
+    _color: string;
+    _width: number;
+    _height: number;
+    beginNode: Node;
+    endNode: Node;
+    _getControlPoint(begin: Point, end: Point): number[];
+    _setSize(): void;
+}

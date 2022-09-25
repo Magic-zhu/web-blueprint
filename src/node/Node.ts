@@ -1,8 +1,10 @@
-import {BaseNode} from 'src/blueprint/BaseNode'
-import {createDiv, createSvg} from 'src/dom/create'
-import IO from 'src/blueprint/IO'
+import {BaseNode} from 'src/base/BaseNode'
+import {createDiv, createSpan, createSvg} from 'src/dom/create'
+import IO from 'src/base/IO'
 import {Line} from './Line'
-import {Point} from 'src/blueprint/Point'
+import {Point} from 'src/base/Point'
+import { Param } from './Param'
+import { Label } from './Label'
 
 export interface NodeParams {
   nodeName: string
@@ -20,7 +22,7 @@ export interface Position {
 
 export class Node extends BaseNode {
   // * The ui part
-  container: HTMLElement
+  instance: HTMLElement
   header: HTMLElement
   body: HTMLElement
   leftBody: HTMLElement
@@ -49,13 +51,13 @@ export class Node extends BaseNode {
     this.initBody()
     this.initPrePoint()
     this.initNextPoint()
-    this.container.appendChild(this.header)
-    this.container.appendChild(this.body)
+    this.instance.appendChild(this.header)
+    this.instance.appendChild(this.body)
     this.leftBody.appendChild(this.prePoint)
     this.rightBody.appendChild(this.nextPoint)
     if (params.input && params.input.length > 0) {
       params.input.forEach((item: any) => {
-        this.leftBody.appendChild(this.initInput(item.type))
+        // this.addInput(this.initInput(item.type))
       })
     }
     this.x = params.x || 0
@@ -65,7 +67,7 @@ export class Node extends BaseNode {
   initContainer() {
     const div = createDiv()
     div.className = 'wb-container-base'
-    this.container = div
+    this.instance = div
     // this.container.addEventListener('click', () => {
     //   if (this.selected) {
     //     // !! attention to the white space
@@ -79,10 +81,10 @@ export class Node extends BaseNode {
     //   this.selected = !this.selected
     //   IO.emit('NodeSelected', this)
     // })
-    this.container.addEventListener('mousedown', () => {
+    this.instance.addEventListener('mousedown', () => {
       IO.emit('NodeActive', this)
     })
-    this.container.addEventListener('mouseup', () => {
+    this.instance.addEventListener('mouseup', () => {
       IO.emit('NodeInactive', this)
     })
   }
@@ -176,41 +178,14 @@ export class Node extends BaseNode {
   }
 
   initInput(type: string) {
-    const box = createDiv()
-    const svg: SVGElement = createSvg('svg')
-    svg.setAttribute('class', 'wb-inputPoint-' + type)
-    const circle = createSvg('circle')
-    circle.setAttribute('cx', '5')
-    circle.setAttribute('cy', '5')
-    circle.setAttribute('r', '4')
-    circle.setAttribute('stroke-width', '1px')
-    circle.setAttribute('fill', 'none')
-    const color = this.getColor(type)
-    circle.setAttribute('stroke', color)
-    svg.appendChild(circle)
-    box.appendChild(svg)
+    const box = new Param()
+    // box.add(svg)
+    // box.add(label)
     return box
   }
 
-  addInput() {}
-
-  getColor(type: string) {
-    let color: string
-    switch (type) {
-      case 'string':
-        color = '#f703cf'
-        break
-      case 'boolean':
-        color = '#8e020b'
-        break
-      case 'object':
-        color = '#20a5e8'
-        break
-      case 'number':
-        color = '#a4fa60'
-        break
-    }
-    return color
+  addInput(param:Param) {
+    this.leftBody.appendChild(param.instance)
   }
 
   get x(): number {
@@ -219,7 +194,7 @@ export class Node extends BaseNode {
 
   set x(value: number) {
     this._x = value
-    this.container.style.left = `${this._x}px`
+    this.instance.style.left = `${this._x}px`
   }
 
   get y(): number {
@@ -228,7 +203,7 @@ export class Node extends BaseNode {
 
   set y(value: number) {
     this._y = value
-    this.container.style.top = `${this._y}px`
+    this.instance.style.top = `${this._y}px`
   }
 
   get position() {

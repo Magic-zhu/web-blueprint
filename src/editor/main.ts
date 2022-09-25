@@ -1,5 +1,5 @@
 import {Line, Node, Point} from 'src'
-import IO from 'src/blueprint/IO'
+import IO from 'src/base/IO'
 import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
 
@@ -178,7 +178,7 @@ export class BluePrintEditor {
   }
 
   add(node: Node): void {
-    this.container.appendChild(node.container)
+    this.container.appendChild(node.instance)
     this.graph.push(node)
   }
 
