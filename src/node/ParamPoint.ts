@@ -26,7 +26,8 @@ export class ParamPoint {
     type:string
 
     constructor(options) {
-
+        this.type = options.type
+        this.init()
     }
 
     init() {

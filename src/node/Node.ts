@@ -57,7 +57,7 @@ export class Node extends BaseNode {
     this.rightBody.appendChild(this.nextPoint)
     if (params.input && params.input.length > 0) {
       params.input.forEach((item: any) => {
-        // this.addInput(this.initInput(item.type))
+        this.addInput(this.initInput(item.type))
       })
     }
     this.x = params.x || 0
@@ -115,7 +115,7 @@ export class Node extends BaseNode {
 
   initPrePoint() {
     const svg: SVGElement = createSvg('svg')
-    svg.setAttribute('class', 'prePoint')
+    svg.setAttribute('class', 'wb-prePoint')
     const polygon: SVGPolygonElement = createSvg('polygon')
     polygon.setAttribute('points', '0,0 0,10 5,10 9,5 5,0')
     polygon.setAttribute('stroke-width', '2px')
@@ -153,7 +153,7 @@ export class Node extends BaseNode {
 
   initNextPoint() {
     const svg: SVGElement = createSvg('svg')
-    svg.setAttribute('class', 'nextPoint')
+    svg.setAttribute('class', 'wb-nextPoint')
     const polygon: SVGPolygonElement = createSvg('polygon')
     polygon.setAttribute('points', '0,0 0,10 5,10 9,5 5,0')
     polygon.setAttribute('stroke-width', '2px')
@@ -178,13 +178,12 @@ export class Node extends BaseNode {
   }
 
   initInput(type: string) {
-    const box = new Param()
-    // box.add(svg)
-    // box.add(label)
+    const box = new Param({type})
     return box
   }
 
   addInput(param:Param) {
+    this.inputPoints.push(param)
     this.leftBody.appendChild(param.instance)
   }
 

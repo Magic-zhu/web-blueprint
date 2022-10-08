@@ -59,10 +59,17 @@
     align-items: flex-end;
 }
 
+.wb-prePoint{
+    margin-bottom: 5px;
+}
+
+.wb-nextPoint {
+
+}
+
 .wb-container-base-body svg {
     width: 10px;
     height: 10px;
-    margin-bottom: 15px;
 }
 
 .wb-container-base-body svg:hover {
@@ -73,4 +80,15 @@
 .wb-inputPoint-string {
     width: 10px;
     height: 10px;
+}
+
+.wb-param-base {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    height: 20px;
+}
+
+.wb-param-label {
+    margin-left: 5px;
 }

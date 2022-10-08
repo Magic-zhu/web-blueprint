@@ -1,26 +1,29 @@
-import { createSpan } from "src/dom/create"
+import {createSpan} from 'src/dom/create'
 
 export interface LabelOptions {
-    text?:string
+  text?: string
 }
 
 export class Label {
-    private _text:string = ''
-    instance: HTMLSpanElement
+  private _text: string = ''
+  instance: HTMLSpanElement
 
-    constructor(options:LabelOptions){
-        this.instance = createSpan()
-        if(options.text){
-            this.text = options.text
-        }
+  constructor(options: LabelOptions) {
+    this.instance = createSpan()
+    this.instance.setAttribute('class','wb-param-label')
+    if (options.text) {
+      this.text = options.text
+    } else {
+      this.text = '未命名'
     }
+  }
 
-    get text(){
-        return this._text
-    }
+  get text() {
+    return this._text
+  }
 
-    set text(value:string){
-        this._text = value
-        this.instance.innerText = value
-    }
+  set text(value: string) {
+    this._text = value
+    this.instance.innerText = value
+  }
 }

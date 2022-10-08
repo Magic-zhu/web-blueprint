@@ -1,4 +1,5 @@
 import {Line} from 'src'
+import { Param } from 'src/node/Param'
 import {uuid} from './UUID'
 
 export interface BasePoint {
@@ -16,11 +17,11 @@ export interface BasePoint {
 // export type InputType = StaticInputType | string
 
 export class BaseNode {
-  inputPoints: BasePoint[] = []
-  outPutPoints: BasePoint[] = []
+  inputPoints: Param[] = []
+  outPutPoints: Param[] = []
   variables: any = {}
   // the fucntion need to execute
-  func: (inputPoints: BasePoint[]) => {}
+  func: (inputPoints: Param[]) => {}
 
   // * base attribute
   nodeName: string = 'Function Name'
