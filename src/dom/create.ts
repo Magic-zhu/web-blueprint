@@ -26,3 +26,9 @@ export const createInputTextBox = (): HTMLInputElement => {
 export const createSpan = ():HTMLSpanElement => {
   return createDom('span')
 }
+
+export const createCheckBox = ():HTMLInputElement => {
+    const input = document.createElement('input')
+    input.setAttribute('type', 'checkbox')
+    return input
+}

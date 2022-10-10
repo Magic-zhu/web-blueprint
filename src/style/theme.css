@@ -43,7 +43,7 @@
 }
 
 .wb-container-base-body-left {
-    width: 50%;
+    flex:1;
     box-sizing: border-box;
     padding: 10px;
     display: flex;
@@ -51,7 +51,6 @@
 }
 
 .wb-container-base-body-right {
-    width: 50%;
     box-sizing: border-box;
     padding: 10px;
     display: flex;
@@ -91,4 +90,35 @@
 
 .wb-param-label {
     margin-left: 5px;
+}
+
+
+.wb-input-box {
+    margin-left: 5px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.wb-input-number {
+    width: 40px;
+    height: 14px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.5);
+    color: white;
+    font-size: 12px;
+    border-radius: 2px;
+}
+.wb-input-string {
+    width: 40px;
+    height: 14px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.5);
+    color: white;
+    font-size: 12px;
+    border-radius: 2px;
+}
+
+.wb-input-checkbox::after {
+    background: transparent;
 }
