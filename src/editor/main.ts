@@ -83,7 +83,6 @@ export class BluePrintEditor {
     IO.on(
       'ConnectPointClick',
       (info: any) => {
-        console.log(info)
         this.currentTarget = info.node
         if (this.currentEventType !== EditorEventType.LineBegin) {
           this.currentEventType = EditorEventType.LineBegin
@@ -93,6 +92,44 @@ export class BluePrintEditor {
           const t = new Line(
             new Point(info.pos[0], info.pos[1]),
             new Point(info.pos[0], info.pos[1]),
+          )
+          this.currentLine = t
+          this.addLine(t)
+        } else {
+          this.currentEventType = EditorEventType.LineEnd
+          this.currentLine.update(
+            this.currentLine._begin,
+            new Point(info.pos[0], info.pos[1]),
+          )
+          this.lineGraph.push(this.currentLine)
+          // @ 连接信息注入
+          info.node = this.beginNode
+          info.line = this.currentLine
+          this.currentTarget.connect(info)
+          info.isPre = !info.isPre
+          info.node = this.currentTarget
+          info.node = this.beginNode.connect(info)
+          this.beginNode = null
+          this.currentLine = null
+          this.currentEventType = EditorEventType.Normal
+        }
+      },
+      {only: true},
+    )
+    // todo: 未完成
+    IO.on(
+      'ParamPointClick',
+      (info: any) => {
+        this.currentTarget = info.node
+        if (this.currentEventType !== EditorEventType.LineBegin) {
+          this.currentEventType = EditorEventType.LineBegin
+          //@ 记录一下开始端点
+          this.beginNode = info.node
+
+          const t = new Line(
+            new Point(info.pos[0], info.pos[1]),
+            new Point(info.pos[0], info.pos[1]),
+            {color: info.param.point.color},
           )
           this.currentLine = t
           this.addLine(t)
@@ -242,6 +279,7 @@ export class BluePrintEditor {
     }
   }
 
+  // @ 处理节点移动
   private NodeMoveHandler(ev: MouseEvent) {
     this.currentTarget.position = {
       x: ev.clientX - this._mouseDownPosition[0] + this._mouseDownPosition[2],
@@ -249,6 +287,7 @@ export class BluePrintEditor {
     }
   }
 
+  // @ 处理节点激活
   private NodeActiveHandler(node: Node) {
     this.currentEventType = EditorEventType.NodeActive
     this.currentTarget = node

@@ -30,7 +30,7 @@ export declare class Node extends BaseNode {
     initBody(): void;
     initPrePoint(): void;
     initNextPoint(): void;
-    initInput(type: string): Param;
+    initInput(type: string, index: number): Param;
     addInput(param: Param): void;
     get x(): number;
     set x(value: number);

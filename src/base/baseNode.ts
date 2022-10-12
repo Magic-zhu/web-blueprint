@@ -1,5 +1,5 @@
 import {Line} from 'src'
-import { Param } from 'src/node/Param'
+import {Param} from 'src/node/Param'
 import {uuid} from './UUID'
 
 export interface BasePoint {
@@ -53,5 +53,9 @@ export class BaseNode {
 
   getNextPointPosition() {
     return [this._x + 200 - 10, this._y + 32 + 10 + 5]
+  }
+
+  getParamPosition(index: number) {
+    return [this._x + 10, this._y + 32 + 25 + 20 * index + 10]
   }
 }

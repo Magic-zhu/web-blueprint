@@ -3,8 +3,7 @@ import {createDiv, createSpan, createSvg} from 'src/dom/create'
 import IO from 'src/base/IO'
 import {Line} from './Line'
 import {Point} from 'src/base/Point'
-import { Param } from './Param'
-import { Label } from './Label'
+import {Param} from './Param'
 
 export interface NodeParams {
   nodeName: string
@@ -56,8 +55,8 @@ export class Node extends BaseNode {
     this.leftBody.appendChild(this.prePoint)
     this.rightBody.appendChild(this.nextPoint)
     if (params.input && params.input.length > 0) {
-      params.input.forEach((item: any) => {
-        this.addInput(this.initInput(item.type))
+      params.input.forEach((item: any, index: number) => {
+        this.addInput(this.initInput(item.type, index))
       })
     }
     this.x = params.x || 0
@@ -177,12 +176,25 @@ export class Node extends BaseNode {
     this.nextPoint = svg
   }
 
-  initInput(type: string) {
+  initInput(type: string, index: number) {
     const box = new Param({type})
+    box.instance.addEventListener('mousedown', (ev: MouseEvent) => {
+      ev.cancelBubble = true
+    })
+    box.instance.addEventListener('mouseup', (ev: MouseEvent) => {
+      ev.cancelBubble = true
+    })
+    box.instance.addEventListener('click', (ev: MouseEvent) => {
+      IO.emit('ParamPointClick', {
+        pos: this.getParamPosition(index),
+        node: this,
+        param: box,
+      })
+    })
     return box
   }
 
-  addInput(param:Param) {
+  addInput(param: Param) {
     this.inputPoints.push(param)
     this.leftBody.appendChild(param.instance)
   }

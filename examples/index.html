@@ -55,11 +55,28 @@
       x: 400,
       y: 200,
     })
+    const node3 = new Node({
+      nodeName: 'set',
+      color: 'green',
+      x: 400,
+      y: 400,
+      input: [
+        {
+          type: 'string',
+        },
+      ],
+      output: [
+        {
+          type: 'string',
+        },
+      ],
+    })
     node.func = (input) => {
       console.log(input)
     }
     node.execute()
     editor.add(node)
     editor.add(node2)
+    editor.add(node3)
   </script>
 </html>

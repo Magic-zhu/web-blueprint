@@ -23,16 +23,14 @@ export class Param {
 
   create() {
     this.instance = createDiv()
-    this.instance.setAttribute('class','wb-param-base')
-    this.point = new ParamPoint({type:this.type})
+    this.instance.setAttribute('class', 'wb-param-base')
+    this.point = new ParamPoint({type: this.type})
     this.label = new Label({})
-    this.input = new Input({type:this.type})
+    this.input = new Input({type: this.type})
     this.add(this.point)
     this.add(this.label)
     this.add(this.input)
-    this.instance.addEventListener('',()=>{
-        
-    })
+    this.instance.addEventListener('', () => {})
   }
 
   add(ele: WpElement) {

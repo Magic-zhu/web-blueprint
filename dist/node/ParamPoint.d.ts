@@ -3,6 +3,7 @@ export declare class ParamPoint {
     protected uid: string;
     instance: SVGElement;
     type: string;
+    color: string;
     constructor(options: any);
     init(): void;
     update(): void;

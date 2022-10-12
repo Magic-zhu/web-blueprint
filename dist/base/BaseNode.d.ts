@@ -1,14 +1,15 @@
 import { Line } from 'src';
+import { Param } from 'src/node/Param';
 export interface BasePoint {
     key: string;
     value: any;
     type: string;
 }
 export declare class BaseNode {
-    inputPoints: BasePoint[];
-    outPutPoints: BasePoint[];
+    inputPoints: Param[];
+    outPutPoints: Param[];
     variables: any;
-    func: (inputPoints: BasePoint[]) => {};
+    func: (inputPoints: Param[]) => {};
     nodeName: string;
     nodeType: string;
     readonly nodeId: string;
