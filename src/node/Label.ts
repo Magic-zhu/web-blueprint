@@ -1,4 +1,5 @@
 import {createSpan} from 'src/dom/create'
+import {WpElement} from './WpElement'
 
 export interface LabelOptions {
   text?: string
@@ -7,10 +8,11 @@ export interface LabelOptions {
 export class Label {
   private _text: string = ''
   instance: HTMLSpanElement
+  parent: WpElement
 
   constructor(options: LabelOptions) {
     this.instance = createSpan()
-    this.instance.setAttribute('class','wb-param-label')
+    this.instance.setAttribute('class', 'wb-param-label')
     if (options.text) {
       this.text = options.text
     } else {

@@ -20,8 +20,13 @@ export declare class BaseNode {
     nextNodes: BaseNode[];
     preLines: Line[];
     nextLines: Line[];
+    inputNodes: BaseNode[];
+    outPutNodes: BaseNode[];
+    inputLines: Line[];
+    outputLines: Line[];
     constructor();
     execute(): void;
     getPrePointPosition(): number[];
     getNextPointPosition(): number[];
+    getParamPosition(index: number): number[];
 }

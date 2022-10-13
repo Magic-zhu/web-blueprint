@@ -4,6 +4,7 @@ import {
   createInputTextBox,
   createCheckBox,
 } from 'src/dom/create'
+import {WpElement} from './WpElement'
 export interface InputOptions {
   type: string
 }
@@ -11,7 +12,8 @@ export class Input {
   instance: HTMLElement
   private inputIntance: HTMLElement
   type: string
-  _value: any 
+  parent: WpElement
+  _value: any
   constructor(options: InputOptions) {
     this.type = options.type
     this.create()
@@ -43,7 +45,7 @@ export class Input {
     this.instance = box
   }
 
-  inputChangeHanlde(v:any){
+  inputChangeHanlde(v: any) {
     this.value = (this.inputIntance as HTMLInputElement).value
   }
 
@@ -51,7 +53,7 @@ export class Input {
     return this._value
   }
 
-  set value(s:any) {
+  set value(s: any) {
     this._value = s
   }
 }

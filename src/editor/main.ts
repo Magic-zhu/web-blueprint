@@ -83,36 +83,7 @@ export class BluePrintEditor {
     IO.on(
       'ConnectPointClick',
       (info: any) => {
-        this.currentTarget = info.node
-        if (this.currentEventType !== EditorEventType.LineBegin) {
-          this.currentEventType = EditorEventType.LineBegin
-          //@ 记录一下开始端点
-          this.beginNode = info.node
-
-          const t = new Line(
-            new Point(info.pos[0], info.pos[1]),
-            new Point(info.pos[0], info.pos[1]),
-          )
-          this.currentLine = t
-          this.addLine(t)
-        } else {
-          this.currentEventType = EditorEventType.LineEnd
-          this.currentLine.update(
-            this.currentLine._begin,
-            new Point(info.pos[0], info.pos[1]),
-          )
-          this.lineGraph.push(this.currentLine)
-          // @ 连接信息注入
-          info.node = this.beginNode
-          info.line = this.currentLine
-          this.currentTarget.connect(info)
-          info.isPre = !info.isPre
-          info.node = this.currentTarget
-          info.node = this.beginNode.connect(info)
-          this.beginNode = null
-          this.currentLine = null
-          this.currentEventType = EditorEventType.Normal
-        }
+        this.handleConnectPointClick(info)
       },
       {only: true},
     )
@@ -120,37 +91,7 @@ export class BluePrintEditor {
     IO.on(
       'ParamPointClick',
       (info: any) => {
-        this.currentTarget = info.node
-        if (this.currentEventType !== EditorEventType.LineBegin) {
-          this.currentEventType = EditorEventType.LineBegin
-          //@ 记录一下开始端点
-          this.beginNode = info.node
-
-          const t = new Line(
-            new Point(info.pos[0], info.pos[1]),
-            new Point(info.pos[0], info.pos[1]),
-            {color: info.param.point.color},
-          )
-          this.currentLine = t
-          this.addLine(t)
-        } else {
-          this.currentEventType = EditorEventType.LineEnd
-          this.currentLine.update(
-            this.currentLine._begin,
-            new Point(info.pos[0], info.pos[1]),
-          )
-          this.lineGraph.push(this.currentLine)
-          // @ 连接信息注入
-          info.node = this.beginNode
-          info.line = this.currentLine
-          this.currentTarget.connect(info)
-          info.isPre = !info.isPre
-          info.node = this.currentTarget
-          info.node = this.beginNode.connect(info)
-          this.beginNode = null
-          this.currentLine = null
-          this.currentEventType = EditorEventType.Normal
-        }
+        this.handleParamPointClick(info)
       },
       {only: true},
     )
@@ -315,5 +256,79 @@ export class BluePrintEditor {
     const r: vec2 = [0, 0]
     vec2.transformMat3(r, [x, y], m5)
     return [...r]
+  }
+
+  private isLineBegin(): boolean {
+    return this.currentEventType === EditorEventType.LineBegin
+  }
+
+  private handleConnectPointClick(info): void {
+    this.currentTarget = info.node
+    if (!this.isLineBegin()) {
+      this.currentEventType = EditorEventType.LineBegin
+      //@ 记录一下开始端点
+      this.beginNode = info.node
+
+      const t = new Line(
+        new Point(info.pos[0], info.pos[1]),
+        new Point(info.pos[0], info.pos[1]),
+      )
+      this.currentLine = t
+      this.addLine(t)
+    } else {
+      this.currentEventType = EditorEventType.LineEnd
+      this.currentLine.update(
+        this.currentLine._begin,
+        new Point(info.pos[0], info.pos[1]),
+      )
+      this.lineGraph.push(this.currentLine)
+      // @ 连接信息注入
+      info.node = this.beginNode
+      info.line = this.currentLine
+      this.currentTarget.connect(info)
+      info.isPre = !info.isPre
+      info.node = this.currentTarget
+      info.node = this.beginNode.connect(info)
+      this.resetAfterAttachLine()
+    }
+  }
+
+  private handleParamPointClick(info): void {
+    this.currentTarget = info.node
+    if (this.currentEventType !== EditorEventType.LineBegin) {
+      this.currentEventType = EditorEventType.LineBegin
+      //@ 记录一下开始端点
+      this.beginNode = info.node
+
+      const t = new Line(
+        new Point(info.pos[0], info.pos[1]),
+        new Point(info.pos[0], info.pos[1]),
+        {color: info.param.point.color},
+      )
+      this.currentLine = t
+      this.addLine(t)
+    } else {
+      this.currentEventType = EditorEventType.LineEnd
+      this.currentLine.update(
+        this.currentLine._begin,
+        new Point(info.pos[0], info.pos[1]),
+      )
+      this.lineGraph.push(this.currentLine)
+      // @ 连接信息注入
+      info.node = this.beginNode
+      info.line = this.currentLine
+      this.currentTarget.connect(info)
+      info.isPre = !info.isPre
+      info.node = this.currentTarget
+      info.node = this.beginNode.connect(info)
+
+      this.resetAfterAttachLine()
+    }
+  }
+
+  resetAfterAttachLine() {
+    this.beginNode = null
+    this.currentLine = null
+    this.currentEventType = EditorEventType.Normal
   }
 }

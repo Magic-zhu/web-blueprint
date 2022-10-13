@@ -16,6 +16,7 @@ export class Param {
   point: ParamPoint
   label: Label
   input: Input
+  parent: WpElement
   constructor(options: ParamOptions) {
     this.type = options.type
     this.create()

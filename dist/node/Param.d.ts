@@ -12,6 +12,7 @@ export declare class Param {
     point: ParamPoint;
     label: Label;
     input: Input;
+    parent: WpElement;
     constructor(options: ParamOptions);
     create(): void;
     add(ele: WpElement): void;

@@ -196,6 +196,7 @@ export class Node extends BaseNode {
 
   addInput(param: Param) {
     this.inputPoints.push(param)
+    param.parent = this
     this.leftBody.appendChild(param.instance)
   }
 

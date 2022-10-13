@@ -37,6 +37,10 @@ export class BaseNode {
   nextNodes: BaseNode[] = []
   preLines: Line[] = []
   nextLines: Line[] = []
+  inputNodes: BaseNode[] = []
+  outPutNodes: BaseNode[] = []
+  inputLines: Line[] = []
+  outputLines: Line[] = []
 
   constructor() {}
 
