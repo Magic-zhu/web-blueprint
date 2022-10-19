@@ -16,4 +16,6 @@ export declare class Param {
     constructor(options: ParamOptions);
     create(): void;
     add(ele: WpElement): void;
+    connect(): void;
+    disConnect(): void;
 }

@@ -2,6 +2,7 @@ import {Line, Node, Point} from 'src'
 import IO from 'src/base/IO'
 import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
+import {Param} from 'src/node/Param'
 
 export enum MouseDownType {
   'LEFT' = 0,
@@ -29,6 +30,14 @@ export interface EventInfo {
   pos?: number[]
   isPre?: boolean
 }
+
+export interface ClickInfo {
+  pos: number[]
+  isPre?: boolean
+  node: Node
+  param?: Param
+}
+
 export class BluePrintEditor {
   container: HTMLElement
   lineContainer: SVGAElement
@@ -54,8 +63,10 @@ export class BluePrintEditor {
   private currentEventType: EditorEventType = EditorEventType.Normal
   // @ 当前操作对象
   private currentTarget: Node
-  // @ 连线断点对象
+  // @ 连线起始点对象
   private beginNode: Node
+  // @ 连线起始参数对象
+  private beginParam: Param
   // @ 当前操作的线
   private currentLine: Line
 
@@ -91,7 +102,7 @@ export class BluePrintEditor {
     IO.on(
       'ParamPointClick',
       (info: any) => {
-        this.handleParamPointClick(info)
+        this.paramPointClickHandler(info)
       },
       {only: true},
     )
@@ -293,21 +304,26 @@ export class BluePrintEditor {
     }
   }
 
-  private handleParamPointClick(info): void {
+  private paramPointClickHandler(info: ClickInfo): void {
     this.currentTarget = info.node
     if (this.currentEventType !== EditorEventType.LineBegin) {
       this.currentEventType = EditorEventType.LineBegin
       //@ 记录一下开始端点
-      this.beginNode = info.node
+      this.beginParam = info.param
 
       const t = new Line(
         new Point(info.pos[0], info.pos[1]),
         new Point(info.pos[0], info.pos[1]),
         {color: info.param.point.color},
       )
+
       this.currentLine = t
       this.addLine(t)
     } else {
+      if (info.param.type !== this.beginParam.type) {
+        return
+      }
+      // 将线更新注入到lineGraph中
       this.currentEventType = EditorEventType.LineEnd
       this.currentLine.update(
         this.currentLine._begin,
@@ -315,19 +331,15 @@ export class BluePrintEditor {
       )
       this.lineGraph.push(this.currentLine)
       // @ 连接信息注入
-      info.node = this.beginNode
-      info.line = this.currentLine
-      this.currentTarget.connect(info)
-      info.isPre = !info.isPre
-      info.node = this.currentTarget
-      info.node = this.beginNode.connect(info)
-
+      this.beginParam.connect()
+      info.param.connect()
       this.resetAfterAttachLine()
     }
   }
 
-  resetAfterAttachLine() {
+  private resetAfterAttachLine() {
     this.beginNode = null
+    this.beginParam = null
     this.currentLine = null
     this.currentEventType = EditorEventType.Normal
   }

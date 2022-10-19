@@ -37,4 +37,12 @@ export class Param {
   add(ele: WpElement) {
     this.instance.appendChild(ele.instance)
   }
+
+  connect() {
+    this.point.connect()
+  }
+
+  disConnect() {
+
+  }
 }

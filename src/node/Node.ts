@@ -67,19 +67,6 @@ export class Node extends BaseNode {
     const div = createDiv()
     div.className = 'wb-container-base'
     this.instance = div
-    // this.container.addEventListener('click', () => {
-    //   if (this.selected) {
-    //     // !! attention to the white space
-    //     this.container.className = this.container.className.replace(
-    //       ' selected',
-    //       '',
-    //     )
-    //   } else {
-    //     this.container.className = this.container.className + ' selected'
-    //   }
-    //   this.selected = !this.selected
-    //   IO.emit('NodeSelected', this)
-    // })
     this.instance.addEventListener('mousedown', () => {
       IO.emit('NodeActive', this)
     })
@@ -184,7 +171,7 @@ export class Node extends BaseNode {
     box.instance.addEventListener('mouseup', (ev: MouseEvent) => {
       ev.cancelBubble = true
     })
-    box.instance.addEventListener('click', (ev: MouseEvent) => {
+    box.point.instance.addEventListener('click', (ev: MouseEvent) => {
       IO.emit('ParamPointClick', {
         pos: this.getParamPosition(index),
         node: this,

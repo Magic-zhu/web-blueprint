@@ -23,6 +23,7 @@ export const getColor = (type: string) => {
 export class ParamPoint {
   protected uid = uuid()
   instance: SVGElement
+  inside: SVGAElement
   type: string
   color: string
 
@@ -43,9 +44,18 @@ export class ParamPoint {
     const color = getColor(this.type)
     this.color = color
     circle.setAttribute('stroke', color)
+    this.inside = circle
     svg.appendChild(circle)
     this.instance = svg
   }
 
   update() {}
+
+  connect() {
+    this.inside.setAttribute('fill',this.color)
+  }
+
+  disConnect(){
+    this.inside.setAttribute('fill', 'none')
+  }
 }

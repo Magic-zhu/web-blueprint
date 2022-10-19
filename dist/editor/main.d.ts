@@ -1,4 +1,5 @@
 import { Line, Node } from 'src';
+import { Param } from 'src/node/Param';
 export declare enum MouseDownType {
     'LEFT' = 0,
     'RIGHT' = 2,
@@ -19,6 +20,12 @@ export interface EventInfo {
     pos?: number[];
     isPre?: boolean;
 }
+export interface ClickInfo {
+    pos: number[];
+    isPre?: boolean;
+    node: Node;
+    param?: Param;
+}
 export declare class BluePrintEditor {
     container: HTMLElement;
     lineContainer: SVGAElement;
@@ -33,6 +40,7 @@ export declare class BluePrintEditor {
     private currentEventType;
     private currentTarget;
     private beginNode;
+    private beginParam;
     private currentLine;
     constructor(container: any);
     private init;
@@ -50,6 +58,6 @@ export declare class BluePrintEditor {
     private getScaleOffset;
     private isLineBegin;
     private handleConnectPointClick;
-    private handleParamPointClick;
-    resetAfterAttachLine(): void;
+    private paramPointClickHandler;
+    private resetAfterAttachLine;
 }
