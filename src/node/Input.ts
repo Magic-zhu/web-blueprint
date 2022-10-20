@@ -56,4 +56,12 @@ export class Input {
   set value(s: any) {
     this._value = s
   }
+
+  hidden() {
+    this.instance.style.display = 'none'
+  }
+
+  show() {
+    this.instance.style.display = ''
+  }
 }

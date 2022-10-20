@@ -3,6 +3,7 @@ import IO from 'src/base/IO'
 import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
 import {Param} from 'src/node/Param'
+import {Selector} from './Selector'
 
 export enum MouseDownType {
   'LEFT' = 0,
@@ -41,6 +42,7 @@ export interface ClickInfo {
 export class BluePrintEditor {
   container: HTMLElement
   lineContainer: SVGAElement
+  selector: Selector
   graph: Node[] = []
   lineGraph: Line[] = []
   // @ 当前画布的缩放系数
@@ -98,7 +100,6 @@ export class BluePrintEditor {
       },
       {only: true},
     )
-    // todo: 未完成
     IO.on(
       'ParamPointClick',
       (info: any) => {
@@ -129,6 +130,7 @@ export class BluePrintEditor {
       this._mouseDownType = -1
       this._transform.translate = [...this._translateLast]
       this._mouseDownPosition = []
+      this.selector.hidden()
       if (this.currentEventType === EditorEventType.LineBegin) {
         this.currentLine.destory()
         this.currentLine = null
@@ -149,6 +151,7 @@ export class BluePrintEditor {
         this._mouseDownPosition[0] != 0
       ) {
         this.NodeMoveHandler(ev)
+        return
       }
       // @ 连线模式
       if (this.currentEventType === EditorEventType.LineBegin) {
@@ -157,6 +160,18 @@ export class BluePrintEditor {
           ev.clientY - this._translateLast[1],
         )
         this.currentLine.update(this.currentLine._begin, new Point(ox, oy))
+        return
+      }
+      // @ 框选模式
+      if (this._mouseDownType === MouseDownType.LEFT) {
+        const ow = ev.clientX - this._mouseDownPosition[0]
+        const oh = ev.clientY - this._mouseDownPosition[1]
+        this.selector.update(
+          this._mouseDownPosition[0],
+          this._mouseDownPosition[1],
+          ow,
+          oh,
+        )
       }
     })
     // @ 处理滚轮事件
@@ -164,6 +179,8 @@ export class BluePrintEditor {
       this.ScaleHandler(ev)
       this.resize(this.scale)
     })
+
+    this.selector = new Selector()
   }
 
   add(node: Node): void {
@@ -310,6 +327,7 @@ export class BluePrintEditor {
       this.currentEventType = EditorEventType.LineBegin
       //@ 记录一下开始端点
       this.beginParam = info.param
+      this.beginNode = info.node
 
       const t = new Line(
         new Point(info.pos[0], info.pos[1]),
@@ -331,8 +349,8 @@ export class BluePrintEditor {
       )
       this.lineGraph.push(this.currentLine)
       // @ 连接信息注入
-      this.beginParam.connect()
-      info.param.connect()
+      this.beginParam.connect(this.currentLine, info.param, 'begin')
+      info.param.connect(this.currentLine, this.beginParam, 'end')
       this.resetAfterAttachLine()
     }
   }
@@ -343,4 +361,6 @@ export class BluePrintEditor {
     this.currentLine = null
     this.currentEventType = EditorEventType.Normal
   }
+
+  private SelectHandler() {}
 }

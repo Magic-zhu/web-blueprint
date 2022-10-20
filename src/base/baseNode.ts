@@ -37,10 +37,6 @@ export class BaseNode {
   nextNodes: BaseNode[] = []
   preLines: Line[] = []
   nextLines: Line[] = []
-  inputNodes: BaseNode[] = []
-  outPutNodes: BaseNode[] = []
-  inputLines: Line[] = []
-  outputLines: Line[] = []
 
   constructor() {}
 
@@ -59,7 +55,11 @@ export class BaseNode {
     return [this._x + 200 - 10, this._y + 32 + 10 + 5]
   }
 
-  getParamPosition(index: number) {
-    return [this._x + 10, this._y + 32 + 25 + 20 * index + 10]
+  getParamPosition(index: number, isInput: boolean = true) {
+    if (isInput) {
+      return [this._x + 10, this._y + 32 + 25 + 20 * index + 10]
+    } else {
+      return [this._x + 200, this._y + 32 + 25 + 20 * index + 10]
+    }
   }
 }

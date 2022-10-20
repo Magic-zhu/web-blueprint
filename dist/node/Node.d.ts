@@ -5,6 +5,7 @@ export interface NodeParams {
     headerClass?: string;
     color?: string;
     input?: [];
+    output?: [];
     x?: number;
     y?: number;
 }
@@ -25,6 +26,11 @@ export declare class Node extends BaseNode {
     selected: boolean;
     active: boolean;
     constructor(params: NodeParams);
+    get x(): number;
+    set x(value: number);
+    get y(): number;
+    set y(value: number);
+    get position(): Position;
     initContainer(): void;
     initHeader(): void;
     initBody(): void;
@@ -32,11 +38,8 @@ export declare class Node extends BaseNode {
     initNextPoint(): void;
     initInput(type: string, index: number): Param;
     addInput(param: Param): void;
-    get x(): number;
-    set x(value: number);
-    get y(): number;
-    set y(value: number);
-    get position(): Position;
+    initOutput(type: string, index: number): Param;
+    addOutput(param: Param): void;
     set position(pos: Position);
     connect(info: any): void;
     updateRelativeLines(x: number, y: number): void;

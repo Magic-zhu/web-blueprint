@@ -10,6 +10,7 @@ export interface NodeParams {
   headerClass?: string
   color?: string
   input?: []
+  output?: []
   x?: number
   y?: number
 }
@@ -59,8 +60,38 @@ export class Node extends BaseNode {
         this.addInput(this.initInput(item.type, index))
       })
     }
+    if (params.output && params.output.length > 0) {
+      params.output.forEach((item: any, index: number) => {
+        this.addOutput(this.initOutput(item.type, index))
+      })
+    }
     this.x = params.x || 0
     this.y = params.y || 0
+  }
+
+  get x(): number {
+    return this._x
+  }
+
+  set x(value: number) {
+    this._x = value
+    this.instance.style.left = `${this._x}px`
+  }
+
+  get y(): number {
+    return this._y
+  }
+
+  set y(value: number) {
+    this._y = value
+    this.instance.style.top = `${this._y}px`
+  }
+
+  get position() {
+    return {
+      x: this._x,
+      y: this._y,
+    }
   }
 
   initContainer() {
@@ -187,29 +218,28 @@ export class Node extends BaseNode {
     this.leftBody.appendChild(param.instance)
   }
 
-  get x(): number {
-    return this._x
+  initOutput(type: string, index: number) {
+    const box = new Param({type, isInput: false})
+    box.instance.addEventListener('mousedown', (ev: MouseEvent) => {
+      ev.cancelBubble = true
+    })
+    box.instance.addEventListener('mouseup', (ev: MouseEvent) => {
+      ev.cancelBubble = true
+    })
+    box.point.instance.addEventListener('click', (ev: MouseEvent) => {
+      IO.emit('ParamPointClick', {
+        pos: this.getParamPosition(index, false),
+        node: this,
+        param: box,
+      })
+    })
+    return box
   }
 
-  set x(value: number) {
-    this._x = value
-    this.instance.style.left = `${this._x}px`
-  }
-
-  get y(): number {
-    return this._y
-  }
-
-  set y(value: number) {
-    this._y = value
-    this.instance.style.top = `${this._y}px`
-  }
-
-  get position() {
-    return {
-      x: this._x,
-      y: this._y,
-    }
+  addOutput(param: Param) {
+    this.outPutPoints.push(param)
+    param.parent = this
+    this.rightBody.appendChild(param.instance)
   }
 
   set position(pos: Position) {
@@ -235,6 +265,7 @@ export class Node extends BaseNode {
   }
 
   updateRelativeLines(x: number, y: number) {
+    // tip: update preNode nextNode line
     const [ix, iy] = this.getPrePointPosition()
     this.preLines.forEach((line: Line) => {
       if (line.beginNode.nodeId === this.nodeId) {
@@ -249,6 +280,26 @@ export class Node extends BaseNode {
         line.update(new Point(ix, iy), line._end)
       } else {
         line.update(line._begin, new Point(ix, iy))
+      }
+    })
+    // tip: update inputPoints line
+    this.inputPoints.forEach((param: Param, index) => {
+      if (!param.linkedLine) return
+      const [ix, iy] = this.getParamPosition(index)
+      if (param.isBeign) {
+        param.linkedLine.update(new Point(ix, iy), param.linkedLine._end)
+      } else {
+        param.linkedLine.update(param.linkedLine._begin, new Point(ix, iy))
+      }
+    })
+    // tip: update outPoints line
+    this.outPutPoints.forEach((param: Param, index) => {
+      if (!param.linkedLine) return
+      const [ix, iy] = this.getParamPosition(index, false)
+      if (param.isBeign) {
+        param.linkedLine.update(new Point(ix, iy), param.linkedLine._end)
+      } else {
+        param.linkedLine.update(param.linkedLine._begin, new Point(ix, iy))
       }
     })
   }

@@ -13,4 +13,6 @@ export declare class Input {
     inputChangeHanlde(v: any): void;
     get value(): any;
     set value(s: any);
+    hidden(): void;
+    show(): void;
 }

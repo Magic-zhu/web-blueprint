@@ -52,10 +52,10 @@ export class ParamPoint {
   update() {}
 
   connect() {
-    this.inside.setAttribute('fill',this.color)
+    this.inside.setAttribute('fill', this.color)
   }
 
-  disConnect(){
+  disConnect() {
     this.inside.setAttribute('fill', 'none')
   }
 }

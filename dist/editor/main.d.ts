@@ -1,5 +1,6 @@
 import { Line, Node } from 'src';
 import { Param } from 'src/node/Param';
+import { Selector } from './Selector';
 export declare enum MouseDownType {
     'LEFT' = 0,
     'RIGHT' = 2,
@@ -29,6 +30,7 @@ export interface ClickInfo {
 export declare class BluePrintEditor {
     container: HTMLElement;
     lineContainer: SVGAElement;
+    selector: Selector;
     graph: Node[];
     lineGraph: Line[];
     private scale;
@@ -60,4 +62,5 @@ export declare class BluePrintEditor {
     private handleConnectPointClick;
     private paramPointClickHandler;
     private resetAfterAttachLine;
+    private SelectHandler;
 }

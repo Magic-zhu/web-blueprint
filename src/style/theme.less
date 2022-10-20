@@ -13,12 +13,15 @@
   position: absolute;
   z-index: 10;
 }
+
 .wb-container-base.selected {
   box-shadow: 0 2px 10px 2px green !important;
 }
+
 .wb-container-base:active {
   box-shadow: 0 2px 10px 2px blue;
 }
+
 .wb-container-base-header {
   width: 100%;
   height: 32px;
@@ -31,70 +34,83 @@
   cursor: normal;
   user-select: none;
 }
+
 .wb-container-base-body {
   width: 100%;
   flex: 1;
   box-sizing: border-box;
   display: flex;
 }
+
 .wb-container-base-body-left {
   flex: 1;
   box-sizing: border-box;
   padding: 10px;
   display: flex;
   flex-direction: column;
+
+  .wb-param-label {
+    margin-left: 5px;
+    user-select: none;
+  }
+
+  .wb-input-box {
+    margin-left: 5px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+  }
 }
-.wb-container-base-body-left .wb-param-label {
-  margin-left: 5px;
-  user-select: none;
-}
-.wb-container-base-body-left .wb-input-box {
-  margin-left: 5px;
-  height: 14px;
-  display: flex;
-  align-items: center;
-}
+
 .wb-container-base-body-right {
   box-sizing: border-box;
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  .wb-param-label {
+    margin-right: 5px;
+    user-select: none;
+  }
+
+  .wb-input-box {
+    margin-right: 5px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+  }
 }
-.wb-container-base-body-right .wb-param-label {
-  margin-right: 5px;
-  user-select: none;
-}
-.wb-container-base-body-right .wb-input-box {
-  margin-right: 5px;
-  height: 14px;
-  display: flex;
-  align-items: center;
-}
+
 .wb-prePoint {
   margin-bottom: 5px;
 }
+
 .wb-nextPoint {
   margin-bottom: 5px;
 }
+
 .wb-container-base-body svg {
   width: 10px;
   height: 10px;
 }
+
 .wb-container-base-body svg:hover {
   box-shadow: 0 2px 10px 2px lightgray;
   background-color: lightgray;
 }
+
 .wb-inputPoint-string {
   width: 10px;
   height: 10px;
 }
+
 .wb-param-base {
   display: flex;
   align-items: center;
   font-size: 12px;
   height: 20px;
 }
+
 .wb-input-number {
   width: 40px;
   height: 14px;
@@ -113,6 +129,7 @@
   font-size: 12px;
   border-radius: 2px;
 }
+
 .wb-input-checkbox::after {
   background: transparent;
 }
