@@ -126,7 +126,7 @@ export class BluePrintEditor {
       this.setMouseDownType(ev.button)
       this.recordPosition(ev.clientX, ev.clientY)
     })
-    this.container.addEventListener('mouseup', (ev) => {
+    document.body.addEventListener('mouseup', (ev) => {
       this._mouseDownType = -1
       this._transform.translate = [...this._translateLast]
       this._mouseDownPosition = []
@@ -138,7 +138,7 @@ export class BluePrintEditor {
       }
     })
     // @ 处理鼠标移动事件
-    this.container.addEventListener('mousemove', (ev) => {
+    document.body.addEventListener('mousemove', (ev) => {
       // @ 移动画布
       if (this._mouseDownType == MouseDownType.RIGHT) {
         this.translate(ev)
@@ -163,9 +163,15 @@ export class BluePrintEditor {
         return
       }
       // @ 框选模式
-      if (this._mouseDownType === MouseDownType.LEFT) {
+      if (
+        this._mouseDownType === MouseDownType.LEFT &&
+        this.currentEventType === EditorEventType.Normal
+      ) {
         const ow = ev.clientX - this._mouseDownPosition[0]
         const oh = ev.clientY - this._mouseDownPosition[1]
+        if(this.selector.isHidden === true){
+          this.selector.show()
+        }
         this.selector.update(
           this._mouseDownPosition[0],
           this._mouseDownPosition[1],

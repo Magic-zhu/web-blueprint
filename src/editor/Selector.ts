@@ -1,8 +1,9 @@
 import {createSvg} from 'src/dom/create'
 
 export class Selector {
-  instance: SVGElement
-  inside: SVGElement
+  private instance: SVGElement
+  private inside: SVGElement
+  isHidden: boolean = true
   constructor() {
     this.create()
   }
@@ -27,27 +28,37 @@ export class Selector {
     if (width >= 0 && height >= 0) {
       this.instance.style.left = x + 'px'
       this.instance.style.top = y + 'px'
-      this.instance.style.width = width + 'px'
-      this.instance.style.height = height + 'px'
     }
 
     if (width < 0 && height < 0) {
       this.instance.style.left = x + width + 'px'
       this.instance.style.top = y + height + 'px'
-      this.instance.style.width = -width + 'px'
-      this.instance.style.height = -height + 'px'
     }
 
+    if(width > 0 && height < 0){
+      this.instance.style.left = x + 'px'
+      this.instance.style.top = y + height + 'px'
+    }
+
+    if(width < 0 && height > 0){
+      this.instance.style.left = x + width + 'px'
+      this.instance.style.top = y + 'px'
+    }
+
+    this.instance.style.width = Math.abs(width) + 'px'
+    this.instance.style.height = Math.abs(height) + 'px'
     this.inside.setAttribute('width', `${Math.abs(width)}`)
     this.inside.setAttribute('height', `${Math.abs(height)}`)
   }
 
   show() {
     this.instance.style.display = 'block'
+    this.isHidden = false
   }
 
   hidden() {
     this.update(0, 0, 0, 0)
     this.instance.style.display = 'none'
+    this.isHidden = true
   }
 }
