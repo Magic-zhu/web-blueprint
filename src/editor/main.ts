@@ -4,7 +4,7 @@ import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
 import {Param} from 'src/node/Param'
 import {Selector} from './Selector'
-import {intersection_rectangle} from 'stl-typescript/src/geometry/intersection_rectangle'
+import {intersection_rectangle} from 'stl-typescript'
 
 export enum MouseDownType {
   'LEFT' = 0,

@@ -50,6 +50,6 @@
   ],
   "dependencies": {
     "gl-matrix": "^3.4.3",
-    "stl-typescript": "^0.0.2"
+    "stl-typescript": "^0.0.4"
   }
 }
