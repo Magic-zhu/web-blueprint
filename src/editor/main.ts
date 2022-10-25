@@ -4,6 +4,7 @@ import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
 import {Param} from 'src/node/Param'
 import {Selector} from './Selector'
+import {intersection_rectangle} from 'stl-typescript/src/geometry/intersection_rectangle'
 
 export enum MouseDownType {
   'LEFT' = 0,
@@ -169,7 +170,7 @@ export class BluePrintEditor {
       ) {
         const ow = ev.clientX - this._mouseDownPosition[0]
         const oh = ev.clientY - this._mouseDownPosition[1]
-        if(this.selector.isHidden === true){
+        if (this.selector.isHidden === true) {
           this.selector.show()
         }
         this.selector.update(
@@ -177,6 +178,12 @@ export class BluePrintEditor {
           this._mouseDownPosition[1],
           ow,
           oh,
+        )
+        this.SelectHandler(
+          this.selector.x,
+          this.selector.y,
+          this.selector.width,
+          this.selector.height,
         )
       }
     })
@@ -368,5 +375,23 @@ export class BluePrintEditor {
     this.currentEventType = EditorEventType.Normal
   }
 
-  private SelectHandler() {}
+  private SelectHandler(x: number, y: number, width: number, height: number) {
+    this.graph.forEach((item: Node) => {
+      const isT = intersection_rectangle(
+        x,
+        y,
+        width,
+        height,
+        item.x,
+        item.y,
+        item.width,
+        item.height,
+      )
+      if (isT) {
+        item.selected = true
+      } else {
+        item.selected = false
+      }
+    })
+  }
 }

@@ -23,6 +23,14 @@
     "chalk" "^2.0.0"
     "js-tokens" "^4.0.0"
 
+"@babel/polyfill@^7.8.3":
+  "integrity" "sha512-X0pi0V6gxLi6lFZpGmeNa4zxtwEmCs42isWLNjZZDE0Y8yVfgu0T2OAHlzBbdYlqbW/YXVvoBHpATEM+goCj8g=="
+  "resolved" "https://registry.npmjs.org/@babel/polyfill/-/polyfill-7.12.1.tgz"
+  "version" "7.12.1"
+  dependencies:
+    "core-js" "^2.6.5"
+    "regenerator-runtime" "^0.13.4"
+
 "@eslint/eslintrc@^1.0.4":
   "integrity" "sha1-3+D/e6JwhI0Qxa3QcV4ElkwDSzE="
   "resolved" "https://registry.npmmirror.com/@eslint/eslintrc/download/@eslint/eslintrc-1.0.4.tgz"
@@ -340,6 +348,11 @@
   "resolved" "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   "version" "0.0.1"
 
+"core-js@^2.6.5":
+  "integrity" "sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ=="
+  "resolved" "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz"
+  "version" "2.6.12"
+
 "cross-spawn@^7.0.2":
   "integrity" "sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w=="
   "resolved" "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz"
@@ -627,11 +640,6 @@
   "integrity" "sha1-FQStJSMVjKpA20onh8sBQRmU6k8="
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
-
-"fsevents@~2.3.2":
-  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
-  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
-  "version" "2.3.2"
 
 "function-bind@^1.1.1":
   "integrity" "sha1-pWiZ0+o8m6uHS7l3O3xe3pL0iV0="
@@ -1015,6 +1023,11 @@
   dependencies:
     "safe-buffer" "^5.1.0"
 
+"regenerator-runtime@^0.13.4":
+  "integrity" "sha512-KepLsg4dU12hryUO7bp/axHAKvwGOCV0sGloQtpagJ12ai+ojVDqkeGSiRX1zlq+kjIMZ1t7gpze+26QqtdGqw=="
+  "resolved" "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.10.tgz"
+  "version" "0.13.10"
+
 "regexpp@^3.2.0":
   "integrity" "sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg=="
   "resolved" "https://registry.npmjs.org/regexpp/-/regexpp-3.2.0.tgz"
@@ -1181,6 +1194,13 @@
   "integrity" "sha1-6oBL2UhXQC5pktBaOO8a41qatMQ="
   "resolved" "https://registry.npm.taobao.org/sourcemap-codec/download/sourcemap-codec-1.4.8.tgz"
   "version" "1.4.8"
+
+"stl-typescript@^0.0.2":
+  "integrity" "sha512-tz54qwgboi0KFSpQa/nNfviNRN4jqYpbzAwcexHrChsRjPQ2SEB49xxCD9Ew0c613izAHyypSlG6g6YUYLvt9w=="
+  "resolved" "https://registry.npmjs.org/stl-typescript/-/stl-typescript-0.0.2.tgz"
+  "version" "0.0.2"
+  dependencies:
+    "@babel/polyfill" "^7.8.3"
 
 "strip-ansi@^6.0.1":
   "integrity" "sha1-nibGPTD1NEPpSJSVshBdN7Z6hdk="

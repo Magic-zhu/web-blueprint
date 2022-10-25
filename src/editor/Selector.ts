@@ -4,6 +4,10 @@ export class Selector {
   private instance: SVGElement
   private inside: SVGElement
   isHidden: boolean = true
+  width: number
+  height: number
+  x: number
+  y: number
   constructor() {
     this.create()
   }
@@ -28,25 +32,35 @@ export class Selector {
     if (width >= 0 && height >= 0) {
       this.instance.style.left = x + 'px'
       this.instance.style.top = y + 'px'
+      this.x = x
+      this.y = y
     }
 
     if (width < 0 && height < 0) {
       this.instance.style.left = x + width + 'px'
       this.instance.style.top = y + height + 'px'
+      this.x = x + width
+      this.y = y + height
     }
 
-    if(width > 0 && height < 0){
+    if (width > 0 && height < 0) {
       this.instance.style.left = x + 'px'
       this.instance.style.top = y + height + 'px'
+      this.x = x
+      this.y = y + height
     }
 
-    if(width < 0 && height > 0){
+    if (width < 0 && height > 0) {
       this.instance.style.left = x + width + 'px'
       this.instance.style.top = y + 'px'
+      this.x = x + width
+      this.y = y
     }
 
     this.instance.style.width = Math.abs(width) + 'px'
     this.instance.style.height = Math.abs(height) + 'px'
+    this.width = Math.abs(width)
+    this.height = Math.abs(height)
     this.inside.setAttribute('width', `${Math.abs(width)}`)
     this.inside.setAttribute('height', `${Math.abs(height)}`)
   }

@@ -32,10 +32,10 @@ export class Node extends BaseNode {
   headerClass: string = 'wb-container-base-header'
   color: string
 
-  // * status attribte
-  selected: boolean
   // if onmousedown?
   active: boolean = false
+
+  private _selected: boolean = false
 
   constructor(params: NodeParams) {
     super()
@@ -91,6 +91,30 @@ export class Node extends BaseNode {
     return {
       x: this._x,
       y: this._y,
+    }
+  }
+
+  get width() {
+    return this.instance.clientWidth
+  }
+
+  get height() {
+    return this.instance.clientHeight
+  }
+
+  get selected() {
+    return this._selected
+  }
+
+  set selected(value: boolean) {
+    if (this._selected === value) {
+      return
+    }
+    this._selected = value
+    if (value) {
+      this.instance.className = this.instance.className + ' ' + 'selected'
+    } else {
+      this.instance.className = this.instance.className.replace(' selected', '')
     }
   }
 

@@ -49,6 +49,7 @@
     "src"
   ],
   "dependencies": {
-    "gl-matrix": "^3.4.3"
+    "gl-matrix": "^3.4.3",
+    "stl-typescript": "^0.0.2"
   }
 }
