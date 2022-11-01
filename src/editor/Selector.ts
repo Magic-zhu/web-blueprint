@@ -16,6 +16,7 @@ export class Selector {
     const container = createSvg('svg')
     container.style.position = 'absolute'
     container.style.opacity = '0.5'
+    container.style.display = 'none'
     const rec = createSvg('rect')
     rec.setAttribute('width', '0')
     rec.setAttribute('height', '0')

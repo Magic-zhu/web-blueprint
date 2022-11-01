@@ -58,6 +58,7 @@ export declare class BluePrintEditor {
     private NodeMoveHandler;
     private NodeActiveHandler;
     private getScaleOffset;
+    private getScaleOffset_T;
     private isLineBegin;
     private handleConnectPointClick;
     private paramPointClickHandler;

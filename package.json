@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Magic-zhu/mot.js.git"
+    "url": "git+https://github.com/Magic-zhu/helper.git"
   },
   "keywords": [
     "animation",
@@ -26,9 +26,9 @@
   "author": "magic-zhu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Magic-zhu/obiusm/issues"
+    "url": "https://github.com/Magic-zhu/helper/issues"
   },
-  "homepage": "https://github.com/Magic-zhu/obiusm#readme",
+  "homepage": "https://github.com/Magic-zhu/helper#readme",
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^5.3.1",

@@ -4,7 +4,7 @@ import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
 import {Param} from 'src/node/Param'
 import {Selector} from './Selector'
-import {intersection_rectangle} from 'stl-typescript'
+import {intersection_rectangle} from 'stl-typescript/index'
 
 export enum MouseDownType {
   'LEFT' = 0,
@@ -279,7 +279,7 @@ export class BluePrintEditor {
     this._mouseDownPosition[3] = node.y
   }
 
-  // @ 获取坐标偏移量
+  // @ 获取缩放坐标偏移量
   private getScaleOffset(x: number, y: number) {
     const originOffset: string[] = this._transform.transformOrigin
       .replace(/px/g, '')
@@ -289,6 +289,25 @@ export class BluePrintEditor {
     // @ 先平移到缩放中心再平移回来
     const m1: mat3 = [1, 0, 0, 0, 1, 0, xc, yc, 1]
     const m2: mat3 = [1 / this.scale, 0, 0, 0, 1 / this.scale, 0, 0, 0, 1]
+    const m3: mat3 = [1, 0, 0, 0, 1, 0, -xc, -yc, 1]
+    let m4: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    let m5: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    mat3.multiply(m4, m1, m2)
+    mat3.multiply(m5, m4, m3)
+    const r: vec2 = [0, 0]
+    vec2.transformMat3(r, [x, y], m5)
+    return [...r]
+  }
+
+  private getScaleOffset_T(x: number, y: number) {
+    const originOffset: string[] = this._transform.transformOrigin
+      .replace(/px/g, '')
+      .split(' ')
+    const xc = +originOffset[0]
+    const yc = +originOffset[1]
+    // @ 先平移到缩放中心再平移回来
+    const m1: mat3 = [1, 0, 0, 0, 1, 0, xc, yc, 1]
+    const m2: mat3 = [1 * this.scale, 0, 0, 0, 1 * this.scale, 0, 0, 0, 1]
     const m3: mat3 = [1, 0, 0, 0, 1, 0, -xc, -yc, 1]
     let m4: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     let m5: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -376,16 +395,18 @@ export class BluePrintEditor {
   }
 
   private SelectHandler(x: number, y: number, width: number, height: number) {
-    this.graph.forEach((item: Node) => {
+    this.graph.forEach((item: Node, index) => {    
+      // 当画布缩放的时候需要计算补偿  
+      const [tx, ty] = this.getScaleOffset_T(item.x, item.y)
       const isT = intersection_rectangle(
         x,
         y,
         width,
         height,
-        item.x,
-        item.y,
-        item.width,
-        item.height,
+        tx + this._translateLast[0],
+        ty + this._translateLast[1],
+        item.width * this.scale,
+        item.height * this.scale,
       )
       if (isT) {
         item.selected = true
