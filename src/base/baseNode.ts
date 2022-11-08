@@ -21,7 +21,7 @@ export class BaseNode {
   outPutPoints: Param[] = []
   variables: any = {}
   // the fucntion need to execute
-  func: (inputPoints: Param[]) => {}
+  func: (inputPoints: Param[], outPutPoints: Param[]) => {}
 
   // * base attribute
   nodeName: string = 'Function Name'
@@ -41,7 +41,7 @@ export class BaseNode {
   constructor() {}
 
   execute() {
-    this.func(this.inputPoints)
+    this.func(this.inputPoints, this.outPutPoints)
     this.nextNodes.forEach((item) => {
       item.execute()
     })

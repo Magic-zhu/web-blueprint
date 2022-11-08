@@ -33,8 +33,25 @@
     const node = new Node({
       x: 100,
       y: 100,
-      nodeName: 'Mounted',
-      input: [
+      nodeName: 'Get',
+      output: [
+        {
+            name:'输出值',
+            type:'number',
+            value:10
+        }
+      ],
+    })
+    const node5 = new Node({
+      x: 100,
+      y: 200,
+      nodeName: 'Get',
+      output: [
+        {
+            name:'输出值',
+            type:'number',
+            value:10
+        }
       ],
     })
     const node2 = new Node({
@@ -42,6 +59,17 @@
       color: 'rgba(88,88,88,0.5)',
       x: 400,
       y: 200,
+      input:[
+        {
+            type:'number',
+        },
+        {
+            type:'number',
+        },
+      ],
+      fun:(input)=>{
+        
+      }
     })
     const node3 = new Node({
       nodeName: 'set',
@@ -66,5 +94,6 @@
     editor.add(node)
     editor.add(node2)
     editor.add(node3)
+    editor.add(node5)
   </script>
 </html>

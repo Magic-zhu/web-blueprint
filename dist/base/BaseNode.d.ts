@@ -9,7 +9,7 @@ export declare class BaseNode {
     inputPoints: Param[];
     outPutPoints: Param[];
     variables: any;
-    func: (inputPoints: Param[]) => {};
+    func: (inputPoints: Param[], outPutPoints: Param[]) => {};
     nodeName: string;
     nodeType: string;
     readonly nodeId: string;

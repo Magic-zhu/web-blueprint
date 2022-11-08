@@ -8,7 +8,9 @@ import {Node} from './Node'
 import {Line} from './Line'
 
 export interface ParamOptions {
-  type: string
+  type: string,
+  name?: string,
+  value?: any,
   isInput?: boolean
 }
 
