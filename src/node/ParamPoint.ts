@@ -16,6 +16,9 @@ export const getColor = (type: string) => {
     case 'number':
       color = '#a4fa60'
       break
+    case 'any':
+      color = '#eeeeee'
+      break
   }
   return color
 }

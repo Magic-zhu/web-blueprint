@@ -14,6 +14,8 @@ export declare class Param {
     protected uid: string;
     instance: HTMLElement;
     type: string;
+    name: string;
+    value: any;
     point: ParamPoint;
     label: Label;
     input: Input;

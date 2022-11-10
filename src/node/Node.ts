@@ -13,6 +13,7 @@ export interface NodeParams {
   output?: []
   x?: number
   y?: number
+  func: any
 }
 
 export interface Position {
@@ -46,6 +47,7 @@ export class Node extends BaseNode {
     if (params.color) {
       this.color = params.color
     }
+    this.func = params.func
     this.initContainer()
     this.initHeader()
     this.initBody()
@@ -57,7 +59,7 @@ export class Node extends BaseNode {
     this.rightBody.appendChild(this.nextPoint)
     if (params.input && params.input.length > 0) {
       params.input.forEach((item: any, index: number) => {
-        this.addInput(this.initInput(item.type, index))
+        this.addInput(this.initInput(item, index))
       })
     }
     if (params.output && params.output.length > 0) {
@@ -218,8 +220,8 @@ export class Node extends BaseNode {
     this.nextPoint = svg
   }
 
-  initInput(type: string, index: number) {
-    const box = new Param({type})
+  initInput({type, value, name}, index: number) {
+    const box = new Param({type, value, name})
     box.instance.addEventListener('mousedown', (ev: MouseEvent) => {
       ev.cancelBubble = true
     })

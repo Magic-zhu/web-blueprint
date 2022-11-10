@@ -41,6 +41,9 @@
             value:10
         }
       ],
+      func:()=>{
+
+      }
     })
     const node5 = new Node({
       x: 100,
@@ -53,6 +56,9 @@
             value:10
         }
       ],
+      func:()=>{
+        
+      }
     })
     const node2 = new Node({
       nodeName: '+',
@@ -67,30 +73,31 @@
             type:'number',
         },
       ],
-      fun:(input)=>{
+      output:[
+        {
+          type:'number'
+        }
+      ],
+      func:(inputs)=>{
         
       }
     })
     const node3 = new Node({
-      nodeName: 'set',
+      nodeName: '打印日志',
       color: 'green',
       x: 400,
       y: 400,
       input: [
         {
-          type: 'string',
+          type: 'any',
+          value: 0,
         },
       ],
-      output: [
-        {
-          type: 'string',
-        },
-      ],
+      func:(inputs)=>{
+        console.log(inputs[0].value)
+      }
     })
-    node.func = (input) => {
-      console.log(input)
-    }
-    node.execute()
+    node3.execute()
     editor.add(node)
     editor.add(node2)
     editor.add(node3)

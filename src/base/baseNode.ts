@@ -26,6 +26,7 @@ export class BaseNode {
   // * base attribute
   nodeName: string = 'Function Name'
   nodeType: string = 'Function'
+  nodeBaseWidth: number = 250
   readonly nodeId: string = uuid()
   // * base attribute
   async: boolean = false
@@ -52,14 +53,14 @@ export class BaseNode {
   }
 
   getNextPointPosition() {
-    return [this._x + 200 - 10, this._y + 32 + 10 + 5]
+    return [this._x + 250 - 10, this._y + 32 + 10 + 5]
   }
 
   getParamPosition(index: number, isInput: boolean = true) {
     if (isInput) {
       return [this._x + 10, this._y + 32 + 25 + 20 * index + 10]
     } else {
-      return [this._x + 200, this._y + 32 + 25 + 20 * index + 10]
+      return [this._x + 250, this._y + 32 + 25 + 20 * index + 10]
     }
   }
 }

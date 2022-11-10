@@ -8,9 +8,9 @@ import {Node} from './Node'
 import {Line} from './Line'
 
 export interface ParamOptions {
-  type: string,
-  name?: string,
-  value?: any,
+  type: string
+  name?: string
+  value?: any
   isInput?: boolean
 }
 
@@ -18,6 +18,8 @@ export class Param {
   protected uid: string = uuid()
   instance: HTMLElement
   type: string = ''
+  name: string = ''
+  value: any = ''
   point: ParamPoint
   label: Label
   input: Input
@@ -31,6 +33,8 @@ export class Param {
   constructor(options: ParamOptions) {
     this.type = options.type
     this.isInput = options.isInput !== undefined ? options.isInput : true
+    this.name = options.name !== undefined ? options.name : 'unknown'
+    this.value = options.value !== undefined ? options.value : ''
     this.create()
   }
 
@@ -38,7 +42,7 @@ export class Param {
     this.instance = createDiv()
     this.instance.setAttribute('class', 'wb-param-base')
     this.point = new ParamPoint({type: this.type})
-    this.label = new Label({})
+    this.label = new Label({text: this.name})
     this.input = new Input({type: this.type})
     if (this.isInput) {
       this.add(this.point)
