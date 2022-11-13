@@ -4,6 +4,8 @@ export interface NodeParams {
     nodeName: string;
     headerClass?: string;
     color?: string;
+    isNeedPreNode?: boolean;
+    isNeedNextNode?: boolean;
     input?: [];
     output?: [];
     x?: number;

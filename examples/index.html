@@ -25,6 +25,9 @@
     <div id="box">
       <div id="app"></div>
     </div>
+    <div>
+        <button id="start">运行</button>
+    </div>
   </body>
   <script>
     // @ts-ignore
@@ -78,8 +81,9 @@
           type:'number'
         }
       ],
-      func:(inputs)=>{
-        
+      func:(inputs,outputs)=>{
+        outputs[0] = inputs[0].value + inputs[1].value
+        console.log(outputs[0])
       }
     })
     const node3 = new Node({
@@ -97,10 +101,13 @@
         console.log(inputs[0].value)
       }
     })
-    node3.execute()
     editor.add(node)
     editor.add(node2)
     editor.add(node3)
     editor.add(node5)
+
+    documents.getElementById("start").addEventListener('click',()=>{
+        
+    })
   </script>
 </html>
