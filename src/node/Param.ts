@@ -38,7 +38,7 @@ export class Param {
     this.create()
   }
 
-  create() {
+  private create() {
     this.instance = createDiv()
     this.instance.setAttribute('class', 'wb-param-base')
     this.point = new ParamPoint({type: this.type})
@@ -73,7 +73,17 @@ export class Param {
     } else {
       this.isBeign = false
     }
+    console.log('cooonect',param);
+    
+    // pass the value
+    if(this.isInput){
+      this.update(param.value)
+    }
   }
 
   disConnect() {}
+
+  update(value: any) {
+    this.value = value
+  }
 }

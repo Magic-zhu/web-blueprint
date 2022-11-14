@@ -25,8 +25,9 @@ export declare class Param {
     isBeign: boolean;
     isInput: boolean;
     constructor(options: ParamOptions);
-    create(): void;
+    private create;
     add(ele: WpElement): void;
     connect(line: Line, param: Param, position: string): void;
     disConnect(): void;
+    update(value: any): void;
 }

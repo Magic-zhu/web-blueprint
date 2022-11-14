@@ -32,6 +32,11 @@ export class BaseNode {
   async: boolean = false
   _x: number = 0
   _y: number = 0
+  preNodeRequired:boolean = true
+  nextNodeRequired:boolean = true
+
+  // * no next point or pre point  this value should be 10;otherwise should be 0
+  yAxisPak = 10
 
   // * LINK NODES
   preNodes: BaseNode[] = []
@@ -58,9 +63,9 @@ export class BaseNode {
 
   getParamPosition(index: number, isInput: boolean = true) {
     if (isInput) {
-      return [this._x + 10, this._y + 32 + 25 + 20 * index + 10]
+      return [this._x + 10, this._y + 32 + 25 + 20 * index + this.yAxisPak]
     } else {
-      return [this._x + 250, this._y + 32 + 25 + 20 * index + 10]
+      return [this._x + 250, this._y + 32 + 25 + 20 * index + this.yAxisPak]
     }
   }
 }

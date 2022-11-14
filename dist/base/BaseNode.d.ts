@@ -17,6 +17,9 @@ export declare class BaseNode {
     async: boolean;
     _x: number;
     _y: number;
+    preNodeRequired: boolean;
+    nextNodeRequired: boolean;
+    yAxisPak: number;
     preNodes: BaseNode[];
     nextNodes: BaseNode[];
     preLines: Line[];

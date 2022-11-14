@@ -37,6 +37,8 @@
       x: 100,
       y: 100,
       nodeName: 'Get',
+      preNodeRequired:false,
+      nextNodeRequired:false,
       output: [
         {
             name:'输出值',
@@ -52,6 +54,8 @@
       x: 100,
       y: 200,
       nodeName: 'Get',
+      preNodeRequired:false,
+      nextNodeRequired:false,
       output: [
         {
             name:'输出值',
@@ -71,19 +75,22 @@
       input:[
         {
             type:'number',
+            name:"输入值1"
         },
         {
             type:'number',
+            name:"输入值2"
         },
       ],
       output:[
         {
-          type:'number'
+          type:'number',
+          name:"结果"
         }
       ],
       func:(inputs,outputs)=>{
-        outputs[0] = inputs[0].value + inputs[1].value
-        console.log(outputs[0])
+        outputs[0].value = inputs[0].value + inputs[1].value
+        outputs[0].linkedParam.value = outputs[0].value
       }
     })
     const node3 = new Node({
@@ -93,8 +100,9 @@
       y: 400,
       input: [
         {
-          type: 'any',
+          type: 'number',
           value: 0,
+          name:'value'
         },
       ],
       func:(inputs)=>{
@@ -106,8 +114,8 @@
     editor.add(node3)
     editor.add(node5)
 
-    documents.getElementById("start").addEventListener('click',()=>{
-        
+    document.getElementById("start").addEventListener('click',()=>{
+        node2.execute()
     })
   </script>
 </html>

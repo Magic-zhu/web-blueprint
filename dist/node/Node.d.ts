@@ -4,8 +4,8 @@ export interface NodeParams {
     nodeName: string;
     headerClass?: string;
     color?: string;
-    isNeedPreNode?: boolean;
-    isNeedNextNode?: boolean;
+    preNodeRequired?: boolean;
+    nextNodeRequired?: boolean;
     input?: [];
     output?: [];
     x?: number;
@@ -49,7 +49,11 @@ export declare class Node extends BaseNode {
         name: any;
     }, index: number): Param;
     addInput(param: Param): void;
-    initOutput(type: string, index: number): Param;
+    initOutput({ type, value, name }: {
+        type: any;
+        value: any;
+        name: any;
+    }, index: number): Param;
     addOutput(param: Param): void;
     set position(pos: Position);
     connect(info: any): void;

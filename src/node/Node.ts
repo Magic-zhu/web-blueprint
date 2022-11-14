@@ -9,8 +9,8 @@ export interface NodeParams {
   nodeName: string
   headerClass?: string
   color?: string
-  isNeedPreNode?: boolean
-  isNeedNextNode?: boolean
+  preNodeRequired?: boolean
+  nextNodeRequired?: boolean
   input?: []
   output?: []
   x?: number
@@ -52,13 +52,29 @@ export class Node extends BaseNode {
     this.func = params.func
     this.initContainer()
     this.initHeader()
-    this.initBody()
-    this.initPrePoint()
-    this.initNextPoint()
     this.instance.appendChild(this.header)
+    this.initBody()
     this.instance.appendChild(this.body)
-    this.leftBody.appendChild(this.prePoint)
-    this.rightBody.appendChild(this.nextPoint)
+
+    if(params.preNodeRequired || params.preNodeRequired === undefined){
+      this.initPrePoint()
+      this.leftBody.appendChild(this.prePoint)
+    }else{
+      this.preNodeRequired = false
+    }
+
+    if(params.nextNodeRequired || params.nextNodeRequired === undefined){
+      this.initNextPoint()
+      this.rightBody.appendChild(this.nextPoint)
+    }else{
+      this.nextNodeRequired = false
+    }
+
+    // tip *  no next point or pre point  this value should be 10;otherwise should be 0
+    if(!this.nextNodeRequired && !this.preNodeRequired){
+      this.yAxisPak = 0
+    }
+
     if (params.input && params.input.length > 0) {
       params.input.forEach((item: any, index: number) => {
         this.addInput(this.initInput(item, index))
@@ -66,7 +82,7 @@ export class Node extends BaseNode {
     }
     if (params.output && params.output.length > 0) {
       params.output.forEach((item: any, index: number) => {
-        this.addOutput(this.initOutput(item.type, index))
+        this.addOutput(this.initOutput(item, index))
       })
     }
     this.x = params.x || 0
@@ -246,8 +262,8 @@ export class Node extends BaseNode {
     this.leftBody.appendChild(param.instance)
   }
 
-  initOutput(type: string, index: number) {
-    const box = new Param({type, isInput: false})
+  initOutput({type, value, name}, index: number) {
+    const box = new Param({type, value, name, isInput: false})
     box.instance.addEventListener('mousedown', (ev: MouseEvent) => {
       ev.cancelBubble = true
     })
