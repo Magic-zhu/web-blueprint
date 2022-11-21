@@ -1,4 +1,4 @@
-import { WpElement } from './WpElement';
+import { Param } from './Param';
 export interface InputOptions {
     type: string;
 }
@@ -6,7 +6,7 @@ export declare class Input {
     instance: HTMLElement;
     private inputIntance;
     type: string;
-    parent: WpElement;
+    parent: Param;
     _value: any;
     constructor(options: InputOptions);
     create(): void;

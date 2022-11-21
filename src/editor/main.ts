@@ -73,6 +73,9 @@ export class BluePrintEditor {
   // @ 当前操作的线
   private currentLine: Line
 
+  // @ 右键监听
+  onRightClick:Function
+
   constructor(container) {
     // # hook
     IO.emit('beforeCreated')
@@ -125,6 +128,10 @@ export class BluePrintEditor {
   private init() {
     this.container.addEventListener('mousedown', (ev: MouseEvent) => {
       this.setMouseDownType(ev.button)
+      // @ hook rightclick
+      if(this.onRightClick && ev.button === 2) {
+        this.onRightClick()
+      }
       this.recordPosition(ev.clientX, ev.clientY)
     })
     document.body.addEventListener('mouseup', (ev) => {

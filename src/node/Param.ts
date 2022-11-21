@@ -26,6 +26,7 @@ export class Param {
   parent: Node
   linkedLine: Line
   linkedParam: Param
+  private linkedLines: Line []
   // tip:relative to the line, beign or end here
   isBeign: boolean
   // tip: input or output
@@ -44,6 +45,8 @@ export class Param {
     this.point = new ParamPoint({type: this.type})
     this.label = new Label({text: this.name})
     this.input = new Input({type: this.type})
+    // tip: set parent
+    this.input.parent = this
     if (this.isInput) {
       this.add(this.point)
       this.add(this.label)

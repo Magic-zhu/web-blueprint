@@ -22,6 +22,7 @@ export declare class Param {
     parent: Node;
     linkedLine: Line;
     linkedParam: Param;
+    private linkedLines;
     isBeign: boolean;
     isInput: boolean;
     constructor(options: ParamOptions);

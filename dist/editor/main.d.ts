@@ -44,6 +44,7 @@ export declare class BluePrintEditor {
     private beginNode;
     private beginParam;
     private currentLine;
+    onRightClick: Function;
     constructor(container: any);
     private init;
     add(node: Node): void;
