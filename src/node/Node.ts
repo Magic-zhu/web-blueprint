@@ -331,9 +331,13 @@ export class Node extends BaseNode {
       if (!param.linkedLine) return
       const [ix, iy] = this.getParamPosition(index)
       if (param.isBeign) {
-        param.linkedLine.update(new Point(ix, iy), param.linkedLine._end)
+        param.linkedObjects.forEach((item)=>{
+            item.line.update(new Point(ix, iy), item.line._end)
+        })
       } else {
-        param.linkedLine.update(param.linkedLine._begin, new Point(ix, iy))
+        param.linkedObjects.forEach((item)=>{
+            item.line.update(item.line._begin, new Point(ix, iy))
+        })
       }
     })
     // tip: update outPoints line

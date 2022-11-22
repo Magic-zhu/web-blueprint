@@ -3,7 +3,7 @@
   "version": "0.0.01",
   "description": "web-blueprint",
   "main": "./dist/obiusm-umd.min.js",
-  "module": "./src/index.ts",
+  "module": "./dist/blueprint-ems.min.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rollup --config",

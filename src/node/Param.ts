@@ -14,6 +14,12 @@ export interface ParamOptions {
   isInput?: boolean
 }
 
+export interface LinkedObject {
+  line: Line
+  param: Param
+  id: string
+}
+
 export class Param {
   protected uid: string = uuid()
   instance: HTMLElement
@@ -24,9 +30,12 @@ export class Param {
   label: Label
   input: Input
   parent: Node
-  linkedLine: Line
-  linkedParam: Param
-  private linkedLines: Line []
+  // tip# when this parameter is the end point
+  public linkedLine: Line
+  private linkedParam: Param
+  // tip# when this parameter is the begin point
+  public linkedObjects: LinkedObject[]
+
   // tip:relative to the line, beign or end here
   isBeign: boolean
   // tip: input or output
@@ -69,17 +78,30 @@ export class Param {
   connect(line: Line, param: Param, position: string) {
     this.point.connect()
     this.input.hidden()
-    this.linkedLine = line
-    this.linkedParam = param
+
+    /**
+     * tip# the output point can connect to serval points,
+     * tip# but the output can only connect to one point
+     */
+    if (!this.input) {
+      this.linkedObjects.push({
+        line,
+        param,
+        id: param.uid,
+      })
+    } else {
+      this.linkedLine = line
+      this.linkedParam = param
+    }
+
     if (position === 'begin') {
       this.isBeign = true
     } else {
       this.isBeign = false
     }
-    console.log('cooonect',param);
-    
+
     // pass the value
-    if(this.isInput){
+    if (this.isInput) {
       this.update(param.value)
     }
   }

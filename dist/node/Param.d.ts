@@ -10,6 +10,11 @@ export interface ParamOptions {
     value?: any;
     isInput?: boolean;
 }
+export interface LinkedObject {
+    line: Line;
+    param: Param;
+    id: string;
+}
 export declare class Param {
     protected uid: string;
     instance: HTMLElement;
@@ -21,8 +26,8 @@ export declare class Param {
     input: Input;
     parent: Node;
     linkedLine: Line;
-    linkedParam: Param;
-    private linkedLines;
+    private linkedParam;
+    linkedObjects: LinkedObject[];
     isBeign: boolean;
     isInput: boolean;
     constructor(options: ParamOptions);
