@@ -9,13 +9,13 @@
   </head>
   <style>
     #box {
-      width: 800px;
-      height: 800px;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       background-color: #333333;
     }
     #app {
-      width: 800px;
+      width: 100%;
       height: 800px;
       position: relative;
     }
@@ -39,9 +39,10 @@
       nodeName: 'Get',
       preNodeRequired:false,
       nextNodeRequired:false,
+      color:"linear-gradient(135deg,#622774,#c53364)",
       output: [
         {
-            name:'输出值',
+            name:'值1',
             type:'number',
             value:10
         }
@@ -58,7 +59,7 @@
       nextNodeRequired:false,
       output: [
         {
-            name:'输出值',
+            name:'值2',
             type:'number',
             value:10
         }
@@ -94,7 +95,7 @@
       }
     })
     const node3 = new Node({
-      nodeName: '打印日志',
+      nodeName: 'Print Log',
       color: 'green',
       x: 400,
       y: 400,
@@ -113,6 +114,34 @@
     editor.add(node2)
     editor.add(node3)
     editor.add(node5)
+    const BranchNode = new Node({
+        x:500,
+        y:100,
+        nodeName: "Branch",
+        nextNodeRequired: false,
+        color:"linear-gradient(135deg,#f54ea2,#ff7676)",
+        input:[
+            {
+                type:"boolean",
+                value:false,
+                name:"condition"
+            }
+        ],
+        output:[
+            {
+                type:'process',
+                name:'true',
+            },
+            {
+                type:'process',
+                name:'false',
+            }
+        ],
+        func:()=>{
+            
+        }
+    })
+    editor.add(BranchNode)
 
     document.getElementById("start").addEventListener('click',()=>{
         node2.execute()

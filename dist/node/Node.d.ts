@@ -41,8 +41,8 @@ export declare class Node extends BaseNode {
     initContainer(): void;
     initHeader(): void;
     initBody(): void;
-    initPrePoint(): void;
-    initNextPoint(): void;
+    initPrePoint(ifNeed: boolean): void;
+    initNextPoint(ifNeed: boolean): void;
     initInput({ type, value, name }: {
         type: any;
         value: any;

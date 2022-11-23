@@ -16,10 +16,8 @@
     "url": "git+https://github.com/Magic-zhu/helper.git"
   },
   "keywords": [
-    "animation",
-    "dom",
-    "canvas",
-    "webgl",
+    "lowcode",
+    "blueprint",
     "typescript",
     "javascript"
   ],

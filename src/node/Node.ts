@@ -51,27 +51,35 @@ export class Node extends BaseNode {
     }
     this.func = params.func
     this.initContainer()
+
     this.initHeader()
     this.instance.appendChild(this.header)
+
     this.initBody()
     this.instance.appendChild(this.body)
 
-    if(params.preNodeRequired || params.preNodeRequired === undefined){
-      this.initPrePoint()
-      this.leftBody.appendChild(this.prePoint)
-    }else{
+    if (params.preNodeRequired || params.preNodeRequired === undefined) {
+      this.preNodeRequired = true
+    } else {
       this.preNodeRequired = false
     }
 
-    if(params.nextNodeRequired || params.nextNodeRequired === undefined){
-      this.initNextPoint()
-      this.rightBody.appendChild(this.nextPoint)
-    }else{
+    if (params.nextNodeRequired || params.nextNodeRequired === undefined) {
+      this.nextNodeRequired = true
+    } else {
       this.nextNodeRequired = false
     }
 
+    if (this.nextNodeRequired || this.preNodeRequired) {
+      this.initPrePoint(this.preNodeRequired)
+      this.leftBody.appendChild(this.prePoint)
+      this.initNextPoint(this.nextNodeRequired)
+      this.rightBody.appendChild(this.nextPoint)
+    }
+
     // tip *  no next point or pre point  this value should be 10;otherwise should be 0
-    if(!this.nextNodeRequired && !this.preNodeRequired){
+    // tip *  yAxisPak -> calculate the point position
+    if (!this.nextNodeRequired && !this.preNodeRequired) {
       this.yAxisPak = 0
     }
 
@@ -155,7 +163,7 @@ export class Node extends BaseNode {
     div.className = this.headerClass
     div.innerText = this.nodeName
     if (this.color) {
-      div.style.backgroundColor = this.color
+      div.style.background = this.color
     }
     this.header = div
   }
@@ -174,9 +182,13 @@ export class Node extends BaseNode {
     this.body = div
   }
 
-  initPrePoint() {
+  initPrePoint(ifNeed: boolean) {
     const svg: SVGElement = createSvg('svg')
     svg.setAttribute('class', 'wb-prePoint')
+    if(!ifNeed) {
+        this.prePoint = svg
+        return 
+    }
     const polygon: SVGPolygonElement = createSvg('polygon')
     polygon.setAttribute('points', '0,0 0,10 5,10 9,5 5,0')
     polygon.setAttribute('stroke-width', '2px')
@@ -212,9 +224,13 @@ export class Node extends BaseNode {
     this.prePoint = svg
   }
 
-  initNextPoint() {
+  initNextPoint(ifNeed: boolean) {
     const svg: SVGElement = createSvg('svg')
     svg.setAttribute('class', 'wb-nextPoint')
+    if(!ifNeed) {
+        this.nextPoint = svg
+        return 
+    }
     const polygon: SVGPolygonElement = createSvg('polygon')
     polygon.setAttribute('points', '0,0 0,10 5,10 9,5 5,0')
     polygon.setAttribute('stroke-width', '2px')
@@ -331,12 +347,12 @@ export class Node extends BaseNode {
       if (!param.linkedLine) return
       const [ix, iy] = this.getParamPosition(index)
       if (param.isBeign) {
-        param.linkedObjects.forEach((item)=>{
-            item.line.update(new Point(ix, iy), item.line._end)
+        param.linkedObjects.forEach((item) => {
+          item.line.update(new Point(ix, iy), item.line._end)
         })
       } else {
-        param.linkedObjects.forEach((item)=>{
-            item.line.update(item.line._begin, new Point(ix, iy))
+        param.linkedObjects.forEach((item) => {
+          item.line.update(item.line._begin, new Point(ix, iy))
         })
       }
     })
