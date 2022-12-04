@@ -345,7 +345,17 @@ export class Node extends BaseNode {
     // tip: update inputPoints line
     this.inputPoints.forEach((param: Param, index) => {
       if (!param.linkedLine) return
-      const [ix, iy] = this.getParamPosition(index)
+      const [ix, iy] = this.getParamPosition(index, true)
+      if (param.isBeign) {
+        param.linkedLine.update(new Point(ix, iy), param.linkedLine._end)
+      } else {
+        param.linkedLine.update(param.linkedLine._begin, new Point(ix, iy))
+      }
+    })
+    // tip: update outPoints line
+    this.outPutPoints.forEach((param: Param, index) => {
+      if (!param.linkedObjects) return
+      const [ix, iy] = this.getParamPosition(index, false)
       if (param.isBeign) {
         param.linkedObjects.forEach((item) => {
           item.line.update(new Point(ix, iy), item.line._end)
@@ -354,16 +364,6 @@ export class Node extends BaseNode {
         param.linkedObjects.forEach((item) => {
           item.line.update(item.line._begin, new Point(ix, iy))
         })
-      }
-    })
-    // tip: update outPoints line
-    this.outPutPoints.forEach((param: Param, index) => {
-      if (!param.linkedLine) return
-      const [ix, iy] = this.getParamPosition(index, false)
-      if (param.isBeign) {
-        param.linkedLine.update(new Point(ix, iy), param.linkedLine._end)
-      } else {
-        param.linkedLine.update(param.linkedLine._begin, new Point(ix, iy))
       }
     })
   }

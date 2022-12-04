@@ -81,7 +81,7 @@ export class Param {
 
     /**
      * tip# the output point can connect to serval points,
-     * tip# but the output can only connect to one point
+     * tip# but the input point can only connect to one point
      */
     if (!this.input) {
       this.linkedObjects.push({
