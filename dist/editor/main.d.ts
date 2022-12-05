@@ -26,6 +26,7 @@ export interface ClickInfo {
     isPre?: boolean;
     node: Node;
     param?: Param;
+    line?: Line;
 }
 export declare class BluePrintEditor {
     container: HTMLElement;
@@ -65,4 +66,5 @@ export declare class BluePrintEditor {
     private paramPointClickHandler;
     private resetAfterAttachLine;
     private SelectHandler;
+    private canBeConnected;
 }

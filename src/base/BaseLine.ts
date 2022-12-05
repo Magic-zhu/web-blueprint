@@ -1,6 +1,11 @@
 import {Node} from 'src/node/Node'
 import {Point} from './Point'
 
+export enum NodeConnectType {
+  PRE = 0,
+  NEXT = 1,
+}
+
 export class BaseLine {
   _begin: Point
   _end: Point
@@ -9,6 +14,8 @@ export class BaseLine {
   _height: number
   beginNode: Node
   endNode: Node
+  beginNodeConnectType:NodeConnectType
+  endNodeConnectType:NodeConnectType
 
   _getControlPoint(begin: Point, end: Point): number[] {
     const middlePoint = begin.middileWith(end)

@@ -5,6 +5,7 @@ import {mat3, vec2} from 'gl-matrix'
 import {Param} from 'src/node/Param'
 import {Selector} from './Selector'
 import {intersection_rectangle} from 'stl-typescript/index'
+import {NodeConnectType} from 'src/base/BaseLine'
 
 export enum MouseDownType {
   'LEFT' = 0,
@@ -38,6 +39,7 @@ export interface ClickInfo {
   isPre?: boolean
   node: Node
   param?: Param
+  line?: Line
 }
 
 export class BluePrintEditor {
@@ -74,7 +76,7 @@ export class BluePrintEditor {
   private currentLine: Line
 
   // @ 右键监听
-  onRightClick:Function
+  onRightClick: Function
 
   constructor(container) {
     // # hook
@@ -129,7 +131,7 @@ export class BluePrintEditor {
     this.container.addEventListener('mousedown', (ev: MouseEvent) => {
       this.setMouseDownType(ev.button)
       // @ hook rightclick
-      if(this.onRightClick && ev.button === 2) {
+      if (this.onRightClick && ev.button === 2) {
         this.onRightClick()
       }
       this.recordPosition(ev.clientX, ev.clientY)
@@ -329,33 +331,44 @@ export class BluePrintEditor {
     return this.currentEventType === EditorEventType.LineBegin
   }
 
-  private handleConnectPointClick(info): void {
+  private handleConnectPointClick(info: ClickInfo): void {
     this.currentTarget = info.node
     if (!this.isLineBegin()) {
       this.currentEventType = EditorEventType.LineBegin
-      //@ 记录一下开始端点
+      // @ 记录一下开始端点
       this.beginNode = info.node
-
+      // @ 记录连接点是next还是pre
       const t = new Line(
         new Point(info.pos[0], info.pos[1]),
         new Point(info.pos[0], info.pos[1]),
       )
+      t.beginNodeConnectType = info.isPre
+        ? NodeConnectType.PRE
+        : NodeConnectType.NEXT
       this.currentLine = t
       this.addLine(t)
-    } else {
+    } else {   
+      const endPointConnectType = info.isPre
+        ? NodeConnectType.PRE
+        : NodeConnectType.NEXT        
+      // ? 检查是否是相同类型连接点 不可连接
+      if (this.currentLine.beginNodeConnectType === endPointConnectType) return
+      // 切换状态
       this.currentEventType = EditorEventType.LineEnd
+      // 更新线的end point
+      this.currentLine.endNodeConnectType = endPointConnectType
       this.currentLine.update(
         this.currentLine._begin,
         new Point(info.pos[0], info.pos[1]),
       )
       this.lineGraph.push(this.currentLine)
-      // @ 连接信息注入
+      // 连接信息注入
       info.node = this.beginNode
       info.line = this.currentLine
       this.currentTarget.connect(info)
       info.isPre = !info.isPre
       info.node = this.currentTarget
-      info.node = this.beginNode.connect(info)
+      this.beginNode.connect(info)
       this.resetAfterAttachLine()
     }
   }
@@ -402,8 +415,8 @@ export class BluePrintEditor {
   }
 
   private SelectHandler(x: number, y: number, width: number, height: number) {
-    this.graph.forEach((item: Node, index) => {    
-      // 当画布缩放的时候需要计算补偿  
+    this.graph.forEach((item: Node, index) => {
+      // 当画布缩放的时候需要计算补偿
       const [tx, ty] = this.getScaleOffset_T(item.x, item.y)
       const isT = intersection_rectangle(
         x,
@@ -422,4 +435,6 @@ export class BluePrintEditor {
       }
     })
   }
+
+  private canBeConnected() {}
 }
