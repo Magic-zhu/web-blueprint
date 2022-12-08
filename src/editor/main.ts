@@ -356,6 +356,8 @@ export class BluePrintEditor {
         : NodeConnectType.NEXT
       this.currentLine = t
       this.addLine(t)
+      console.log(t);
+      
     } else {
       if (this.beginType !== BeginType.NODE) return   
       const endPointConnectType = info.isPre
@@ -375,17 +377,15 @@ export class BluePrintEditor {
       // 连接信息注入
       info.node = this.beginNode
       info.line = this.currentLine
-      this.currentTarget.connect(info)
+      this.currentTarget.connect(info,'end')
       info.isPre = !info.isPre
       info.node = this.currentTarget
-      this.beginNode.connect(info)
+      this.beginNode.connect(info,'begin')
       this.resetAfterAttachLine()
     }
   }
 
   private paramPointClickHandler(info: ClickInfo): void {
-    console.log(info);
-    
     this.currentTarget = info.node
     if (this.currentEventType !== EditorEventType.LineBegin) {
       this.currentEventType = EditorEventType.LineBegin

@@ -56,6 +56,6 @@ export declare class Node extends BaseNode {
     }, index: number): Param;
     addOutput(param: Param): void;
     set position(pos: Position);
-    connect(info: any): void;
+    connect(info: any, position: string): void;
     updateRelativeLines(x: number, y: number): void;
 }

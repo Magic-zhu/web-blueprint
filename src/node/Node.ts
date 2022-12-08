@@ -185,9 +185,9 @@ export class Node extends BaseNode {
   initPrePoint(ifNeed: boolean) {
     const svg: SVGElement = createSvg('svg')
     svg.setAttribute('class', 'wb-prePoint')
-    if(!ifNeed) {
-        this.prePoint = svg
-        return 
+    if (!ifNeed) {
+      this.prePoint = svg
+      return
     }
     const polygon: SVGPolygonElement = createSvg('polygon')
     polygon.setAttribute('points', '0,0 0,10 5,10 9,5 5,0')
@@ -227,9 +227,9 @@ export class Node extends BaseNode {
   initNextPoint(ifNeed: boolean) {
     const svg: SVGElement = createSvg('svg')
     svg.setAttribute('class', 'wb-nextPoint')
-    if(!ifNeed) {
-        this.nextPoint = svg
-        return 
+    if (!ifNeed) {
+      this.nextPoint = svg
+      return
     }
     const polygon: SVGPolygonElement = createSvg('polygon')
     polygon.setAttribute('points', '0,0 0,10 5,10 9,5 5,0')
@@ -308,26 +308,30 @@ export class Node extends BaseNode {
     this.updateRelativeLines(pos.x, pos.y)
   }
 
-  connect(info) {
+  connect(info, position: string) {
     if (info.isPre) {
       this.preNodes.push(info.node)
       const inside: any = this.prePoint.childNodes[0]
       inside.setAttribute('fill', 'white')
       this.preLines.push(info.line)
-      info.line.endNode = this
     } else {
       this.nextNodes.push(info.node)
       const inside: any = this.nextPoint.childNodes[0]
       inside.setAttribute('fill', 'white')
       this.nextLines.push(info.line)
+    }
+    if (position === 'begin') {
       info.line.beginNode = this
+    } else {
+      info.line.endNode = this
     }
   }
 
   updateRelativeLines(x: number, y: number) {
     // tip: update preNode nextNode line
-    const [ix, iy] = this.getPrePointPosition()
+
     this.preLines.forEach((line: Line) => {
+      const [ix, iy] = this.getPrePointPosition()
       if (line.beginNode.nodeId === this.nodeId) {
         line.update(new Point(ix, iy), line._end)
       } else {
