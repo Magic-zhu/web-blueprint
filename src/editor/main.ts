@@ -42,6 +42,11 @@ export interface ClickInfo {
   line?: Line
 }
 
+export enum BeginType {
+  NODE = 'node',
+  PARAM = 'param',
+}
+
 export class BluePrintEditor {
   container: HTMLElement
   lineContainer: SVGAElement
@@ -72,6 +77,8 @@ export class BluePrintEditor {
   private beginNode: Node
   // @ 连线起始参数对象
   private beginParam: Param
+  // @ 连线起始类型
+  private beginType: string
   // @ 当前操作的线
   private currentLine: Line
 
@@ -262,7 +269,7 @@ export class BluePrintEditor {
       this._transform.transformOrigin = `${ev.x}px ${ev.y}px`
       this.container.style.transform = `translate(${this._transform.translate[0]}px, ${this._transform.translate[1]}px) scale(${this.scale})`
     } else {
-      if (this.scale < 0.3) return
+      if (this.scale <= 0.7) return
       this.scale -= 0.1
       this.container.style.transformOrigin = `${ev.x}px ${ev.y}px`
       this._transform.transformOrigin = `${ev.x}px ${ev.y}px`
@@ -337,17 +344,20 @@ export class BluePrintEditor {
       this.currentEventType = EditorEventType.LineBegin
       // @ 记录一下开始端点
       this.beginNode = info.node
-      // @ 记录连接点是next还是pre
+      // @ 记录一下开始端点类型
+      this.beginType = BeginType.NODE
       const t = new Line(
         new Point(info.pos[0], info.pos[1]),
         new Point(info.pos[0], info.pos[1]),
       )
+      // @ 记录连接点是next还是pre
       t.beginNodeConnectType = info.isPre
         ? NodeConnectType.PRE
         : NodeConnectType.NEXT
       this.currentLine = t
       this.addLine(t)
-    } else {   
+    } else {
+      if (this.beginType !== BeginType.NODE) return   
       const endPointConnectType = info.isPre
         ? NodeConnectType.PRE
         : NodeConnectType.NEXT        
@@ -374,22 +384,30 @@ export class BluePrintEditor {
   }
 
   private paramPointClickHandler(info: ClickInfo): void {
+    console.log(info);
+    
     this.currentTarget = info.node
     if (this.currentEventType !== EditorEventType.LineBegin) {
       this.currentEventType = EditorEventType.LineBegin
       //@ 记录一下开始端点
       this.beginParam = info.param
       this.beginNode = info.node
-
+      this.beginType = BeginType.PARAM
       const t = new Line(
         new Point(info.pos[0], info.pos[1]),
         new Point(info.pos[0], info.pos[1]),
         {color: info.param.point.color},
       )
 
+      // @ 记录连接点是next还是pre
+      t.beginNodeConnectType = info.param.isInput
+        ? NodeConnectType.PRE
+        : NodeConnectType.NEXT
+
       this.currentLine = t
       this.addLine(t)
     } else {
+      if (this.beginType !== BeginType.PARAM) return
       if (info.param.type !== this.beginParam.type) {
         return
       }
@@ -410,6 +428,7 @@ export class BluePrintEditor {
   private resetAfterAttachLine() {
     this.beginNode = null
     this.beginParam = null
+    this.beginType = null
     this.currentLine = null
     this.currentEventType = EditorEventType.Normal
   }

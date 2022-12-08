@@ -28,6 +28,10 @@ export interface ClickInfo {
     param?: Param;
     line?: Line;
 }
+export declare enum BeginType {
+    NODE = "node",
+    PARAM = "param"
+}
 export declare class BluePrintEditor {
     container: HTMLElement;
     lineContainer: SVGAElement;
@@ -44,6 +48,7 @@ export declare class BluePrintEditor {
     private currentTarget;
     private beginNode;
     private beginParam;
+    private beginType;
     private currentLine;
     onRightClick: Function;
     constructor(container: any);
