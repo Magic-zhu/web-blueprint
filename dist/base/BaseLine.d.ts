@@ -14,6 +14,7 @@ export declare class BaseLine {
     endNode: Node;
     beginNodeConnectType: NodeConnectType;
     endNodeConnectType: NodeConnectType;
+    readonly id: string;
     _getControlPoint(begin: Point, end: Point): number[];
     _setSize(): void;
 }

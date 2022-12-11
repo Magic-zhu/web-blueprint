@@ -58,4 +58,7 @@ export declare class Node extends BaseNode {
     set position(pos: Position);
     connect(info: any, position: string): void;
     updateRelativeLines(x: number, y: number): void;
+    disConnect(id: string, isPre: boolean): void;
+    private callRelativeNodeDisconnect;
+    private updatePreOrNextConnectedStatus;
 }

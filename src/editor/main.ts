@@ -6,6 +6,7 @@ import {Param} from 'src/node/Param'
 import {Selector} from './Selector'
 import {intersection_rectangle} from 'stl-typescript/index'
 import {NodeConnectType} from 'src/base/BaseLine'
+import {LogMsg} from './LogMsg'
 
 export enum MouseDownType {
   'LEFT' = 0,
@@ -51,6 +52,7 @@ export class BluePrintEditor {
   container: HTMLElement
   lineContainer: SVGAElement
   selector: Selector
+  msgLogger: LogMsg = new LogMsg()
   graph: Node[] = []
   lineGraph: Line[] = []
   // @ 当前画布的缩放系数
@@ -85,9 +87,16 @@ export class BluePrintEditor {
   // @ 右键监听
   onRightClick: Function
 
-  constructor(container) {
+  constructor(container: HTMLElement) {
     // # hook
     IO.emit('beforeCreated')
+    IO.on('LineRemove', (id: string) => {
+      const index = this.lineGraph.findIndex((item) => item.id)
+      if (index === -1) return
+      const line = this.lineGraph[index]
+      this.lineGraph.splice(index, 1)
+      line.destory()
+    })
     IO.on(
       'NodeActive',
       (node: Node) => {
@@ -121,7 +130,7 @@ export class BluePrintEditor {
       {only: true},
     )
     IO.on('ConnectPointEnter', (info) => {}, {only: true})
-    // preventDefault
+    // !! preventDefault
     container.oncontextmenu = function () {
       return false
     }
@@ -152,6 +161,7 @@ export class BluePrintEditor {
         this.currentLine.destory()
         this.currentLine = null
         this.currentEventType = EditorEventType.Normal
+        this.resetAfterAttachLine()
       }
     })
     // @ 处理鼠标移动事件
@@ -206,7 +216,6 @@ export class BluePrintEditor {
     // @ 处理滚轮事件
     this.container.addEventListener('mousewheel', (ev: any) => {
       this.ScaleHandler(ev)
-      this.resize(this.scale)
     })
 
     this.selector = new Selector()
@@ -228,11 +237,6 @@ export class BluePrintEditor {
       ev.clientY - this._mouseDownPosition[1] + this._transform.translate[1]
     this.container.style.transform = `translate(${goalX}px, ${goalY}px) scale(${this.scale})`
     this._translateLast = [goalX, goalY]
-  }
-
-  resize(scale: number) {
-    // this.container.style.width = this._orginSize[0] / scale + 'px'
-    // this.container.style.height = this._orginSize[1] / scale + 'px'
   }
 
   private setMouseDownType(type: MouseDownType): void {
@@ -356,13 +360,12 @@ export class BluePrintEditor {
         : NodeConnectType.NEXT
       this.currentLine = t
       this.addLine(t)
-      console.log(t);
-      
+      console.log(t)
     } else {
-      if (this.beginType !== BeginType.NODE) return   
+      if (this.beginType !== BeginType.NODE) return
       const endPointConnectType = info.isPre
         ? NodeConnectType.PRE
-        : NodeConnectType.NEXT        
+        : NodeConnectType.NEXT
       // ? 检查是否是相同类型连接点 不可连接
       if (this.currentLine.beginNodeConnectType === endPointConnectType) return
       // 切换状态
@@ -377,10 +380,10 @@ export class BluePrintEditor {
       // 连接信息注入
       info.node = this.beginNode
       info.line = this.currentLine
-      this.currentTarget.connect(info,'end')
+      this.currentTarget.connect(info, 'end')
       info.isPre = !info.isPre
       info.node = this.currentTarget
-      this.beginNode.connect(info,'begin')
+      this.beginNode.connect(info, 'begin')
       this.resetAfterAttachLine()
     }
   }

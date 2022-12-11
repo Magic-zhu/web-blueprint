@@ -1,5 +1,6 @@
 import {Node} from 'src/node/Node'
 import {Point} from './Point'
+import { uuid } from './UUID'
 
 export enum NodeConnectType {
   PRE = 0,
@@ -16,6 +17,7 @@ export class BaseLine {
   endNode: Node
   beginNodeConnectType:NodeConnectType
   endNodeConnectType:NodeConnectType
+  readonly id:string = uuid()
 
   _getControlPoint(begin: Point, end: Point): number[] {
     const middlePoint = begin.middileWith(end)

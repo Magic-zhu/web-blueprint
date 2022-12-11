@@ -1,6 +1,7 @@
 import { Line, Node } from 'src';
 import { Param } from 'src/node/Param';
 import { Selector } from './Selector';
+import { LogMsg } from './LogMsg';
 export declare enum MouseDownType {
     'LEFT' = 0,
     'RIGHT' = 2,
@@ -36,6 +37,7 @@ export declare class BluePrintEditor {
     container: HTMLElement;
     lineContainer: SVGAElement;
     selector: Selector;
+    msgLogger: LogMsg;
     graph: Node[];
     lineGraph: Line[];
     private scale;
@@ -51,12 +53,11 @@ export declare class BluePrintEditor {
     private beginType;
     private currentLine;
     onRightClick: Function;
-    constructor(container: any);
+    constructor(container: HTMLElement);
     private init;
     add(node: Node): void;
     addLine(line: Line): void;
     translate(ev: MouseEvent): void;
-    resize(scale: number): void;
     private setMouseDownType;
     private recordPosition;
     private initLineContainer;

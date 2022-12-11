@@ -15,7 +15,7 @@
       background-color: #333333;
     }
     #app {
-      width: 100%;
+      width: 800px;
       height: 800px;
       position: relative;
     }
@@ -144,7 +144,8 @@
     editor.add(BranchNode)
 
     document.getElementById("start").addEventListener('click',()=>{
-        node2.execute()
+        // node2.execute()
+        node2.disConnect(node3.nodeId,false)
     })
   </script>
 </html>

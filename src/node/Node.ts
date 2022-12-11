@@ -203,11 +203,20 @@ export class Node extends BaseNode {
     })
     svg.addEventListener('click', (ev: MouseEvent) => {
       ev.cancelBubble = true
-      IO.emit('ConnectPointClick', {
+      const info = {
         pos: this.getPrePointPosition(),
         node: this,
         isPre: true,
-      })
+      }
+      //  left click
+      if (ev.button === 0) {
+        IO.emit('ConnectPointClick', info)
+        return
+      }
+      // right click
+      if (ev.button === 2) {
+        IO.emit('ConnectPointRightClick', info)
+      }
     })
     svg.addEventListener('mouseenter', () => {
       IO.emit('ConnectPointEnter', {
@@ -370,5 +379,62 @@ export class Node extends BaseNode {
         })
       }
     })
+  }
+
+  // # step1 find the relative node, then delete from self
+  // # step2 find the relativev line, delete from self and editor
+  /**
+   *
+   * @param id - the relative node id ,not self.nodeId
+   * @param isPre
+   * @returns
+   */
+  disConnect(id: string, isPre: boolean) {
+    let relativeNode: Node
+    if (isPre) {
+      const index = this.preNodes.findIndex((item) => item.nodeId === id)
+      if (index === -1) return
+      relativeNode = this.preNodes[index] as Node
+      this.preNodes.splice(index, 1)
+      const lineIndex = this.preLines.findIndex((item) => {
+        return item.beginNode.nodeId === id || item.endNode.nodeId === id
+      })
+      if (lineIndex === -1) return
+      IO.emit('LineRemove', this.preLines[lineIndex].id)
+      this.preLines.splice(lineIndex, 1)
+    } else {
+      const index = this.nextNodes.findIndex((item) => item.nodeId === id)
+      if (index === -1) return
+      relativeNode = this.nextNodes[index] as Node
+      this.nextNodes.splice(index, 1)
+      const lineIndex = this.nextLines.findIndex((item) => {
+        return item.beginNode.nodeId === id || item.endNode.nodeId === id
+      })
+      if (lineIndex === -1) return
+      IO.emit('LineRemove', this.nextLines[lineIndex].id)
+      this.nextLines.splice(lineIndex, 1)
+    }
+    this.callRelativeNodeDisconnect(relativeNode, !isPre)
+    this.updatePreOrNextConnectedStatus()
+  }
+
+  private callRelativeNodeDisconnect(node: Node, isPre: boolean) {
+    node.disConnect(this.nodeId, isPre)
+    node.updatePreOrNextConnectedStatus()
+  }
+
+  private updatePreOrNextConnectedStatus() {
+    const child1 = this.prePoint.childNodes[0] as SVGAElement
+    const child2 = this.nextPoint.childNodes[0] as SVGAElement
+    if (this.preLines.length === 0) {
+      child1.setAttribute('fill', 'none')
+    } else {
+      child1.setAttribute('fill', 'white')
+    }
+    if (this.nextLines.length === 0) {
+      child2.setAttribute('fill', 'none')
+    } else {
+      child2.setAttribute('fill', 'white')
+    }
   }
 }
