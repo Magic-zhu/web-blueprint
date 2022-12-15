@@ -4,7 +4,7 @@ This library is created for making javascript become graphical programming!
 Todo List
 
 + [x] node disconnect api
-+ [ ] param disconnect api
++ [x] param disconnect api
 + [ ] input param can only receive one param
 + [ ] process node
 

@@ -30,11 +30,11 @@ export class Param {
   label: Label
   input: Input
   parent: Node
-  // tip# when this parameter is the end point
+  // tip: when this parameter is the end point
   public linkedLine: Line
   private linkedParam: Param
-  // tip# when this parameter is the begin point
-  public linkedObjects: LinkedObject[]
+  // tip: when this parameter is the begin point
+  public linkedObjects: LinkedObject[] = []
 
   // tip:relative to the line, beign or end here
   isBeign: boolean
@@ -83,7 +83,7 @@ export class Param {
      * tip# the output point can connect to serval points,
      * tip# but the input point can only connect to one point
      */
-    if (!this.input) {
+    if (!this.isInput) {
       this.linkedObjects.push({
         line,
         param,
@@ -106,7 +106,37 @@ export class Param {
     }
   }
 
-  disConnect() {}
+  // # step1 若为输入->清空value,展示输入框
+  // # step2 相关节点断开
+  // # step3 清空当前节点连线
+  /**
+   *
+   * @param paramId - the param should be removed from linkedObjects
+   * @ this function should be called by the input param firstly
+   */
+  disConnect(paramId?: string) {
+    if (this.isInput) {
+      this.value = ''
+      this.input.show()
+      this.point.disConnect()
+
+      this.linkedLine.destory()
+      this.linkedParam.disConnect(this.uid)
+
+      this.linkedParam = null
+      this.linkedLine = null
+    } else {
+      const index = this.linkedObjects.findIndex(
+        (item) => item.param.uid === paramId,
+      )
+      if (index === -1) return
+      this.linkedObjects[index].line.destory()
+      this.linkedObjects.splice(index, 1)
+      if (this.linkedObjects.length === 0) {
+        this.point.disConnect()
+      }
+    }
+  }
 
   update(value: any) {
     this.value = value

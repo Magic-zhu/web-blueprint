@@ -34,6 +34,6 @@ export declare class Param {
     private create;
     add(ele: WpElement): void;
     connect(line: Line, param: Param, position: string): void;
-    disConnect(): void;
+    disConnect(paramId?: string): void;
     update(value: any): void;
 }
