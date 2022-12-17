@@ -26,10 +26,13 @@ export class BaseNode {
   // * base attribute
   nodeName: string = 'Function Name'
   nodeType: string = 'Function'
+  _nodeLabel: string = ''
   nodeBaseWidth: number = 250
   readonly nodeId: string = uuid()
   // * base attribute
   async: boolean = false
+
+  // the position of the node
   _x: number = 0
   _y: number = 0
   preNodeRequired:boolean = true

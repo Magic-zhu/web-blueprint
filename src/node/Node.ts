@@ -7,6 +7,7 @@ import {Param} from './Param'
 
 export interface NodeParams {
   nodeName: string
+  nodeLabel?: string
   headerClass?: string
   color?: string
   preNodeRequired?: boolean
@@ -27,6 +28,7 @@ export class Node extends BaseNode {
   // * The ui part
   instance: HTMLElement
   header: HTMLElement
+  label: HTMLElement
   body: HTMLElement
   leftBody: HTMLElement
   rightBody: HTMLElement
@@ -95,7 +97,15 @@ export class Node extends BaseNode {
     }
     this.x = params.x || 0
     this.y = params.y || 0
+
+    if (params.nodeLabel) {
+      this.initLabel(params.nodeLabel)
+    }
   }
+
+  // ? *********************************
+  // ? ********** Attributes **************
+  // ? *********************************
 
   get x(): number {
     return this._x
@@ -145,6 +155,25 @@ export class Node extends BaseNode {
       this.instance.className = this.instance.className.replace(' selected', '')
     }
   }
+
+  set position(pos: Position) {
+    this.x = pos.x
+    this.y = pos.y
+    this.updateRelativeLines(pos.x, pos.y)
+  }
+
+  get nodeLabel() {
+    return this._nodeLabel
+  }
+
+  set nodeLabel(label:string) {
+    this._nodeLabel = label
+  }
+
+  // ? *********************************
+  // ? ********** Methods **************
+  // ? *********************************
+
 
   initContainer() {
     const div = createDiv()
@@ -311,10 +340,11 @@ export class Node extends BaseNode {
     this.rightBody.appendChild(param.instance)
   }
 
-  set position(pos: Position) {
-    this.x = pos.x
-    this.y = pos.y
-    this.updateRelativeLines(pos.x, pos.y)
+  initLabel(labelText:string) {
+    const label = createSpan()
+    label.setAttribute('class','wb-container-base-header-label')
+    label.innerText = labelText
+    this.header.append(label)
   }
 
   connect(info, position: string) {

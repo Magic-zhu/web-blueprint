@@ -70,7 +70,7 @@ export declare class BluePrintEditor {
     private isLineBegin;
     private handleConnectPointClick;
     private paramPointClickHandler;
+    private processPointClickHandler;
     private resetAfterAttachLine;
     private SelectHandler;
-    private canBeConnected;
 }

@@ -25,6 +25,7 @@ export declare class Param {
     label: Label;
     input: Input;
     parent: Node;
+    isConnected: boolean;
     linkedLine: Line;
     private linkedParam;
     linkedObjects: LinkedObject[];

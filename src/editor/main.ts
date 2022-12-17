@@ -129,6 +129,9 @@ export class BluePrintEditor {
       },
       {only: true},
     )
+    IO.on('ProcessPointClick',(info:ClickInfo)=>{
+      this.processPointClickHandler()
+    })
     IO.on('ConnectPointEnter', (info) => {}, {only: true})
     // !! preventDefault
     container.oncontextmenu = function () {
@@ -342,6 +345,7 @@ export class BluePrintEditor {
     return this.currentEventType === EditorEventType.LineBegin
   }
 
+  // @ 连接节点点击处理
   private handleConnectPointClick(info: ClickInfo): void {
     this.currentTarget = info.node
     if (!this.isLineBegin()) {
@@ -388,6 +392,7 @@ export class BluePrintEditor {
     }
   }
 
+  // @ 参数节点击处理
   private paramPointClickHandler(info: ClickInfo): void {
     this.currentTarget = info.node
     if (this.currentEventType !== EditorEventType.LineBegin) {
@@ -414,6 +419,7 @@ export class BluePrintEditor {
       if (info.param.type !== this.beginParam.type) {
         return
       }
+      if (info.param.isConnected) return
       // 将线更新注入到lineGraph中
       this.currentEventType = EditorEventType.LineEnd
       this.currentLine.update(
@@ -426,6 +432,11 @@ export class BluePrintEditor {
       info.param.connect(this.currentLine, this.beginParam, 'end')
       this.resetAfterAttachLine()
     }
+  }
+
+  // @ 流程节点点击处理
+  private processPointClickHandler():void {
+
   }
 
   private resetAfterAttachLine() {
@@ -457,6 +468,4 @@ export class BluePrintEditor {
       }
     })
   }
-
-  private canBeConnected() {}
 }

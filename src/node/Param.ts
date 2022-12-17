@@ -30,6 +30,7 @@ export class Param {
   label: Label
   input: Input
   parent: Node
+  isConnected: boolean = false
   // tip: when this parameter is the end point
   public linkedLine: Line
   private linkedParam: Param
@@ -76,7 +77,9 @@ export class Param {
    * @param position - 起点还是终点
    */
   connect(line: Line, param: Param, position: string) {
+    if (this.isInput && this.isConnected) return
     this.point.connect()
+    this.isConnected = true
     this.input.hidden()
 
     /**
@@ -117,6 +120,7 @@ export class Param {
   disConnect(paramId?: string) {
     if (this.isInput) {
       this.value = ''
+      this.isConnected = false
       this.input.show()
       this.point.disConnect()
 
@@ -133,6 +137,7 @@ export class Param {
       this.linkedObjects[index].line.destory()
       this.linkedObjects.splice(index, 1)
       if (this.linkedObjects.length === 0) {
+        this.isConnected = false
         this.point.disConnect()
       }
     }

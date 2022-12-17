@@ -2,6 +2,7 @@ import { BaseNode } from 'src/base/BaseNode';
 import { Param } from './Param';
 export interface NodeParams {
     nodeName: string;
+    nodeLabel?: string;
     headerClass?: string;
     color?: string;
     preNodeRequired?: boolean;
@@ -19,6 +20,7 @@ export interface Position {
 export declare class Node extends BaseNode {
     instance: HTMLElement;
     header: HTMLElement;
+    label: HTMLElement;
     body: HTMLElement;
     leftBody: HTMLElement;
     rightBody: HTMLElement;
@@ -38,6 +40,9 @@ export declare class Node extends BaseNode {
     get height(): number;
     get selected(): boolean;
     set selected(value: boolean);
+    set position(pos: Position);
+    get nodeLabel(): string;
+    set nodeLabel(label: string);
     initContainer(): void;
     initHeader(): void;
     initBody(): void;
@@ -55,7 +60,7 @@ export declare class Node extends BaseNode {
         name: any;
     }, index: number): Param;
     addOutput(param: Param): void;
-    set position(pos: Position);
+    initLabel(labelText: string): void;
     connect(info: any, position: string): void;
     updateRelativeLines(x: number, y: number): void;
     disConnect(id: string, isPre: boolean): void;
