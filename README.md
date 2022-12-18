@@ -1,12 +1,20 @@
 # Base BluePrint System
 
-This library is created for making javascript become graphical programming!
+This library is created for graphical programming!
+
 Todo List
 
 + [x] node disconnect api
 + [x] param disconnect api
-+ [ ] input param can only receive one param
++ [x] input param can only receive one param
 + [ ] process node
+
++ [ ] if else / switch / for 
++ [ ] 'array' param
++ [ ] define a basic node map 
+    - [ ] + - * /
+    - [ ] func:console
+
 
 ![](https://files.catbox.moe/gijy0x.png)
 ![](https://files.catbox.moe/gc91hy.gif)
