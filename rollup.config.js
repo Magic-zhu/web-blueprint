@@ -4,7 +4,7 @@ import reolve from 'rollup-plugin-node-resolve'
 
 export default [
   {
-    input: 'src/index.ts',
+    input: './src/index.ts',
     plugins: [
       reolve(),
       typescript(),

@@ -3,7 +3,7 @@ import {ParamPoint} from './ParamPoint'
 import {Input} from './Input'
 import {createDiv} from 'src/dom/create'
 import {uuid} from 'src/base/UUID'
-import {WpElement} from './WpElement'
+import {WpElement,ClassType} from '../WpElement'
 import {Node} from './Node'
 import {Line} from './Line'
 
@@ -16,11 +16,14 @@ export interface ParamOptions {
 
 export interface LinkedObject {
   line: Line
-  param: Param
+  param?: Param
   id: string
+  node?: Node
+  classType: ClassType
 }
 
 export class Param {
+  readonly classType = ClassType.PARAM
   protected uid: string = uuid()
   instance: HTMLElement
   type: string = ''
@@ -74,44 +77,69 @@ export class Param {
   /**
    *
    * @param param
-   * @param position - 起点还是终点
+   * @param position - begin or end
    */
-  connect(line: Line, param: Param, position: string) {
-    if (this.isInput && this.isConnected) return
-    this.point.connect()
-    this.isConnected = true
-    this.input.hidden()
+  connect(line: Line, wpElement: Param | Node, position: string) {
+    // # only process param, the connect object could be 'Node'
+    if (wpElement.classType === ClassType.NODE) {
+      const node = wpElement as Node
+      this.point.connect()
+      this.isConnected = true
 
-    /**
-     * tip# the output point can connect to serval points,
-     * tip# but the input point can only connect to one point
-     */
-    if (!this.isInput) {
       this.linkedObjects.push({
         line,
-        param,
-        id: param.uid,
+        node,
+        id: node.nodeId,
+        classType: ClassType.NODE,
       })
-    } else {
-      this.linkedLine = line
-      this.linkedParam = param
+
+      if (position === 'begin') {
+        this.isBeign = true
+      } else {
+        this.isBeign = false
+      }
     }
 
-    if (position === 'begin') {
-      this.isBeign = true
-    } else {
-      this.isBeign = false
-    }
+    // # the normal condition
+    if (wpElement.classType === ClassType.PARAM) {
+      const param = wpElement as Param
+      if (this.isInput && this.isConnected) return
+      this.point.connect()
+      this.isConnected = true
+      this.input.hidden()
 
-    // pass the value
-    if (this.isInput) {
-      this.update(param.value)
+      /**
+       * tip: the output point can connect to serval points,
+       * tip: but the input point can only connect to one point
+       */
+      if (!this.isInput) {
+        this.linkedObjects.push({
+          line,
+          param,
+          id: param.uid,
+          classType: ClassType.PARAM,
+        })
+      } else {
+        this.linkedLine = line
+        this.linkedParam = param
+      }
+
+      if (position === 'begin') {
+        this.isBeign = true
+      } else {
+        this.isBeign = false
+      }
+
+      // pass the value
+      if (this.isInput) {
+        this.update(param.value)
+      }
     }
   }
 
-  // # step1 若为输入->清空value,展示输入框
-  // # step2 相关节点断开
-  // # step3 清空当前节点连线
+  // tip step1 若为输入->清空value,展示输入框
+  // tip step2 相关节点断开
+  // tip step3 清空当前节点连线
   /**
    *
    * @param paramId - the param should be removed from linkedObjects

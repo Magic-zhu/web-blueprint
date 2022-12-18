@@ -1,11 +1,13 @@
 import { Line } from 'src';
 import { Param } from 'src/node/Param';
+import { ClassType } from '../WpElement';
 export interface BasePoint {
     key: string;
     value: any;
     type: string;
 }
 export declare class BaseNode {
+    readonly classType = ClassType.NODE;
     inputPoints: Param[];
     outPutPoints: Param[];
     variables: any;

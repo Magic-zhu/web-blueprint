@@ -1,6 +1,7 @@
 import {Line} from 'src'
 import {Param} from 'src/node/Param'
 import {uuid} from './UUID'
+import {ClassType} from '../WpElement'
 
 export interface BasePoint {
   key: string
@@ -17,6 +18,7 @@ export interface BasePoint {
 // export type InputType = StaticInputType | string
 
 export class BaseNode {
+  readonly classType = ClassType.NODE
   inputPoints: Param[] = []
   outPutPoints: Param[] = []
   variables: any = {}

@@ -1,4 +1,4 @@
-import { WpElement } from './WpElement';
+import { WpElement } from '../base/WpElement';
 export interface LabelOptions {
     text?: string;
 }

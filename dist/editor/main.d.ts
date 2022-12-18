@@ -31,7 +31,8 @@ export interface ClickInfo {
 }
 export declare enum BeginType {
     NODE = "node",
-    PARAM = "param"
+    PARAM = "param",
+    PROCESS = "process"
 }
 export declare class BluePrintEditor {
     container: HTMLElement;

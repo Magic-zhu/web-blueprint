@@ -1,10 +1,12 @@
 import { Node } from 'src/node/Node';
 import { Point } from './Point';
+import { ClassType } from '../WpElement';
 export declare enum NodeConnectType {
     PRE = 0,
     NEXT = 1
 }
 export declare class BaseLine {
+    readonly classType = ClassType.LINE;
     _begin: Point;
     _end: Point;
     _color: string;

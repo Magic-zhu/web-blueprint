@@ -46,6 +46,7 @@ export interface ClickInfo {
 export enum BeginType {
   NODE = 'node',
   PARAM = 'param',
+  PROCESS = 'process',
 }
 
 export class BluePrintEditor {
@@ -129,9 +130,13 @@ export class BluePrintEditor {
       },
       {only: true},
     )
-    IO.on('ProcessPointClick',(info:ClickInfo)=>{
-      this.processPointClickHandler()
-    })
+    IO.on(
+      'ProcessPointClick',
+      (info: ClickInfo) => {
+        this.processPointClickHandler(info)
+      },
+      {only: true},
+    )
     IO.on('ConnectPointEnter', (info) => {}, {only: true})
     // !! preventDefault
     container.oncontextmenu = function () {
@@ -364,8 +369,19 @@ export class BluePrintEditor {
         : NodeConnectType.NEXT
       this.currentLine = t
       this.addLine(t)
-      console.log(t)
     } else {
+      // # enter process mode
+      if (this.beginType === BeginType.PROCESS) {
+        this.currentEventType = EditorEventType.LineEnd
+        this.currentLine.update(
+          this.currentLine._begin,
+          new Point(info.pos[0], info.pos[1]),
+        )
+        this.lineGraph.push(this.currentLine)
+        this.beginParam.connect(this.currentLine, info.node, 'begin')
+        return
+      }
+      // # enter node mode
       if (this.beginType !== BeginType.NODE) return
       const endPointConnectType = info.isPre
         ? NodeConnectType.PRE
@@ -435,8 +451,23 @@ export class BluePrintEditor {
   }
 
   // @ 流程节点点击处理
-  private processPointClickHandler():void {
-
+  private processPointClickHandler(info: ClickInfo): void {
+    this.currentTarget = info.node
+    if (this.currentEventType !== EditorEventType.LineBegin) {
+      this.currentEventType = EditorEventType.LineBegin
+      //@ 记录一下开始端点
+      this.beginParam = info.param
+      this.beginNode = info.node
+      this.beginType = BeginType.PROCESS
+      const t = new Line(
+        new Point(info.pos[0], info.pos[1]),
+        new Point(info.pos[0], info.pos[1]),
+        {color: 'orange'},
+      )
+      t.beginNodeConnectType = NodeConnectType.NEXT
+      this.currentLine = t
+      this.addLine(t)
+    }
   }
 
   private resetAfterAttachLine() {

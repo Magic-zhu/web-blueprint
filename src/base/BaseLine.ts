@@ -1,6 +1,7 @@
 import {Node} from 'src/node/Node'
 import {Point} from './Point'
-import { uuid } from './UUID'
+import {uuid} from './UUID'
+import {ClassType} from '../WpElement'
 
 export enum NodeConnectType {
   PRE = 0,
@@ -8,6 +9,7 @@ export enum NodeConnectType {
 }
 
 export class BaseLine {
+  readonly classType = ClassType.LINE
   _begin: Point
   _end: Point
   _color: string = 'white'
@@ -15,9 +17,9 @@ export class BaseLine {
   _height: number
   beginNode: Node
   endNode: Node
-  beginNodeConnectType:NodeConnectType
-  endNodeConnectType:NodeConnectType
-  readonly id:string = uuid()
+  beginNodeConnectType: NodeConnectType
+  endNodeConnectType: NodeConnectType
+  readonly id: string = uuid()
 
   _getControlPoint(begin: Point, end: Point): number[] {
     const middlePoint = begin.middileWith(end)

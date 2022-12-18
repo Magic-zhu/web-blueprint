@@ -1,5 +1,5 @@
 import {createSpan} from 'src/dom/create'
-import {WpElement} from './WpElement'
+import {WpElement} from '../WpElement'
 
 export interface LabelOptions {
   text?: string

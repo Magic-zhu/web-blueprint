@@ -166,14 +166,13 @@ export class Node extends BaseNode {
     return this._nodeLabel
   }
 
-  set nodeLabel(label:string) {
+  set nodeLabel(label: string) {
     this._nodeLabel = label
   }
 
   // ? *********************************
   // ? ********** Methods **************
   // ? *********************************
-
 
   initContainer() {
     const div = createDiv()
@@ -325,11 +324,19 @@ export class Node extends BaseNode {
       ev.cancelBubble = true
     })
     box.point.instance.addEventListener('click', (ev: MouseEvent) => {
-      IO.emit('ParamPointClick', {
-        pos: this.getParamPosition(index, false),
-        node: this,
-        param: box,
-      })
+      if (box.type !== 'process') {
+        IO.emit('ParamPointClick', {
+          pos: this.getParamPosition(index, false),
+          node: this,
+          param: box,
+        })
+      } else {
+        IO.emit('ProcessPointClick', {
+          pos: this.getParamPosition(index, false),
+          node: this,
+          param: box,
+        })
+      }
     })
     return box
   }
@@ -340,9 +347,9 @@ export class Node extends BaseNode {
     this.rightBody.appendChild(param.instance)
   }
 
-  initLabel(labelText:string) {
+  initLabel(labelText: string) {
     const label = createSpan()
-    label.setAttribute('class','wb-container-base-header-label')
+    label.setAttribute('class', 'wb-container-base-header-label')
     label.innerText = labelText
     this.header.append(label)
   }
