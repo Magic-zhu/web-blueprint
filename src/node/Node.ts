@@ -24,6 +24,11 @@ export interface Position {
   y: number
 }
 
+export enum ConnectPosition {
+  BEGIN = 'begin',
+  END = 'END',
+}
+
 export class Node extends BaseNode {
   // * The ui part
   instance: HTMLElement
@@ -354,7 +359,7 @@ export class Node extends BaseNode {
     this.header.append(label)
   }
 
-  connect(info, position: string) {
+  connect(info, position: ConnectPosition) {
     if (info.isPre) {
       this.preNodes.push(info.node)
       const inside: any = this.prePoint.childNodes[0]
@@ -366,7 +371,7 @@ export class Node extends BaseNode {
       inside.setAttribute('fill', 'white')
       this.nextLines.push(info.line)
     }
-    if (position === 'begin') {
+    if (position === ConnectPosition.BEGIN) {
       info.line.beginNode = this
     } else {
       info.line.endNode = this
@@ -378,7 +383,7 @@ export class Node extends BaseNode {
 
     this.preLines.forEach((line: Line) => {
       const [ix, iy] = this.getPrePointPosition()
-      if (line.beginNode.nodeId === this.nodeId) {
+      if (line.beginNode?.nodeId === this.nodeId) {
         line.update(new Point(ix, iy), line._end)
       } else {
         line.update(line._begin, new Point(ix, iy))
@@ -386,7 +391,7 @@ export class Node extends BaseNode {
     })
     this.nextLines.forEach((line: Line) => {
       const [ix, iy] = this.getNextPointPosition()
-      if (line.beginNode.nodeId === this.nodeId) {
+      if (line.beginNode?.nodeId === this.nodeId) {
         line.update(new Point(ix, iy), line._end)
       } else {
         line.update(line._begin, new Point(ix, iy))

@@ -1,4 +1,4 @@
-import {Line, Node, Point} from 'src'
+import {Line, Node, Point, ConnectPosition} from 'src'
 import IO from 'src/base/IO'
 import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
@@ -377,10 +377,15 @@ export class BluePrintEditor {
           this.currentLine._begin,
           new Point(info.pos[0], info.pos[1]),
         )
+        this.currentLine.beginNode = this.beginNode
         this.lineGraph.push(this.currentLine)
         this.beginParam.connect(this.currentLine, info.node, 'begin')
+        info.line = this.currentLine
+        info.node.connect(info, ConnectPosition.END)
+        this.resetAfterAttachLine()
         return
       }
+
       // # enter node mode
       if (this.beginType !== BeginType.NODE) return
       const endPointConnectType = info.isPre
@@ -400,10 +405,10 @@ export class BluePrintEditor {
       // 连接信息注入
       info.node = this.beginNode
       info.line = this.currentLine
-      this.currentTarget.connect(info, 'end')
+      this.currentTarget.connect(info, ConnectPosition.END)
       info.isPre = !info.isPre
       info.node = this.currentTarget
-      this.beginNode.connect(info, 'begin')
+      this.beginNode.connect(info, ConnectPosition.BEGIN)
       this.resetAfterAttachLine()
     }
   }
@@ -411,6 +416,7 @@ export class BluePrintEditor {
   // @ 参数节点击处理
   private paramPointClickHandler(info: ClickInfo): void {
     this.currentTarget = info.node
+    // # normal mode
     if (this.currentEventType !== EditorEventType.LineBegin) {
       this.currentEventType = EditorEventType.LineBegin
       //@ 记录一下开始端点
@@ -443,7 +449,7 @@ export class BluePrintEditor {
         new Point(info.pos[0], info.pos[1]),
       )
       this.lineGraph.push(this.currentLine)
-      // @ 连接信息注入
+      // 连接信息注入
       this.beginParam.connect(this.currentLine, info.param, 'begin')
       info.param.connect(this.currentLine, this.beginParam, 'end')
       this.resetAfterAttachLine()
@@ -462,11 +468,25 @@ export class BluePrintEditor {
       const t = new Line(
         new Point(info.pos[0], info.pos[1]),
         new Point(info.pos[0], info.pos[1]),
-        {color: 'orange'},
+        {color: 'white'},
       )
       t.beginNodeConnectType = NodeConnectType.NEXT
       this.currentLine = t
       this.addLine(t)
+    } else {
+      if (info.param.isConnected) return
+      this.currentEventType = EditorEventType.LineEnd
+      this.currentLine.update(
+        this.currentLine._begin,
+        new Point(info.pos[0], info.pos[1]),
+      )
+      this.currentLine.endNode = info.param.parent
+      this.lineGraph.push(this.currentLine)
+      info.line = this.currentLine
+      info.isPre = true
+      this.beginNode.connect(info, ConnectPosition.BEGIN)
+      info.param.connect(this.currentLine, this.beginNode, 'end')
+      this.resetAfterAttachLine()
     }
   }
 

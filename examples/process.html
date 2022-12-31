@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebBlueprint Process</title>
+    <script src="../dist/blueprint-iife.min.js"></script>
+    <link rel="stylesheet" href="../src/style/theme.css" />
+    <style>
+        #box {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #333333;
+        }
+
+        #app {
+            width: 800px;
+            height: 800px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <div id="app"></div>
+    </div>
+</body>
+<script>
+    const { Node, BluePrintEditor, Line, Point } = blueprint
+    const editor = new BluePrintEditor(document.getElementById('app'))
+    const BranchNode = new Node({
+        x: 100,
+        y: 100,
+        nodeName: "Branch",
+        nextNodeRequired: false,
+        color: "linear-gradient(135deg,#f54ea2,rgba(0,0,0,0.5))",
+        input: [
+            {
+                type: "boolean",
+                value: false,
+                name: "condition"
+            }
+        ],
+        output: [
+            {
+                type: 'process',
+                name: 'true',
+            },
+            {
+                type: 'process',
+                name: 'false',
+            }
+        ],
+        func: () => {
+
+        }
+    })
+
+    const consoleNode = new Node({
+        nodeName: 'Print Log',
+        color: 'linear-gradient(135deg,green,rgba(0,0,0,0.5))',
+        x: 400,
+        y: 400,
+        input: [
+            {
+                type: 'number',
+                value: 0,
+                name: 'value'
+            },
+        ],
+        func: (inputs) => {
+            console.log(inputs[0].value)
+        }
+    })
+
+    editor.add(BranchNode)
+    editor.add(consoleNode)
+</script>
+
+</html>

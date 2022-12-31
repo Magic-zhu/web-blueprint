@@ -17,6 +17,10 @@ export interface Position {
     x: number;
     y: number;
 }
+export declare enum ConnectPosition {
+    BEGIN = "begin",
+    END = "END"
+}
 export declare class Node extends BaseNode {
     instance: HTMLElement;
     header: HTMLElement;
@@ -61,7 +65,7 @@ export declare class Node extends BaseNode {
     }, index: number): Param;
     addOutput(param: Param): void;
     initLabel(labelText: string): void;
-    connect(info: any, position: string): void;
+    connect(info: any, position: ConnectPosition): void;
     updateRelativeLines(x: number, y: number): void;
     disConnect(id: string, isPre: boolean): void;
     private callRelativeNodeDisconnect;

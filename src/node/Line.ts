@@ -47,6 +47,7 @@ export class Line extends BaseLine {
   }
 
   destory() {
+    // ! here, the instance may had been destoryed
     try {
       this.instance.parentNode.removeChild(this.instance)
     } catch (error) {}

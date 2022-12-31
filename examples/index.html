@@ -1,155 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="../dist/blueprint-iife.min.js"></script>
-    <link rel="stylesheet" href="../src/style/theme.css" />
-  </head>
-  <style>
-    #box {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #333333;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <script src="../dist/blueprint-iife.min.js"></script>
+  <link rel="stylesheet" href="../src/style/theme.css" />
+</head>
+<style>
+  #box {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #333333;
+  }
+
+  #app {
+    width: 800px;
+    height: 800px;
+    position: relative;
+  }
+</style>
+
+<body>
+  <div id="box">
+    <div id="app"></div>
+  </div>
+  <div>
+    <button id="start">运行</button>
+  </div>
+</body>
+<script>
+  // @ts-ignore
+  const { Node, BluePrintEditor, Line, Point } = blueprint
+  const editor = new BluePrintEditor(document.getElementById('app'))
+  const minusNode = new Node({
+    x: 0,
+    y: 0,
+    nodeName: '-',
+    color: 'linear-gradient(135deg,grey,rgba(0,0,0,0.5))',
+    input: [
+      {
+        type: 'number',
+        name: "value1"
+      },
+      {
+        type: 'number',
+        name: "value2"
+      },
+    ],
+    output: [
+      {
+        type: 'number',
+        name: 'result'
+      }
+    ]
+  })
+  editor.add(minusNode)
+  const node = new Node({
+    x: 100,
+    y: 100,
+    nodeName: 'Get',
+    nodeLabel: 'Value1',
+    preNodeRequired: false,
+    nextNodeRequired: false,
+    color: "linear-gradient(135deg,#622774,rgba(0,0,0,0.5))",
+    output: [
+      {
+        name: '值1',
+        type: 'number',
+        value: 10
+      }
+    ],
+    func: () => {
+
     }
-    #app {
-      width: 800px;
-      height: 800px;
-      position: relative;
+  })
+  const node5 = new Node({
+    x: 100,
+    y: 200,
+    nodeName: 'Get',
+    nodeLabel: 'Value2',
+    preNodeRequired: false,
+    nextNodeRequired: false,
+    output: [
+      {
+        name: '值2',
+        type: 'number',
+        value: 10
+      }
+    ],
+    func: () => {
+
     }
-  </style>
+  })
+  const node2 = new Node({
+    nodeName: '+',
+    color: 'linear-gradient(135deg,grey,rgba(0,0,0,0.5))',
+    x: 400,
+    y: 200,
+    input: [
+      {
+        type: 'number',
+        name: "输入值1"
+      },
+      {
+        type: 'number',
+        name: "输入值2"
+      },
+    ],
+    output: [
+      {
+        type: 'number',
+        name: "结果"
+      }
+    ],
+    func: (inputs, outputs) => {
+      outputs[0].value = Number(inputs[0].value) + Number(inputs[1].value)
+      outputs[0].linkedParam.value = outputs[0].value
+    }
+  })
+  const node3 = new Node({
+    nodeName: 'Print Log',
+    color: 'linear-gradient(135deg,green,rgba(0,0,0,0.5))',
+    x: 400,
+    y: 400,
+    input: [
+      {
+        type: 'number',
+        value: 0,
+        name: 'value'
+      },
+    ],
+    func: (inputs) => {
+      console.log(inputs[0].value)
+    }
+  })
+  editor.add(node)
+  editor.add(node2)
+  editor.add(node3)
+  editor.add(node5)
+  const BranchNode = new Node({
+    x: 500,
+    y: 100,
+    nodeName: "Branch",
+    nextNodeRequired: false,
+    color: "linear-gradient(135deg,#f54ea2,rgba(0,0,0,0.5))",
+    input: [
+      {
+        type: "boolean",
+        value: false,
+        name: "condition"
+      }
+    ],
+    output: [
+      {
+        type: 'process',
+        name: 'true',
+      },
+      {
+        type: 'process',
+        name: 'false',
+      }
+    ],
+    func: () => {
 
-  <body>
-    <div id="box">
-      <div id="app"></div>
-    </div>
-    <div>
-        <button id="start">运行</button>
-    </div>
-  </body>
-  <script>
-    // @ts-ignore
-    const {Node, BluePrintEditor, Line, Point} = blueprint
-    const editor = new BluePrintEditor(document.getElementById('app'))
-    const node = new Node({
-      x: 100,
-      y: 100,
-      nodeName: 'Get',
-      nodeLabel: 'Value1',
-      preNodeRequired:false,
-      nextNodeRequired:false,
-      color:"linear-gradient(135deg,#622774,rgba(0,0,0,0.5))",
-      output: [
-        {
-            name:'值1',
-            type:'number',
-            value:10
-        }
-      ],
-      func:()=>{
+    }
+  })
+  editor.add(BranchNode)
 
-      }
-    })
-    const node5 = new Node({
-      x: 100,
-      y: 200,
-      nodeName: 'Get',
-      nodeLabel: 'Value2',
-      preNodeRequired:false,
-      nextNodeRequired:false,
-      output: [
-        {
-            name:'值2',
-            type:'number',
-            value:10
-        }
-      ],
-      func:()=>{
-        
-      }
-    })
-    const node2 = new Node({
-      nodeName: '+',
-      color: 'rgba(88,88,88,0.5)',
-      x: 400,
-      y: 200,
-      input:[
-        {
-            type:'number',
-            name:"输入值1"
-        },
-        {
-            type:'number',
-            name:"输入值2"
-        },
-      ],
-      output:[
-        {
-          type:'number',
-          name:"结果"
-        }
-      ],
-      func:(inputs,outputs)=>{
-        outputs[0].value = Number(inputs[0].value) + Number(inputs[1].value)
-        outputs[0].linkedParam.value = outputs[0].value
-      }
-    })
-    const node3 = new Node({
-      nodeName: 'Print Log',
-      color: 'linear-gradient(135deg,green,rgba(0,0,0,0.5))',
-      x: 400,
-      y: 400,
-      input: [
-        {
-          type: 'number',
-          value: 0,
-          name:'value'
-        },
-      ],
-      func:(inputs)=>{
-        console.log(inputs[0].value)
-      }
-    })
-    editor.add(node)
-    editor.add(node2)
-    editor.add(node3)
-    editor.add(node5)
-    const BranchNode = new Node({
-        x:500,
-        y:100,
-        nodeName: "Branch",
-        nextNodeRequired: false,
-        color:"linear-gradient(135deg,#f54ea2,rgba(0,0,0,0.5))",
-        input:[
-            {
-                type:"boolean",
-                value:false,
-                name:"condition"
-            }
-        ],
-        output:[
-            {
-                type:'process',
-                name:'true',
-            },
-            {
-                type:'process',
-                name:'false',
-            }
-        ],
-        func:()=>{
-            
-        }
-    })
-    editor.add(BranchNode)
+  document.getElementById("start").addEventListener('click', () => {
+    // node2.execute()
+    // node2.disConnect(node3.nodeId,false)
+    console.log(node2.inputPoints[0])
+    node2.inputPoints[0].disConnect()
+  })
+</script>
 
-    document.getElementById("start").addEventListener('click',()=>{
-        // node2.execute()
-        // node2.disConnect(node3.nodeId,false)
-        console.log(node2.inputPoints[0]) 
-        node2.inputPoints[0].disConnect()
-    })
-  </script>
 </html>

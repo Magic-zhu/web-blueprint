@@ -3,7 +3,7 @@ import {ParamPoint} from './ParamPoint'
 import {Input} from './Input'
 import {createDiv} from 'src/dom/create'
 import {uuid} from 'src/base/UUID'
-import {WpElement,ClassType} from '../WpElement'
+import {WpElement, ClassType} from '../WpElement'
 import {Node} from './Node'
 import {Line} from './Line'
 
@@ -28,7 +28,16 @@ export class Param {
   instance: HTMLElement
   type: string = ''
   name: string = ''
-  value: any = ''
+  private _value: any = ''
+  public get value(): any {
+    if (this.isConnected && this.isInput) {
+      return this.linkedParam.value
+    }
+    return this._value
+  }
+  public set value(value: any) {
+    this._value = value
+  }
   point: ParamPoint
   label: Label
   input: Input

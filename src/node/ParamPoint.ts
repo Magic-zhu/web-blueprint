@@ -17,7 +17,7 @@ export const getColor = (type: string) => {
       color = '#a4fa60'
       break
     case 'process':
-      color = 'orange'
+      color = 'white'
       break
     case 'any':
       color = '#eeeeee'
@@ -43,27 +43,27 @@ export class ParamPoint {
     svg.setAttribute('class', 'wb-inputPoint-' + this.type)
     const color = getColor(this.type)
     this.color = color
-    
+
     // # process node
     if (this.type === 'process') {
-        const polygon = createSvg('polygon')
-        polygon.setAttribute('points', '0,0 10,5 0,10')
-        polygon.setAttribute('stroke-width', '1px')
-        polygon.setAttribute('stroke', 'white')
-        polygon.setAttribute('fill','none')
-        this.inside = polygon
-        svg.appendChild(polygon)
-    }else{
-        // # common node
-        const circle = createSvg('circle')
-        circle.setAttribute('cx', '5')
-        circle.setAttribute('cy', '5')
-        circle.setAttribute('r', '4')
-        circle.setAttribute('stroke-width', '1px')
-        circle.setAttribute('fill', 'none')
-        circle.setAttribute('stroke', color)
-        this.inside = circle
-        svg.appendChild(circle)
+      const polygon = createSvg('polygon')
+      polygon.setAttribute('points', '0,0 10,5 0,10')
+      polygon.setAttribute('stroke-width', '1px')
+      polygon.setAttribute('stroke', 'white')
+      polygon.setAttribute('fill', 'none')
+      this.inside = polygon
+      svg.appendChild(polygon)
+    } else {
+      // # common node
+      const circle = createSvg('circle')
+      circle.setAttribute('cx', '5')
+      circle.setAttribute('cy', '5')
+      circle.setAttribute('r', '4')
+      circle.setAttribute('stroke-width', '1px')
+      circle.setAttribute('fill', 'none')
+      circle.setAttribute('stroke', color)
+      this.inside = circle
+      svg.appendChild(circle)
     }
 
     this.instance = svg

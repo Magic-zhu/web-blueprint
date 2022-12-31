@@ -23,7 +23,9 @@ export declare class Param {
     instance: HTMLElement;
     type: string;
     name: string;
-    value: any;
+    private _value;
+    get value(): any;
+    set value(value: any);
     point: ParamPoint;
     label: Label;
     input: Input;
