@@ -16,3 +16,11 @@ Todo List
 ![](https://files.catbox.moe/gc91hy.gif)
 ![](https://files.catbox.moe/a2ovqu.gif)
 ![](https://files.catbox.moe/7wm7w5.png)
+
+# how to develop
+
+```bash
+npm i rollup@2.79.0 -g
+npm i
+npm start
+```

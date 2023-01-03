@@ -70,7 +70,7 @@
       {
         name: '值1',
         type: 'number',
-        value: 10
+        value: 8
       }
     ],
     func: () => {
@@ -118,7 +118,6 @@
     ],
     func: (inputs, outputs) => {
       outputs[0].value = Number(inputs[0].value) + Number(inputs[1].value)
-      outputs[0].linkedParam.value = outputs[0].value
     }
   })
   const node3 = new Node({
@@ -171,10 +170,10 @@
   editor.add(BranchNode)
 
   document.getElementById("start").addEventListener('click', () => {
-    // node2.execute()
+    node2.execute()
     // node2.disConnect(node3.nodeId,false)
-    console.log(node2.inputPoints[0])
-    node2.inputPoints[0].disConnect()
+    // console.log(node2.inputPoints[0])
+    // node2.inputPoints[0].disConnect()
   })
 </script>
 

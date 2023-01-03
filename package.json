@@ -44,8 +44,7 @@
     "typescript": "^4.1.2"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "dependencies": {
     "gl-matrix": "^3.4.3",
