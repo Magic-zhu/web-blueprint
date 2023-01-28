@@ -298,14 +298,8 @@ export class BluePrintEditor {
   // @ 处理节点移动
   private NodeMoveHandler(ev: MouseEvent) {
     this.currentTarget.position = {
-      x:
-        this.reviseClientX(ev.clientX) -
-        this._mouseDownPosition[0] +
-        this._mouseDownPosition[2],
-      y:
-        this.reviseClientY(ev.clientY) -
-        this._mouseDownPosition[1] +
-        this._mouseDownPosition[3],
+      x: ev.clientX - this._mouseDownPosition[0] + this._mouseDownPosition[2],
+      y: ev.clientY - this._mouseDownPosition[1] + this._mouseDownPosition[3],
     }
   }
 
