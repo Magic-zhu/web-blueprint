@@ -12,8 +12,8 @@ export interface NodeParams {
   color?: string
   preNodeRequired?: boolean
   nextNodeRequired?: boolean
-  input?: []
-  output?: []
+  input?: any[]
+  output?: any[]
   x?: number
   y?: number
   func: any
@@ -280,13 +280,13 @@ export class Node extends BaseNode {
     polygon.setAttribute('fill', 'none')
     svg.appendChild(polygon)
     svg.addEventListener('mousedown', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
     })
     svg.addEventListener('mouseup', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
     })
     svg.addEventListener('click', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
       IO.emit('ConnectPointClick', {
         pos: this.getNextPointPosition(),
         node: this,

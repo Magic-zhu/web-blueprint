@@ -7,8 +7,8 @@ export interface NodeParams {
     color?: string;
     preNodeRequired?: boolean;
     nextNodeRequired?: boolean;
-    input?: [];
-    output?: [];
+    input?: any[];
+    output?: any[];
     x?: number;
     y?: number;
     func: any;

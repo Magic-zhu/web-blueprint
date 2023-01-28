@@ -1,10 +1,10 @@
 {
   "name": "web-blueprint",
-  "version": "0.0.01",
+  "version": "0.0.2",
   "description": "web-blueprint",
-  "main": "./dist/obiusm-umd.min.js",
-  "module": "./dist/blueprint-ems.min.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/obiusm-umd.min.js",
+  "module": "dist/blueprint-ems.min.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup --config",
     "start": "rollup --config -w",

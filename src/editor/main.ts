@@ -60,6 +60,9 @@ export class BluePrintEditor {
   private scale: number = 1
   // @ 画布原始大小
   private _orginSize: number[] = []
+  // @ 画布距离body位置
+  private left: number = 0
+  private top: number = 0
   // @ 当前点击的类型
   private _mouseDownType: MouseDownType = -1
   // @ 当前点击的坐标位置
@@ -145,6 +148,8 @@ export class BluePrintEditor {
     this.container = container
     this._orginSize[0] = this.container.getClientRects()[0].width
     this._orginSize[1] = this.container.getClientRects()[0].height
+    this.left = this.container.getClientRects()[0].left
+    this.top = this.container.getClientRects()[0].top
     container.style.position = 'relative'
     container.style.transform = 'scale(1)'
     this.initLineContainer()
@@ -172,8 +177,9 @@ export class BluePrintEditor {
         this.resetAfterAttachLine()
       }
     })
+
     // @ 处理鼠标移动事件
-    document.body.addEventListener('mousemove', (ev) => {
+    document.body.addEventListener('mousemove', (ev: MouseEvent) => {
       // @ 移动画布
       if (this._mouseDownType == MouseDownType.RIGHT) {
         this.translate(ev)
@@ -191,8 +197,8 @@ export class BluePrintEditor {
       // @ 连线模式
       if (this.currentEventType === EditorEventType.LineBegin) {
         const [ox, oy] = this.getScaleOffset(
-          ev.clientX - this._translateLast[0],
-          ev.clientY - this._translateLast[1],
+          this.reviseClientX(ev.clientX) - this._translateLast[0],
+          this.reviseClientY(ev.clientY) - this._translateLast[1],
         )
         this.currentLine.update(this.currentLine._begin, new Point(ox, oy))
         return
@@ -292,8 +298,14 @@ export class BluePrintEditor {
   // @ 处理节点移动
   private NodeMoveHandler(ev: MouseEvent) {
     this.currentTarget.position = {
-      x: ev.clientX - this._mouseDownPosition[0] + this._mouseDownPosition[2],
-      y: ev.clientY - this._mouseDownPosition[1] + this._mouseDownPosition[3],
+      x:
+        this.reviseClientX(ev.clientX) -
+        this._mouseDownPosition[0] +
+        this._mouseDownPosition[2],
+      y:
+        this.reviseClientY(ev.clientY) -
+        this._mouseDownPosition[1] +
+        this._mouseDownPosition[3],
     }
   }
 
@@ -518,5 +530,17 @@ export class BluePrintEditor {
         item.selected = false
       }
     })
+  }
+
+  /**
+   *  ! why not use offset
+   *  when move over the node its may cause a lot of strange problems
+   */
+  private reviseClientX(input: number): number {
+    return input - this.left
+  }
+
+  private reviseClientY(input: number): number {
+    return input - this.top
   }
 }

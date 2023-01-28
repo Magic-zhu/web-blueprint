@@ -43,6 +43,8 @@ export declare class BluePrintEditor {
     lineGraph: Line[];
     private scale;
     private _orginSize;
+    private left;
+    private top;
     private _mouseDownType;
     private _mouseDownPosition;
     private _translateLast;
@@ -74,4 +76,6 @@ export declare class BluePrintEditor {
     private processPointClickHandler;
     private resetAfterAttachLine;
     private SelectHandler;
+    private reviseClientX;
+    private reviseClientY;
 }
