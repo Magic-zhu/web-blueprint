@@ -6,10 +6,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="../dist/blueprint-iife.min.js"></script>
+    <link rel="stylesheet" href="../src/style/theme.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #box {
+            width: 900px;
+            height: 900px;
+            overflow: hidden;
+            background-color: #333333;
+            margin: 0px;
+        }
+
+        #app {
+            width: 800px;
+            height: 800px;
+            position: relative;
+        }
+    </style>
 </head>
 
 <body>
-
+    <div id="box">
+        <div id="app"></div>
+    </div>
+    <div>
+        <button id="start">运行</button>
+    </div>
 </body>
+<script>
+    const { Node, BluePrintEditor, Line, Point, NodeFactory } = blueprint
+    const editor = new BluePrintEditor(document.getElementById('app'))
+    const factory = new NodeFactory()
+    editor.add(factory.plusNumber())
+    const minus = factory.minusNumber()
+    minus.x = 250
+    editor.add(minus)
+</script>
 
 </html>

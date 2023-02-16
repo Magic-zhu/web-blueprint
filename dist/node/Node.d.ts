@@ -1,5 +1,15 @@
 import { BaseNode } from 'src/base/BaseNode';
 import { Param } from './Param';
+export interface InputParam {
+    type: string;
+    value?: any;
+    name: string;
+}
+export interface OutputParam {
+    type: string;
+    value?: any;
+    name: string;
+}
 export interface NodeParams {
     nodeName: string;
     nodeLabel?: string;
@@ -7,8 +17,8 @@ export interface NodeParams {
     color?: string;
     preNodeRequired?: boolean;
     nextNodeRequired?: boolean;
-    input?: any[];
-    output?: any[];
+    input?: InputParam[];
+    output?: OutputParam[];
     x?: number;
     y?: number;
     func: any;

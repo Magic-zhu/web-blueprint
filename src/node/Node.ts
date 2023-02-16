@@ -5,6 +5,18 @@ import {Line} from './Line'
 import {Point} from 'src/base/Point'
 import {Param} from './Param'
 
+export interface InputParam {
+  type: string
+  value?: any
+  name: string
+}
+
+export interface OutputParam {
+  type: string
+  value?: any
+  name: string
+}
+
 export interface NodeParams {
   nodeName: string
   nodeLabel?: string
@@ -12,8 +24,8 @@ export interface NodeParams {
   color?: string
   preNodeRequired?: boolean
   nextNodeRequired?: boolean
-  input?: any[]
-  output?: any[]
+  input?: InputParam[]
+  output?: OutputParam[]
   x?: number
   y?: number
   func: any
@@ -229,13 +241,13 @@ export class Node extends BaseNode {
     polygon.setAttribute('fill', 'none')
     svg.appendChild(polygon)
     svg.addEventListener('mousedown', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
     })
     svg.addEventListener('mouseup', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
     })
     svg.addEventListener('click', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
       const info = {
         pos: this.getPrePointPosition(),
         node: this,
