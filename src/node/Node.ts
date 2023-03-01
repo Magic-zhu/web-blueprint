@@ -311,10 +311,10 @@ export class Node extends BaseNode {
   initInput({type, value, name}, index: number) {
     const box = new Param({type, value, name})
     box.instance.addEventListener('mousedown', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
     })
     box.instance.addEventListener('mouseup', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
     })
     box.point.instance.addEventListener('click', (ev: MouseEvent) => {
       IO.emit('ParamPointClick', {
@@ -435,8 +435,8 @@ export class Node extends BaseNode {
     })
   }
 
-  // # step1 find the relative node, then delete from self
-  // # step2 find the relativev line, delete from self and editor
+  // ! step1 find the relative node, then delete from self
+  // ! step2 find the relativev line, delete from self and editor
   /**
    *
    * @param id - the relative node id ,not self.nodeId
@@ -490,5 +490,26 @@ export class Node extends BaseNode {
     } else {
       child2.setAttribute('fill', 'white')
     }
+  }
+
+  serialize(): string {
+    const container: any = {
+      nodeId: this.nodeId,
+      nodeName: this.nodeName,
+      nodeType: this.nodeType,
+      x: this.x,
+      y: this.y,
+    }
+
+    // * record the preNodeId
+    container.preNodeIds = this.preNodes.map((node) => node.nodeId)
+    // * record the nextNodeId
+    container.nextNodeIds = this.nextNodes.map((node) => node.nodeId)
+    // * record the inputParams's relationship
+    container.inputParamsIds = this.inputPoints.map((param) => {
+      return param.linkedParam.uid
+    })
+
+    return JSON.stringify(container)
   }
 }

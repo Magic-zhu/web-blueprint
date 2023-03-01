@@ -37,8 +37,8 @@ export class BaseNode {
   // the position of the node
   _x: number = 0
   _y: number = 0
-  preNodeRequired:boolean = true
-  nextNodeRequired:boolean = true
+  preNodeRequired: boolean = true
+  nextNodeRequired: boolean = true
 
   // * no next point or pre point  this value should be 10;otherwise should be 0
   yAxisPak = 10

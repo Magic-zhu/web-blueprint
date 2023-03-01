@@ -24,7 +24,7 @@ export interface LinkedObject {
 
 export class Param {
   readonly classType = ClassType.PARAM
-  protected uid: string = uuid()
+  readonly uid: string = uuid()
   instance: HTMLElement
   type: string = ''
   name: string = ''
@@ -45,7 +45,7 @@ export class Param {
   isConnected: boolean = false
   // tip: when this parameter is the end point
   public linkedLine: Line
-  private linkedParam: Param
+  public linkedParam: Param
   // tip: when this parameter is the begin point
   public linkedObjects: LinkedObject[] = []
 
