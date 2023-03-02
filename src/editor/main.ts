@@ -1,12 +1,15 @@
-import {Line, Node, Point, ConnectPosition} from 'src'
-import IO from 'src/base/IO'
+import {Line} from '../node/Line'
+import {Node} from '../node/Node'
+import {ConnectPosition} from 'src/node/Node'
+import IO from '../base/IO'
 import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
-import {Param} from 'src/node/Param'
+import {Param} from '../node/Param'
 import {Selector} from './Selector'
 import {intersection_rectangle} from 'stl-typescript/index'
-import {NodeConnectType} from 'src/base/BaseLine'
+import {NodeConnectType} from '../base/BaseLine'
 import {LogMsg} from './LogMsg'
+import {Point} from '../base/Point'
 
 export enum MouseDownType {
   'LEFT' = 0,
@@ -92,7 +95,7 @@ export class BluePrintEditor {
   onRightClick: Function
 
   constructor(container: HTMLElement) {
-    // # hook
+    // @ hook
     IO.emit('beforeCreated')
     IO.on('LineRemove', (id: string) => {
       const index = this.lineGraph.findIndex((item) => item.id)
@@ -536,5 +539,24 @@ export class BluePrintEditor {
 
   private reviseClientY(input: number): number {
     return input - this.top
+  }
+
+  // ** save all the nodes as string
+  save() {
+    const t = []
+    this.graph.forEach((node) => {
+      t.push(node.serialize())
+    })
+    return t
+  }
+
+  // ** restore the data
+  restore(data: string) {}
+
+  //** clear all the nodes
+  clear() {
+    this.container.innerHTML = ''
+    this.graph = []
+    this.lineGraph = []
   }
 }

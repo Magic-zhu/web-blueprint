@@ -1,4 +1,5 @@
-import { Line, Node } from 'src';
+import { Line } from 'src/node/Line';
+import { Node } from 'src/node/Node';
 import { Param } from 'src/node/Param';
 import { Selector } from './Selector';
 import { LogMsg } from './LogMsg';
@@ -78,4 +79,5 @@ export declare class BluePrintEditor {
     private SelectHandler;
     private reviseClientX;
     private reviseClientY;
+    save(): any[];
 }

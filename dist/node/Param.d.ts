@@ -19,7 +19,7 @@ export interface LinkedObject {
 }
 export declare class Param {
     readonly classType = ClassType.PARAM;
-    protected uid: string;
+    readonly uid: string;
     instance: HTMLElement;
     type: string;
     name: string;
@@ -32,7 +32,7 @@ export declare class Param {
     parent: Node;
     isConnected: boolean;
     linkedLine: Line;
-    private linkedParam;
+    linkedParam: Param;
     linkedObjects: LinkedObject[];
     isBeign: boolean;
     isInput: boolean;

@@ -3,7 +3,7 @@ import {createDiv, createSpan, createSvg} from 'src/dom/create'
 import IO from 'src/base/IO'
 import {Line} from './Line'
 import {Point} from 'src/base/Point'
-import {Param} from './Param'
+import {LinkedObject, Param} from './Param'
 
 export interface InputParam {
   type: string
@@ -506,8 +506,18 @@ export class Node extends BaseNode {
     // * record the nextNodeId
     container.nextNodeIds = this.nextNodes.map((node) => node.nodeId)
     // * record the inputParams's relationship
+
+    // ! if noting , its null ex: [null]
     container.inputParamsIds = this.inputPoints.map((param) => {
-      return param.linkedParam.uid
+      return param.linkedParam?.uid
+    })
+    // * record the outputParams's relationship
+    container.outputParamsIds = this.outPutPoints.map((param) => {
+      const ar = []
+      param.linkedObjects.forEach((item: LinkedObject) => {
+        ar.push(item.param.uid)
+      })
+      return ar
     })
 
     return JSON.stringify(container)

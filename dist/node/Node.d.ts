@@ -80,4 +80,5 @@ export declare class Node extends BaseNode {
     disConnect(id: string, isPre: boolean): void;
     private callRelativeNodeDisconnect;
     private updatePreOrNextConnectedStatus;
+    serialize(): string;
 }
