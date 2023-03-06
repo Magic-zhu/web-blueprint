@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup --config",
-    "start": "rollup --config -w",
+    "start": "rollup -c -w",
     "doc": "docsify serve ./docs",
     "test": "test"
   },

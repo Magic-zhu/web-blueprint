@@ -1,6 +1,10 @@
 import {InputParam, Node, OutputParam} from '../Node/Node'
 import {ColorPreset} from './Color'
 export class NodeFactory {
+  // *********************
+  // **  process node   **
+  // *********************
+
   GetNode(x: number, y: number, nodeLabel: string, type: string, value: any) {
     return new Node({
       x,
@@ -153,4 +157,13 @@ export class NodeFactory {
       },
     })
   }
+}
+
+export const NodeFactoryInstance = new NodeFactory()
+
+export const FactoryMap = {
+  Get: NodeFactoryInstance.GetNode(0, 0, '', 'string', ''),
+  Begin: NodeFactoryInstance.BeginNode(0, 0),
+  Plus: NodeFactoryInstance.plusNumber(),
+  Minus: NodeFactoryInstance.minusNumber(),
 }

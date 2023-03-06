@@ -41,6 +41,20 @@ export enum ConnectPosition {
   END = 'END',
 }
 
+export type outputParamsIdss = string[]
+export interface NodeSerialization {
+  nodeId: string
+  nodeName: string
+  nodeType: string
+  nodeLabel?: string
+  x: number
+  y: number
+  preNodeIds: string[]
+  nextNodeIds: string[]
+  inputParamsIds: string[]
+  outputParamsIds: outputParamsIdss[]
+}
+
 export class Node extends BaseNode {
   // * The ui part
   instance: HTMLElement
@@ -185,6 +199,11 @@ export class Node extends BaseNode {
 
   set nodeLabel(label: string) {
     this._nodeLabel = label
+    if (this.label) {
+      this.label.innerText = label
+    } else {
+      this.initLabel(label)
+    }
   }
 
   // ? *********************************
@@ -366,9 +385,10 @@ export class Node extends BaseNode {
 
   initLabel(labelText: string) {
     const label = createSpan()
+    this.label = label
     label.setAttribute('class', 'wb-container-base-header-label')
-    label.innerText = labelText
     this.header.append(label)
+    this.nodeLabel = labelText
   }
 
   connect(info, position: ConnectPosition) {
@@ -497,6 +517,7 @@ export class Node extends BaseNode {
       nodeId: this.nodeId,
       nodeName: this.nodeName,
       nodeType: this.nodeType,
+      nodeLabel: this.nodeLabel,
       x: this.x,
       y: this.y,
     }

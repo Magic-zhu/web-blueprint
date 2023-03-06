@@ -1,5 +1,5 @@
 import {Line} from '../node/Line'
-import {Node} from '../node/Node'
+import {Node, NodeSerialization} from '../node/Node'
 import {ConnectPosition} from 'src/node/Node'
 import IO from '../base/IO'
 import {createSvg} from 'src/dom/create'
@@ -52,6 +52,10 @@ export enum BeginType {
   PROCESS = 'process',
 }
 
+export interface NodeMap {
+  [key: string]: any
+}
+
 export class BluePrintEditor {
   container: HTMLElement
   lineContainer: SVGAElement
@@ -59,6 +63,7 @@ export class BluePrintEditor {
   msgLogger: LogMsg = new LogMsg()
   graph: Node[] = []
   lineGraph: Line[] = []
+  nodeMap: NodeMap = {}
   // @ 当前画布的缩放系数
   private scale: number = 1
   // @ 画布原始大小
@@ -94,7 +99,7 @@ export class BluePrintEditor {
   // @ 右键监听
   onRightClick: Function
 
-  constructor(container: HTMLElement) {
+  constructor(container: HTMLElement, nodeMap: NodeMap = {}) {
     // @ hook
     IO.emit('beforeCreated')
     IO.on('LineRemove', (id: string) => {
@@ -149,6 +154,7 @@ export class BluePrintEditor {
       return false
     }
     this.container = container
+    this.nodeMap = nodeMap
     this._orginSize[0] = this.container.getClientRects()[0].width
     this._orginSize[1] = this.container.getClientRects()[0].height
     this.left = this.container.getClientRects()[0].left
@@ -551,7 +557,25 @@ export class BluePrintEditor {
   }
 
   // ** restore the data
-  restore(data: string) {}
+  restore(data: string[]) {
+    let arr = data.map((item) => {
+      return JSON.parse(item)
+    })
+
+    arr.forEach((element: NodeSerialization) => {
+      let node: Node
+      if (this.nodeMap[element.nodeName]) {
+        node = this.nodeMap[element.nodeName]
+      }
+      node.setNodeId(element.nodeId, 'Vy9YnXy136tFIcfb')
+      node.nodeName = element.nodeName
+      node.nodeLabel = element.nodeLabel
+      node.nodeType = element.nodeType
+      node.x = element.x
+      node.y = element.y
+      this.add(node)
+    })
+  }
 
   //** clear all the nodes
   clear() {

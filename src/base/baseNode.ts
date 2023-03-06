@@ -30,7 +30,7 @@ export class BaseNode {
   nodeType: string = 'Function'
   _nodeLabel: string = ''
   nodeBaseWidth: number = 250
-  readonly nodeId: string = uuid()
+  private _nodeId: string = uuid()
   // * base attribute
   async: boolean = false
 
@@ -71,6 +71,18 @@ export class BaseNode {
       return [this._x + 10, this._y + 32 + 25 + 20 * index + this.yAxisPak]
     } else {
       return [this._x + 250, this._y + 32 + 25 + 20 * index + this.yAxisPak]
+    }
+  }
+
+  get nodeId(): string {
+    return this._nodeId
+  }
+
+  setNodeId(nodeId: string, key: string) {
+    if (key === 'Vy9YnXy136tFIcfb') {
+      this._nodeId = nodeId
+    } else {
+      console.error('Invalid Operation')
     }
   }
 }
