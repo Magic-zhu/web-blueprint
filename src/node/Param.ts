@@ -89,7 +89,7 @@ export class Param {
    * @param position - begin or end
    */
   connect(line: Line, wpElement: Param | Node, position: string) {
-    // # only process param, the connect object could be 'Node'
+    // ! only process param, the connect object could be 'Node'
     if (wpElement.classType === ClassType.NODE) {
       const node = wpElement as Node
       this.point.connect()

@@ -37,105 +37,15 @@
     const { Node, BluePrintEditor, Line, Point, NodeFactory, FactoryMap } = blueprint
     const factory = new NodeFactory()
     const editor = new BluePrintEditor(document.getElementById('app'), FactoryMap)
-    const BranchNode = new Node({
-        x: 100,
-        y: 100,
-        nodeName: "Branch",
-        nextNodeRequired: false,
-        color: "linear-gradient(135deg,#f54ea2,rgba(0,0,0,0.5))",
-        input: [
-            {
-                type: "boolean",
-                value: false,
-                name: "condition"
-            }
-        ],
-        output: [
-            {
-                type: 'process',
-                name: 'true',
-            },
-            {
-                type: 'process',
-                name: 'false',
-            }
-        ],
-        func: (inputs, outputs) => {
-            if (inputs[0].value) {
-                outputs[0].linkedObjects[0].node.execute()
-            } else {
-                outputs[1].linkedObjects[0].node.execute()
-            }
-        }
-    })
-    const ForNode = new Node({
-        x: 300,
-        y: 100,
-        nodeName: "ForEach",
-        nextNodeRequired: false,
-        color: "linear-gradient(135deg,#f54ea2,rgba(0,0,0,0.5))",
-        input: [
-            {
-                type: "object",
-                value: false,
-                name: "input"
-            }
-        ],
-        output: [
-            {
-                type: 'process',
-                name: 'loop'
-            },
-            {
-                type: 'object',
-                name: 'element'
-            },
-            {
-                type: 'number',
-                name: 'index'
-            },
-            {
-                type: 'process',
-                name: 'complete',
-            },
-        ],
-        func: (inputs, outputs) => {
-            const arr = inputs[0].value
-            const nextNode = outputs[0].linkedObjects[0].node
-            if (arr instanceof Array) {
-                for (let i = 0; i < arr.length; i++) {
-                    outputs[1].value = arr[i]
-                    outputs[2].value = i
-                    nextNode.execute()
-                }
-                if (outputs[3].linkedObjects[0]) {
-                    outputs[3].linkedObjects[0].node.execute()
-                }
-            }
-        }
-    })
-    const consoleNode = new Node({
-        nodeName: 'Print Log',
-        color: 'linear-gradient(135deg,green,rgba(0,0,0,0.5))',
-        x: 400,
-        y: 400,
-        input: [
-            {
-                type: 'number',
-                value: 0,
-                name: 'value'
-            },
-        ],
-        func: (inputs) => {
-            console.log(inputs[0].value)
-        }
-    })
-    const GetNode = factory.GetNode(300, 300, 'arrayTest', 'object', [1, 2, 3])
+    const BranchNode = factory.BranchNode(100, 100)
+    const ForNode = factory.ForNode(400, 100)
+    const consoleNode = factory.PrintLog(300, 300)
+    const GetNode = factory.GetObject(50, 300, 'arrayTest', 'object', [1, 2, 3])
 
     editor.add(GetNode)
-    // editor.add(BranchNode)
-    // editor.add(consoleNode)
-    // editor.add(ForNode)
+    editor.add(BranchNode)
+    editor.add(consoleNode)
+    editor.add(ForNode)
     var data
     document.getElementById('btn').addEventListener('click', () => {
         data = editor.save()

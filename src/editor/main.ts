@@ -453,7 +453,11 @@ export class BluePrintEditor {
       this.addLine(t)
     } else {
       if (this.beginType !== BeginType.PARAM) return
-      if (info.param.type !== this.beginParam.type) {
+      // @ 类型不同或者 不是通配类型 则不继续
+      if (
+        info.param.type !== this.beginParam.type &&
+        info.param.type !== 'any'
+      ) {
         return
       }
       if (info.param.isConnected) return
