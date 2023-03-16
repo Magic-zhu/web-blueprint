@@ -10,51 +10,15 @@ import {intersection_rectangle} from 'stl-typescript/index'
 import {NodeConnectType} from '../base/BaseLine'
 import {LogMsg} from './LogMsg'
 import {Point} from '../base/Point'
-
-export enum MouseDownType {
-  'LEFT' = 0,
-  'RIGHT' = 2,
-  'NONE' = -1,
-}
-
-export enum EditorEventType {
-  'Normal' = 'normal',
-  // @ 节点被按下
-  'NodeActive' = 'NodeActive',
-  // @ 开始连线的第一个点
-  'LineBegin' = 'LineBegin',
-  // @ 连线时的结束点
-  'LineEnd' = 'LineEnd',
-}
-
-export interface ITransform {
-  transformOrigin?: string
-  translate?: number[]
-}
-
-export interface EventInfo {
-  node?: Node
-  pos?: number[]
-  isPre?: boolean
-}
-
-export interface ClickInfo {
-  pos: number[]
-  isPre?: boolean
-  node: Node
-  param?: Param
-  line?: Line
-}
-
-export enum BeginType {
-  NODE = 'node',
-  PARAM = 'param',
-  PROCESS = 'process',
-}
-
-export interface NodeMap {
-  [key: string]: any
-}
+import {
+  BeginType,
+  ClickInfo,
+  EditorEventType,
+  ITransform,
+  MouseDownType,
+  NodeMap,
+  ConnectInfo,
+} from 'src/types'
 
 export class BluePrintEditor {
   container: HTMLElement
@@ -577,7 +541,29 @@ export class BluePrintEditor {
       node.nodeType = element.nodeType
       node.x = element.x
       node.y = element.y
+
       this.add(node)
+    })
+
+    arr.forEach((element: NodeSerialization, index: number) => {
+      element.preNodeIds.forEach((item: string) => {
+        const condition = item.split('-')
+        if (condition[1] === 'node') {
+          // find which is the target node
+          const targetIndex = this.graph.findIndex(
+            (item) => item.nodeId === condition[0],
+          )
+          const connectInfo: ConnectInfo = {
+            pos: [],
+            node: this.graph[targetIndex],
+          }
+          this.graph[index].connect(connectInfo, ConnectPosition.END)
+        }
+      })
+      element.inputParamsIds.forEach((item) => {
+        if (item) {
+        }
+      })
     })
   }
 

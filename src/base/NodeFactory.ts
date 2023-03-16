@@ -44,10 +44,10 @@ export class NodeFactory {
     })
   }
 
-  plusNumber() {
+  plusNumber(x: number, y: number) {
     return new Node({
-      x: 0,
-      y: 0,
+      x,
+      y,
       nodeName: 'Plus',
       color: ColorPreset.BlueGradient,
       input: [
@@ -299,7 +299,7 @@ export const FactoryMap = {
   GetBoolean: NodeFactoryInstance.GetBoolean(0, 0, '', false),
   GetObject: NodeFactoryInstance.GetObject(0, 0, '', null),
   Begin: NodeFactoryInstance.BeginNode(0, 0),
-  Plus: NodeFactoryInstance.plusNumber(),
+  Plus: NodeFactoryInstance.plusNumber(0, 0),
   Minus: NodeFactoryInstance.minusNumber(),
   Branch: NodeFactoryInstance.BranchNode(0, 0),
   ForEach: NodeFactoryInstance.ForNode(0, 0),

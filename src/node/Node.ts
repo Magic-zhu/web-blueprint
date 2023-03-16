@@ -49,6 +49,12 @@ export interface NodeSerialization {
   nodeLabel?: string
   x: number
   y: number
+  /**
+   * * all the string is special
+   * * example:  AAAAAAAAAAAA-BBBB-CCCCC
+   * * A ->  id string
+   * * B ->  connect type  param or node
+   */
   preNodeIds: string[]
   nextNodeIds: string[]
   inputParamsIds: string[]
@@ -513,15 +519,19 @@ export class Node extends BaseNode {
   }
 
   serialize(): string {
-    const container: any = {
+    const container: NodeSerialization = {
       nodeId: this.nodeId,
       nodeName: this.nodeName,
       nodeType: this.nodeType,
       nodeLabel: this.nodeLabel,
       x: this.x,
       y: this.y,
+      preNodeIds: [],
+      nextNodeIds: [],
+      inputParamsIds: [],
+      outputParamsIds: [],
     }
-
+    console.log(this)
     // * record the preNodeId
     container.preNodeIds = this.preNodes.map((node) => node.nodeId)
     // * record the nextNodeId
@@ -530,17 +540,21 @@ export class Node extends BaseNode {
 
     // ! if noting , its null ex: [null]
     container.inputParamsIds = this.inputPoints.map((param) => {
-      return param.linkedParam?.uid
+      return param.linkedParam?.uid + '-' + 'param'
     })
     // * record the outputParams's relationship
     container.outputParamsIds = this.outPutPoints.map((param) => {
       const ar = []
       param.linkedObjects.forEach((item: LinkedObject) => {
-        ar.push(item.param.uid)
+        if (item.param) {
+          ar.push(item.param.uid + '-' + 'param')
+        } else if (item.node) {
+          ar.push(item.node.nodeId + '-' + 'node')
+        }
       })
       return ar
     })
-
+    console.log(container)
     return JSON.stringify(container)
   }
 }
