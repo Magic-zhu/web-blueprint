@@ -85,4 +85,8 @@ export class BaseNode {
       console.error('Invalid Operation')
     }
   }
+
+  equal(node: BaseNode): boolean {
+    return this.nodeId === node.nodeId
+  }
 }

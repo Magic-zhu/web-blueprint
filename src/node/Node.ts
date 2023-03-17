@@ -4,6 +4,7 @@ import IO from 'src/base/IO'
 import {Line} from './Line'
 import {Point} from 'src/base/Point'
 import {LinkedObject, Param} from './Param'
+import {ConnectInfo} from 'src/types'
 
 export interface InputParam {
   type: string
@@ -51,9 +52,14 @@ export interface NodeSerialization {
   y: number
   /**
    * * all the string is special
-   * * example:  AAAAAAAAAAAA-BBBB-CCCCC
+   * * example:  A-B-C-D-E-F-G-H
    * * A ->  id string
    * * B ->  connect type  param or node
+   * * C ->  beginNode or endNode
+   * * D ->  begin x
+   * * E ->  begin y
+   * * F ->  end x
+   * * G ->  end y
    */
   preNodeIds: string[]
   nextNodeIds: string[]
@@ -397,7 +403,7 @@ export class Node extends BaseNode {
     this.nodeLabel = labelText
   }
 
-  connect(info, position: ConnectPosition) {
+  connect(info: ConnectInfo, position: ConnectPosition) {
     if (info.isPre) {
       this.preNodes.push(info.node)
       const inside: any = this.prePoint.childNodes[0]
@@ -549,7 +555,20 @@ export class Node extends BaseNode {
         if (item.param) {
           ar.push(item.param.uid + '-' + 'param')
         } else if (item.node) {
-          ar.push(item.node.nodeId + '-' + 'node')
+          let isBeginNode = false
+          const pos =
+            item.line.begin.x +
+            '-' +
+            item.line.begin.y +
+            '-' +
+            item.line.end.x +
+            '-' +
+            item.line.end.y
+          if (item.node.equal(item.line.beginNode)) {
+            isBeginNode = true
+          }
+
+          ar.push(`${item.node.nodeId}-node-${isBeginNode}-${pos}`)
         }
       })
       return ar

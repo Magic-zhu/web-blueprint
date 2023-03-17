@@ -6,7 +6,7 @@ import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
 import {Param} from '../node/Param'
 import {Selector} from './Selector'
-import {intersection_rectangle} from 'stl-typescript/index'
+import {intersection_rectangle} from 'stl-typescript'
 import {NodeConnectType} from '../base/BaseLine'
 import {LogMsg} from './LogMsg'
 import {Point} from '../base/Point'
@@ -62,6 +62,9 @@ export class BluePrintEditor {
 
   // @ 右键监听
   onRightClick: Function
+
+  // @ 是否允许缩放画布
+  public scaleDisabled: boolean = false
 
   constructor(container: HTMLElement, nodeMap: NodeMap = {}) {
     // @ hook
@@ -253,6 +256,7 @@ export class BluePrintEditor {
 
   // @ 画布缩放
   private ScaleHandler(ev: WheelEvent) {
+    if (this.scaleDisabled) return
     if (ev.deltaY < 0) {
       if (this.scale >= 1) return
       this.scale += 0.1
@@ -547,12 +551,13 @@ export class BluePrintEditor {
 
     arr.forEach((element: NodeSerialization, index: number) => {
       element.preNodeIds.forEach((item: string) => {
-        const condition = item.split('-')
-        if (condition[1] === 'node') {
-          // find which is the target node
+        const conditions = item.split('-')
+        if (conditions[1] === 'node') {
+          // % find which is the target node
           const targetIndex = this.graph.findIndex(
-            (item) => item.nodeId === condition[0],
+            (item) => item.nodeId === conditions[0],
           )
+          const line = new Line()
           const connectInfo: ConnectInfo = {
             pos: [],
             node: this.graph[targetIndex],

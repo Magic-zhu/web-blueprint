@@ -28,6 +28,14 @@ export class Line extends BaseLine {
     this.instance.setAttribute('stroke', value)
   }
 
+  get begin() {
+    return this._begin
+  }
+
+  get end() {
+    return this._end
+  }
+
   update(begin: Point, end: Point) {
     // @ control point array ex:[x1,y1,x2,y2]
     let cp: number[]
