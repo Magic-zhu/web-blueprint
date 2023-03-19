@@ -18,7 +18,7 @@ import {
   MouseDownType,
   NodeMap,
   ConnectInfo,
-} from 'src/types'
+} from 'src/gtypes'
 
 export class BluePrintEditor {
   container: HTMLElement
@@ -551,18 +551,34 @@ export class BluePrintEditor {
 
     arr.forEach((element: NodeSerialization, index: number) => {
       element.preNodeIds.forEach((item: string) => {
-        const conditions = item.split('-')
-        if (conditions[1] === 'node') {
+        if (this.getTypeFromSerializationString(item) === 'node') {
           // % find which is the target node
           const targetIndex = this.graph.findIndex(
-            (item) => item.nodeId === conditions[0],
+            (it) => it.nodeId === this.getNodeIdFromSerializationString(item),
           )
-          const line = new Line()
-          const connectInfo: ConnectInfo = {
-            pos: [],
-            node: this.graph[targetIndex],
+
+          // % its different
+          let line: Line
+          if (this.getIsBeginNodeFromSerializationString(item)) {
+            line = new Line(
+              this.getBeginPointFromSerializationString(item),
+              this.getEndPointFromSerializationString(item),
+            )
+          } else {
+            line = new Line(
+              this.getEndPointFromSerializationString(item),
+              this.getBeginPointFromSerializationString(item),
+            )
           }
-          this.graph[index].connect(connectInfo, ConnectPosition.END)
+
+          this.addLine(line)
+          console.log(this)
+          //   const connectInfo: ConnectInfo = {
+          //     pos: [],
+          //     node: this.graph[targetIndex],
+          //   }
+          //   this.graph[index].connect(connectInfo, ConnectPosition.END)
+        } else {
         }
       })
       element.inputParamsIds.forEach((item) => {
@@ -577,5 +593,36 @@ export class BluePrintEditor {
     this.container.innerHTML = ''
     this.graph = []
     this.lineGraph = []
+    this.initLineContainer()
+  }
+
+  private getTypeFromSerializationString(serializationString: string): string {
+    return serializationString.split('-')[1]
+  }
+
+  private getNodeIdFromSerializationString(
+    serializationString: string,
+  ): string {
+    return serializationString.split('-')[0]
+  }
+
+  private getBeginPointFromSerializationString(
+    serializationString: string,
+  ): Point {
+    const n = serializationString.split('-')
+    return new Point(+n[3], +n[4])
+  }
+
+  private getEndPointFromSerializationString(
+    serializationString: string,
+  ): Point {
+    const n = serializationString.split('-')
+    return new Point(+n[5], +n[6])
+  }
+
+  private getIsBeginNodeFromSerializationString(
+    serializationString: string,
+  ): boolean {
+    return serializationString.split('-')[2] === 'false' ? false : true
   }
 }

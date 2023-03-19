@@ -1,40 +1,8 @@
-import { Line } from 'src/node/Line';
-import { Node } from 'src/node/Node';
-import { Param } from 'src/node/Param';
+import { Line } from '../node/Line';
+import { Node } from '../node/Node';
 import { Selector } from './Selector';
 import { LogMsg } from './LogMsg';
-export declare enum MouseDownType {
-    'LEFT' = 0,
-    'RIGHT' = 2,
-    'NONE' = -1
-}
-export declare enum EditorEventType {
-    'Normal' = "normal",
-    'NodeActive' = "NodeActive",
-    'LineBegin' = "LineBegin",
-    'LineEnd' = "LineEnd"
-}
-export interface ITransform {
-    transformOrigin?: string;
-    translate?: number[];
-}
-export interface EventInfo {
-    node?: Node;
-    pos?: number[];
-    isPre?: boolean;
-}
-export interface ClickInfo {
-    pos: number[];
-    isPre?: boolean;
-    node: Node;
-    param?: Param;
-    line?: Line;
-}
-export declare enum BeginType {
-    NODE = "node",
-    PARAM = "param",
-    PROCESS = "process"
-}
+import { NodeMap } from 'src/gtypes';
 export declare class BluePrintEditor {
     container: HTMLElement;
     lineContainer: SVGAElement;
@@ -42,6 +10,7 @@ export declare class BluePrintEditor {
     msgLogger: LogMsg;
     graph: Node[];
     lineGraph: Line[];
+    nodeMap: NodeMap;
     private scale;
     private _orginSize;
     private left;
@@ -57,7 +26,8 @@ export declare class BluePrintEditor {
     private beginType;
     private currentLine;
     onRightClick: Function;
-    constructor(container: HTMLElement);
+    scaleDisabled: boolean;
+    constructor(container: HTMLElement, nodeMap?: NodeMap);
     private init;
     add(node: Node): void;
     addLine(line: Line): void;
@@ -80,4 +50,11 @@ export declare class BluePrintEditor {
     private reviseClientX;
     private reviseClientY;
     save(): any[];
+    restore(data: string[]): void;
+    clear(): void;
+    private getTypeFromSerializationString;
+    private getNodeIdFromSerializationString;
+    private getBeginPointFromSerializationString;
+    private getEndPointFromSerializationString;
+    private getIsBeginNodeFromSerializationString;
 }

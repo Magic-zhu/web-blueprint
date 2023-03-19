@@ -8,6 +8,8 @@ export declare class Line extends BaseLine {
     constructor(begin: Point, end: Point, options?: LineOptions);
     get color(): string;
     set color(value: string);
+    get begin(): Point;
+    get end(): Point;
     update(begin: Point, end: Point): void;
     destory(): void;
 }

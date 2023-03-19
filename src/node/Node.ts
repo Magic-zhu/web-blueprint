@@ -4,7 +4,7 @@ import IO from 'src/base/IO'
 import {Line} from './Line'
 import {Point} from 'src/base/Point'
 import {LinkedObject, Param} from './Param'
-import {ConnectInfo} from 'src/types'
+import {ConnectInfo} from 'src/gtypes'
 
 export interface InputParam {
   type: string
@@ -538,12 +538,21 @@ export class Node extends BaseNode {
       outputParamsIds: [],
     }
     console.log(this)
-    // * record the preNodeId
-    container.preNodeIds = this.preNodes.map((node) => node.nodeId)
-    // * record the nextNodeId
-    container.nextNodeIds = this.nextNodes.map((node) => node.nodeId)
+    // * record the preNode realationship
+    container.preNodeIds = this.preNodes.map((node, index) => {
+      return `${node.nodeId}-node-${this.getSerilazationStringFromLine(
+        this.preLines[index],
+      )}`
+    })
+
+    // todo
+    // * record the nextNode realationship
+    container.nextNodeIds = this.nextNodes.map((node) => {
+      return `${node.nodeId}-node`
+    })
     // * record the inputParams's relationship
 
+    // todo
     // ! if noting , its null ex: [null]
     container.inputParamsIds = this.inputPoints.map((param) => {
       return param.linkedParam?.uid + '-' + 'param'
@@ -573,7 +582,22 @@ export class Node extends BaseNode {
       })
       return ar
     })
-    console.log(container)
+    console.log('序列化信息', container)
     return JSON.stringify(container)
+  }
+
+  private getSerilazationStringFromLine(line: Line): string {
+    const isBeginNode = this.equal(line.beginNode)
+    const t =
+      isBeginNode +
+      '-' +
+      line.begin.x +
+      '-' +
+      line.begin.y +
+      '-' +
+      line.end.x +
+      '-' +
+      line.end.y
+    return t
   }
 }

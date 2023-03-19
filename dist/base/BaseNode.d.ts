@@ -16,7 +16,7 @@ export declare class BaseNode {
     nodeType: string;
     _nodeLabel: string;
     nodeBaseWidth: number;
-    readonly nodeId: string;
+    private _nodeId;
     async: boolean;
     _x: number;
     _y: number;
@@ -32,4 +32,7 @@ export declare class BaseNode {
     getPrePointPosition(): number[];
     getNextPointPosition(): number[];
     getParamPosition(index: number, isInput?: boolean): number[];
+    get nodeId(): string;
+    setNodeId(nodeId: string, key: string): void;
+    equal(node: BaseNode): boolean;
 }

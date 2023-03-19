@@ -6,21 +6,24 @@
     "baseUrl": ".", // 工作根目录
     "experimentalDecorators": true, // 启用实验性的ES装饰器
     "jsx": "react", // 在 .tsx文件里支持JSX
-    "sourceMap": false, // 是否生成map文件
+    "sourceMap": true, // 是否生成map文件
     "module": "es6", // 指定生成哪个模块系统代码
     "noImplicitAny": false, // 是否默认禁用 any
     "removeComments": true, // 是否移除注释
     "moduleResolution": "node",
-    "paths": { // 指定模块的路径，和baseUrl有关联，和webpack中resolve.alias配置一样
-      "src": [ //指定后可以在文件之直接 import * from 'src';
+    "paths": {
+      // 指定模块的路径，和baseUrl有关联，和webpack中resolve.alias配置一样
+      "src": [
+        //指定后可以在文件之直接 import * from 'src';
         "./src"
       ]
     },
     "target": "es6", // 编译的目标是什么版本的
     "declaration": true, // 是否自动创建类型声明文件
     "outDir": "./dist/",
-    "allowJs": true, // 允许编译javascript文件。
-    "lib": [ // 编译过程中需要引入的库文件的列表
+    "allowJs": false, // 允许编译javascript文件。
+    "lib": [
+      // 编译过程中需要引入的库文件的列表
       "es5",
       "es2015",
       "es2016",
@@ -28,15 +31,10 @@
       "es2018",
       "dom"
     ],
-    "incremental": true,
+    "incremental": true
   },
   // 指定一个匹配列表（属于自动指定该路径下的所有ts相关文件）
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*"],
   // 指定一个排除列表（include的反向操作）
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "exclude": ["node_modules", "dist"]
 }

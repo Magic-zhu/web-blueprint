@@ -1,5 +1,6 @@
 import { BaseNode } from 'src/base/BaseNode';
 import { Param } from './Param';
+import { ConnectInfo } from 'src/gtypes';
 export interface InputParam {
     type: string;
     value?: any;
@@ -30,6 +31,19 @@ export interface Position {
 export declare enum ConnectPosition {
     BEGIN = "begin",
     END = "END"
+}
+export type outputParamsIdss = string[];
+export interface NodeSerialization {
+    nodeId: string;
+    nodeName: string;
+    nodeType: string;
+    nodeLabel?: string;
+    x: number;
+    y: number;
+    preNodeIds: string[];
+    nextNodeIds: string[];
+    inputParamsIds: string[];
+    outputParamsIds: outputParamsIdss[];
 }
 export declare class Node extends BaseNode {
     instance: HTMLElement;
@@ -75,10 +89,11 @@ export declare class Node extends BaseNode {
     }, index: number): Param;
     addOutput(param: Param): void;
     initLabel(labelText: string): void;
-    connect(info: any, position: ConnectPosition): void;
+    connect(info: ConnectInfo, position: ConnectPosition): void;
     updateRelativeLines(x: number, y: number): void;
     disConnect(id: string, isPre: boolean): void;
     private callRelativeNodeDisconnect;
     private updatePreOrNextConnectedStatus;
     serialize(): string;
+    private getSerilazationStringFromLine;
 }
