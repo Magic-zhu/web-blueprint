@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebBlueprint Process</title>
+    <script src="../dist/blueprint-iife.min.js"></script>
+    <link rel="stylesheet" href="../src/style/theme.css" />
+    <style>
+        #box {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #333333;
+        }
+
+        #app {
+            width: 800px;
+            height: 800px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <div id="app"></div>
+    </div>
+    <button id="btn">save</button>
+    <button id="btn1">clear</button>
+    <button id="btn2">restore</button>
+    <button id="btn3">执行</button>
+</body>
+<script>
+    const { Node, BluePrintEditor, Line, Point, NodeFactory, FactoryMap } = blueprint
+    const factory = new NodeFactory()
+    const editor = new BluePrintEditor(document.getElementById('app'), FactoryMap)
+    const BranchNode = factory.BranchNode(50, 100)
+    const ForNode = factory.ForNode(400, 100)
+    const consoleNode = factory.PrintLog(350, 300)
+    // const GetNode = factory.GetObject(50, 300, 'arrayTest', 'object', [1, 2, 3])
+    const PlusNode = factory.plusNumber(50, 300)
+    // editor.add(GetNode)
+    // editor.add(PlusNode)
+    editor.add(BranchNode)
+    editor.add(consoleNode)
+    // editor.add(ForNode)
+    var data
+    document.getElementById('btn').addEventListener('click', () => {
+        data = editor.save()
+        console.log(data)
+    })
+    document.getElementById('btn1').addEventListener('click', () => {
+        editor.clear()
+    })
+    document.getElementById('btn2').addEventListener('click', () => {
+        editor.restore(data)
+    })
+    document.getElementById('btn3').addEventListener('click', () => {
+        ForNode.execute()
+    })
+</script>
+
+</html>

@@ -1,9 +1,9 @@
-import { Label } from "./node/Label";
-import { Line } from "./node/Line";
-import { Node } from "./node/Node";
-import { Param } from "./node/Param";
-import { ParamPoint } from "./node/ParamPoint";
-import { Input } from './node/Input'
+import { Label } from "./base/Label";
+import { Line } from "./base/Line";
+import { Node } from "./base/Node";
+import { Param } from "./base/Param";
+import { ParamPoint } from "./base/ParamPoint";
+import { Input } from './base/Input'
 
 export type WpElement = Node|Line|Param|ParamPoint|Label|Input
 

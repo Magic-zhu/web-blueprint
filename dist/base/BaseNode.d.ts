@@ -1,5 +1,5 @@
 import { Line } from 'src';
-import { Param } from 'src/node/Param';
+import { Param } from 'src/base/Param';
 import { ClassType } from '../WpElement';
 export declare class BaseNode {
     readonly classType = ClassType.NODE;

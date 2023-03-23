@@ -1,5 +1,5 @@
 import {Line} from 'src'
-import {Param} from 'src/node/Param'
+import {Param} from 'src/base/Param'
 import {uuid} from './UUID'
 import {ClassType} from '../WpElement'
 

@@ -1,6 +1,6 @@
-import {Line} from './node/Line'
-import {Param} from './node/Param'
-import {Node} from './node/Node'
+import {Line} from './base/Line'
+import {Param} from './base/Param'
+import {Node} from './base/Node'
 
 export enum MouseDownType {
   'LEFT' = 0,

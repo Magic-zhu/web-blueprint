@@ -1,4 +1,4 @@
-import {BaseNode} from 'src/base/BaseNode'
+import {BaseNode} from 'src/base/baseNode'
 import {createDiv, createSpan, createSvg} from 'src/dom/create'
 import IO from 'src/base/IO'
 import {Line} from './Line'
@@ -537,7 +537,6 @@ export class Node extends BaseNode {
       inputParamsIds: [],
       outputParamsIds: [],
     }
-    console.log(this)
     // * record the preNode realationship
     container.preNodeIds = this.preNodes.map((node, index) => {
       return `${node.nodeId}-node-${this.getSerilazationStringFromLine(
@@ -545,10 +544,11 @@ export class Node extends BaseNode {
       )}`
     })
 
-    // todo
     // * record the nextNode realationship
-    container.nextNodeIds = this.nextNodes.map((node) => {
-      return `${node.nodeId}-node`
+    container.nextNodeIds = this.nextNodes.map((node, index) => {
+      return `${node.nodeId}-node-${this.getSerilazationStringFromLine(
+        this.nextLines[index],
+      )}`
     })
     // * record the inputParams's relationship
 

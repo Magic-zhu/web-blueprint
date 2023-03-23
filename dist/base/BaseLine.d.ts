@@ -1,4 +1,4 @@
-import { Node } from 'src/node/Node';
+import { Node } from 'src/base/Node';
 import { Point } from './Point';
 import { ClassType } from '../WpElement';
 export declare enum NodeConnectType {

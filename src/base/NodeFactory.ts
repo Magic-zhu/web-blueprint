@@ -1,4 +1,4 @@
-import {InputParam, Node, OutputParam} from '../Node/Node'
+import {InputParam, Node, OutputParam} from './Node'
 import {ColorPreset} from './Color'
 export class NodeFactory {
   // *********************

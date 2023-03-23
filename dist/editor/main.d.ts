@@ -1,5 +1,5 @@
-import { Line } from '../node/Line';
-import { Node } from '../node/Node';
+import { Line } from '../base/Line';
+import { Node } from '../base/Node';
 import { Selector } from './Selector';
 import { LogMsg } from './LogMsg';
 import { NodeMap } from 'src/gtypes';

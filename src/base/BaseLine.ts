@@ -1,4 +1,4 @@
-import {Node} from 'src/node/Node'
+import {Node} from 'src/base/Node'
 import {Point} from './Point'
 import {uuid} from './UUID'
 import {ClassType} from '../WpElement'
