@@ -28,9 +28,9 @@
     <div id="box">
         <div id="app"></div>
     </div>
-    <button id="btn">保存</button>
-    <button id="btn1">清除</button>
-    <button id="btn2">恢复</button>
+    <button id="btn">save</button>
+    <button id="btn1">clear</button>
+    <button id="btn2">restore</button>
     <button id="btn3">执行</button>
 </body>
 <script>
@@ -39,7 +39,7 @@
     const editor = new BluePrintEditor(document.getElementById('app'), FactoryMap)
     const BranchNode = factory.BranchNode(100, 100)
     const ForNode = factory.ForNode(400, 100)
-    const consoleNode = factory.PrintLog(300, 300)
+    const consoleNode = factory.PrintLog(350, 300)
     // const GetNode = factory.GetObject(50, 300, 'arrayTest', 'object', [1, 2, 3])
     const PlusNode = factory.plusNumber(50, 300)
     // editor.add(GetNode)

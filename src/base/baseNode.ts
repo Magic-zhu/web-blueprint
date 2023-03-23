@@ -3,12 +3,6 @@ import {Param} from 'src/node/Param'
 import {uuid} from './UUID'
 import {ClassType} from '../WpElement'
 
-export interface BasePoint {
-  key: string
-  value: any
-  type: string
-}
-
 // export enum StaticInputType {
 //   string = 'string',
 //   number = 'number',

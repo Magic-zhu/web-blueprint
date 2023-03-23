@@ -551,36 +551,9 @@ export class BluePrintEditor {
 
     arr.forEach((element: NodeSerialization, index: number) => {
       element.preNodeIds.forEach((item: string) => {
-        if (this.getTypeFromSerializationString(item) === 'node') {
-          // % find which is the target node
-          const targetIndex = this.graph.findIndex(
-            (it) => it.nodeId === this.getNodeIdFromSerializationString(item),
-          )
-
-          // % its different
-          let line: Line
-          if (this.getIsBeginNodeFromSerializationString(item)) {
-            line = new Line(
-              this.getBeginPointFromSerializationString(item),
-              this.getEndPointFromSerializationString(item),
-            )
-          } else {
-            line = new Line(
-              this.getEndPointFromSerializationString(item),
-              this.getBeginPointFromSerializationString(item),
-            )
-          }
-
-          this.addLine(line)
-          console.log(this)
-          //   const connectInfo: ConnectInfo = {
-          //     pos: [],
-          //     node: this.graph[targetIndex],
-          //   }
-          //   this.graph[index].connect(connectInfo, ConnectPosition.END)
-        } else {
-        }
+        this.reconnectBySerializationString(item, index)
       })
+      element.nextNodeIds.forEach((item: string) => {})
       element.inputParamsIds.forEach((item) => {
         if (item) {
         }
@@ -624,5 +597,47 @@ export class BluePrintEditor {
     serializationString: string,
   ): boolean {
     return serializationString.split('-')[2] === 'false' ? false : true
+  }
+
+  private findTargetIndexByNodeId(nodeId: string): number {
+    return this.graph.findIndex((it) => it.nodeId === nodeId)
+  }
+
+  private reconnectBySerializationString(item: string, index: number): void {
+    // % find which is the target node
+    const targetIndex = this.findTargetIndexByNodeId(
+      this.getNodeIdFromSerializationString(item),
+    )
+    let line: Line
+    let position: ConnectPosition
+    let position2: ConnectPosition
+    if (this.getIsBeginNodeFromSerializationString(item)) {
+      line = new Line(
+        this.getBeginPointFromSerializationString(item),
+        this.getEndPointFromSerializationString(item),
+      )
+    } else {
+      line = new Line(
+        this.getEndPointFromSerializationString(item),
+        this.getBeginPointFromSerializationString(item),
+      )
+    }
+    line.beginNodeConnectType = NodeConnectType.PRE
+    line.endNodeConnectType = NodeConnectType.NEXT
+    this.addLine(line)
+    const connectInfo: ConnectInfo = {
+      pos: [],
+      node: this.graph[targetIndex],
+      line: line,
+      isPre: true,
+    }
+    const connectInfo2: ConnectInfo = {
+      pos: [],
+      node: this.graph[index],
+      line: line,
+      isPre: false,
+    }
+    this.graph[index].connect(connectInfo, ConnectPosition.BEGIN)
+    this.graph[targetIndex].connect(connectInfo2, ConnectPosition.END)
   }
 }
