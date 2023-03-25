@@ -57,6 +57,8 @@ export declare class BluePrintEditor {
     private getBeginPointFromSerializationString;
     private getEndPointFromSerializationString;
     private getIsBeginNodeFromSerializationString;
+    private getLineTypeFromSerializationString;
+    private getParamIndexFromSerializationString;
     private findTargetIndexByNodeId;
     private reconnectBySerializationString;
 }

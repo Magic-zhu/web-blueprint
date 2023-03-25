@@ -7,7 +7,7 @@ export class Point {
   }
 
   // @ Get the midpoint of two points
-  middileWith(p: Point): Point {
+  middleWith(p: Point): Point {
     const mx = (this.x + p.x) / 2
     const my = (this.y + p.y) / 2
     return new Point(mx, my)

@@ -48,3 +48,26 @@ export enum BeginType {
 export interface NodeMap {
   [key: string]: any
 }
+
+export enum ConnectPosition {
+  BEGIN = 'begin',
+  END = 'END',
+}
+
+export interface ParamSerialization {
+  nodeId: string
+  paramId: string
+  beginX: number
+  beginY: number
+  endX: number
+  endY: number
+  connectType: string
+  isBegin: boolean
+  indexInParent: number
+}
+
+export enum LineType {
+  NodeToNode = 'nodeToNode',
+  ParamToNode = 'paramToNode',
+  ParamToParam = 'paramToParam',
+}

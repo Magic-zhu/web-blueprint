@@ -1,15 +1,38 @@
-import {BaseLine, NodeConnectType} from 'src/base/BaseLine'
 import {Point} from 'src/base/Point'
 import {createSvg} from 'src/dom/create'
+import {Node} from 'src/base/Node'
+import {uuid} from './UUID'
+import {ClassType} from '../WpElement'
+import {LineType} from 'src/gtypes'
+import {Param} from './Param'
+
+export enum NodeConnectType {
+  PRE = 0,
+  NEXT = 1,
+}
 
 interface LineOptions {
   color?: string
 }
-export class Line extends BaseLine {
+
+export class Line {
+  readonly classType = ClassType.LINE
+  _begin: Point
+  _end: Point
+  _color: string = 'white'
+  _width: number
+  _height: number
+  beginNode: Node
+  endNode: Node
+  beginParam: Param
+  endParam: Param
+  beginNodeConnectType: NodeConnectType
+  endNodeConnectType: NodeConnectType
+  readonly id: string = uuid()
   instance: SVGAElement
+  type: LineType
 
   constructor(begin: Point, end: Point, options: LineOptions = {}) {
-    super()
     if (options.color) this._color = options.color
     const Path = createSvg('path')
     this.instance = Path
@@ -54,10 +77,29 @@ export class Line extends BaseLine {
     this.instance.setAttribute('d', path)
   }
 
-  destory() {
-    // ! here, the instance may had been destoryed
+  destroy() {
+    // ! here, the instance may had been destroyed
     try {
       this.instance.parentNode.removeChild(this.instance)
     } catch (error) {}
+  }
+
+  private _getControlPoint(begin: Point, end: Point): number[] {
+    const middlePoint = begin.middleWith(end)
+    if (begin.x < end.x) {
+      return [middlePoint.x, begin.y, middlePoint.x, end.y]
+    } else {
+      return [
+        begin.x + begin.x - middlePoint.x,
+        begin.y,
+        end.x - (middlePoint.x - end.x),
+        end.y,
+      ]
+    }
+  }
+
+  private _setSize() {
+    this._width = Math.abs(this._end.x - this._begin.x)
+    this._height = Math.abs(this._end.y - this._begin.y)
   }
 }

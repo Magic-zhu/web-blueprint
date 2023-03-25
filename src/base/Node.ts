@@ -4,7 +4,7 @@ import IO from 'src/base/IO'
 import {Line} from './Line'
 import {Point} from 'src/base/Point'
 import {LinkedObject, Param} from './Param'
-import {ConnectInfo} from 'src/gtypes'
+import {ConnectInfo, ConnectPosition, LineType} from 'src/gtypes'
 
 export interface InputParam {
   type: string
@@ -37,12 +37,6 @@ export interface Position {
   y: number
 }
 
-export enum ConnectPosition {
-  BEGIN = 'begin',
-  END = 'END',
-}
-
-export type outputParamsIdss = string[]
 export interface NodeSerialization {
   nodeId: string
   nodeName: string
@@ -64,7 +58,7 @@ export interface NodeSerialization {
   preNodeIds: string[]
   nextNodeIds: string[]
   inputParamsIds: string[]
-  outputParamsIds: outputParamsIdss[]
+  outputParamsIds: string[]
 }
 
 export class Node extends BaseNode {
@@ -340,7 +334,7 @@ export class Node extends BaseNode {
   }
 
   initInput({type, value, name}, index: number) {
-    const box = new Param({type, value, name})
+    const box = new Param({type, value, name, indexInParent: index})
     box.instance.addEventListener('mousedown', (ev: MouseEvent) => {
       ev.stopPropagation()
     })
@@ -364,12 +358,18 @@ export class Node extends BaseNode {
   }
 
   initOutput({type, value, name}, index: number) {
-    const box = new Param({type, value, name, isInput: false})
+    const box = new Param({
+      type,
+      value,
+      name,
+      isInput: false,
+      indexInParent: index,
+    })
     box.instance.addEventListener('mousedown', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
     })
     box.instance.addEventListener('mouseup', (ev: MouseEvent) => {
-      ev.cancelBubble = true
+      ev.stopPropagation()
     })
     box.point.instance.addEventListener('click', (ev: MouseEvent) => {
       if (box.type !== 'process') {
@@ -445,7 +445,7 @@ export class Node extends BaseNode {
     this.inputPoints.forEach((param: Param, index) => {
       if (!param.linkedLine) return
       const [ix, iy] = this.getParamPosition(index, true)
-      if (param.isBeign) {
+      if (param.isBegin) {
         param.linkedLine.update(new Point(ix, iy), param.linkedLine._end)
       } else {
         param.linkedLine.update(param.linkedLine._begin, new Point(ix, iy))
@@ -455,7 +455,7 @@ export class Node extends BaseNode {
     this.outPutPoints.forEach((param: Param, index) => {
       if (!param.linkedObjects) return
       const [ix, iy] = this.getParamPosition(index, false)
-      if (param.isBeign) {
+      if (param.isBegin) {
         param.linkedObjects.forEach((item) => {
           item.line.update(new Point(ix, iy), item.line._end)
         })
@@ -537,58 +537,38 @@ export class Node extends BaseNode {
       inputParamsIds: [],
       outputParamsIds: [],
     }
-    // * record the preNode realationship
+    // * record the preNode relationship
     container.preNodeIds = this.preNodes.map((node, index) => {
-      return `${node.nodeId}-node-${this.getSerilazationStringFromLine(
+      return `${node.nodeId}-node-${this.getSerializationStringFromLine(
         this.preLines[index],
       )}`
     })
 
-    // * record the nextNode realationship
+    // * record the nextNode relationship
     container.nextNodeIds = this.nextNodes.map((node, index) => {
-      return `${node.nodeId}-node-${this.getSerilazationStringFromLine(
+      return `${node.nodeId}-node-${this.getSerializationStringFromLine(
         this.nextLines[index],
       )}`
     })
-    // * record the inputParams's relationship
 
+    // * record the inputParams's relationship
     // todo
     // ! if noting , its null ex: [null]
     container.inputParamsIds = this.inputPoints.map((param) => {
-      return param.linkedParam?.uid + '-' + 'param'
+      if (!param.linkedLine) return null
+      return param.serialize()
     })
     // * record the outputParams's relationship
     container.outputParamsIds = this.outPutPoints.map((param) => {
-      const ar = []
-      param.linkedObjects.forEach((item: LinkedObject) => {
-        if (item.param) {
-          ar.push(item.param.uid + '-' + 'param')
-        } else if (item.node) {
-          let isBeginNode = false
-          const pos =
-            item.line.begin.x +
-            '-' +
-            item.line.begin.y +
-            '-' +
-            item.line.end.x +
-            '-' +
-            item.line.end.y
-          if (item.node.equal(item.line.beginNode)) {
-            isBeginNode = true
-          }
-
-          ar.push(`${item.node.nodeId}-node-${isBeginNode}-${pos}`)
-        }
-      })
-      return ar
+      return param.serialize()
     })
     console.log('序列化信息', container)
     return JSON.stringify(container)
   }
 
-  private getSerilazationStringFromLine(line: Line): string {
+  private getSerializationStringFromLine(line: Line): string {
     const isBeginNode = this.equal(line.beginNode)
-    const t =
+    let t =
       isBeginNode +
       '-' +
       line.begin.x +
@@ -597,7 +577,15 @@ export class Node extends BaseNode {
       '-' +
       line.end.x +
       '-' +
-      line.end.y
+      line.end.y +
+      '-' +
+      line.type
+    if (line.type === LineType.ParamToNode) {
+      const index = line.beginParam
+        ? line.beginParam.indexInParent
+        : line.endParam.indexInParent
+      t = t + '-' + index
+    }
     return t
   }
 }

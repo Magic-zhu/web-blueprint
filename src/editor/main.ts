@@ -1,13 +1,13 @@
 import {Line} from '../base/Line'
 import {Node, NodeSerialization} from '../base/Node'
-import {ConnectPosition} from 'src/base/Node'
+import {ConnectPosition, LineType} from 'src/gtypes'
 import IO from '../base/IO'
 import {createSvg} from 'src/dom/create'
 import {mat3, vec2} from 'gl-matrix'
 import {Param} from '../base/Param'
 import {Selector} from './Selector'
 import {intersection_rectangle} from 'stl-typescript'
-import {NodeConnectType} from '../base/BaseLine'
+import {NodeConnectType} from '../base/Line'
 import {LogMsg} from './LogMsg'
 import {Point} from '../base/Point'
 import {
@@ -74,7 +74,7 @@ export class BluePrintEditor {
       if (index === -1) return
       const line = this.lineGraph[index]
       this.lineGraph.splice(index, 1)
-      line.destory()
+      line.destroy()
     })
     IO.on(
       'NodeActive',
@@ -147,7 +147,7 @@ export class BluePrintEditor {
       this._mouseDownPosition = []
       this.selector.hidden()
       if (this.currentEventType === EditorEventType.LineBegin) {
-        this.currentLine.destory()
+        this.currentLine.destroy()
         this.currentLine = null
         this.currentEventType = EditorEventType.Normal
         this.resetAfterAttachLine()
@@ -353,7 +353,7 @@ export class BluePrintEditor {
       this.currentLine = t
       this.addLine(t)
     } else {
-      // # enter process mode
+      // * enter process mode
       if (this.beginType === BeginType.PROCESS) {
         this.currentEventType = EditorEventType.LineEnd
         this.currentLine.update(
@@ -361,15 +361,21 @@ export class BluePrintEditor {
           new Point(info.pos[0], info.pos[1]),
         )
         this.currentLine.beginNode = this.beginNode
+        this.currentLine.beginParam = this.beginParam
         this.lineGraph.push(this.currentLine)
-        this.beginParam.connect(this.currentLine, info.node, 'begin')
+        this.beginParam.connect(
+          this.currentLine,
+          info.node,
+          ConnectPosition.BEGIN,
+        )
         info.line = this.currentLine
+        info.line.type = LineType.ParamToNode
         info.node.connect(info, ConnectPosition.END)
         this.resetAfterAttachLine()
         return
       }
 
-      // # enter node mode
+      // * enter node mode
       if (this.beginType !== BeginType.NODE) return
       const endPointConnectType = info.isPre
         ? NodeConnectType.PRE
@@ -388,6 +394,7 @@ export class BluePrintEditor {
       // 连接信息注入
       info.node = this.beginNode
       info.line = this.currentLine
+      info.line.type = LineType.NodeToNode
       this.currentTarget.connect(info, ConnectPosition.END)
       info.isPre = !info.isPre
       info.node = this.currentTarget
@@ -418,6 +425,7 @@ export class BluePrintEditor {
         : NodeConnectType.NEXT
 
       this.currentLine = t
+      t.beginParam = info.param
       this.addLine(t)
     } else {
       if (this.beginType !== BeginType.PARAM) return
@@ -429,16 +437,22 @@ export class BluePrintEditor {
         return
       }
       if (info.param.isConnected) return
-      // 将线更新注入到lineGraph中
+      // % 将线更新注入到lineGraph中
       this.currentEventType = EditorEventType.LineEnd
       this.currentLine.update(
         this.currentLine._begin,
         new Point(info.pos[0], info.pos[1]),
       )
+      this.currentLine.endParam = info.param
       this.lineGraph.push(this.currentLine)
-      // 连接信息注入
-      this.beginParam.connect(this.currentLine, info.param, 'begin')
-      info.param.connect(this.currentLine, this.beginParam, 'end')
+      // % 连接信息注入
+      this.beginParam.connect(
+        this.currentLine,
+        info.param,
+        ConnectPosition.BEGIN,
+      )
+      this.currentLine.type = LineType.ParamToParam
+      info.param.connect(this.currentLine, this.beginParam, ConnectPosition.END)
       this.resetAfterAttachLine()
     }
   }
@@ -468,11 +482,13 @@ export class BluePrintEditor {
         new Point(info.pos[0], info.pos[1]),
       )
       this.currentLine.endNode = info.param.parent
+      this.currentLine.endParam = info.param
       this.lineGraph.push(this.currentLine)
       info.line = this.currentLine
+      info.line.type = LineType.ParamToNode
       info.isPre = true
       this.beginNode.connect(info, ConnectPosition.BEGIN)
-      info.param.connect(this.currentLine, this.beginNode, 'end')
+      info.param.connect(this.currentLine, this.beginNode, ConnectPosition.END)
       this.resetAfterAttachLine()
     }
   }
@@ -487,7 +503,7 @@ export class BluePrintEditor {
 
   private SelectHandler(x: number, y: number, width: number, height: number) {
     this.graph.forEach((item: Node, index) => {
-      // 当画布缩放的时候需要计算补偿
+      //  % 当画布缩放的时候需要计算补偿
       const [tx, ty] = this.getScaleOffset_T(item.x, item.y)
       const isT = intersection_rectangle(
         x,
@@ -553,7 +569,6 @@ export class BluePrintEditor {
       element.preNodeIds.forEach((item: string) => {
         this.reconnectBySerializationString(item, index)
       })
-      element.nextNodeIds.forEach((item: string) => {})
       element.inputParamsIds.forEach((item) => {
         if (item) {
         }
@@ -599,45 +614,60 @@ export class BluePrintEditor {
     return serializationString.split('-')[2] === 'false' ? false : true
   }
 
+  private getLineTypeFromSerializationString(
+    serializationString: string,
+  ): string {
+    return serializationString.split('-')[7]
+  }
+
+  private getParamIndexFromSerializationString(serializationString: string) {
+    return serializationString.split('-')[8]
+  }
+
   private findTargetIndexByNodeId(nodeId: string): number {
     return this.graph.findIndex((it) => it.nodeId === nodeId)
   }
 
   private reconnectBySerializationString(item: string, index: number): void {
-    // % find which is the target node
-    const targetIndex = this.findTargetIndexByNodeId(
-      this.getNodeIdFromSerializationString(item),
-    )
-    let line: Line
-    let position: ConnectPosition
-    let position2: ConnectPosition
-    if (this.getIsBeginNodeFromSerializationString(item)) {
-      line = new Line(
-        this.getBeginPointFromSerializationString(item),
-        this.getEndPointFromSerializationString(item),
-      )
+    const type = this.getLineTypeFromSerializationString(item)
+
+    // * 和流程参数连接的情况
+    if (type === LineType.ParamToNode) {
     } else {
-      line = new Line(
-        this.getEndPointFromSerializationString(item),
-        this.getBeginPointFromSerializationString(item),
+      // * 正常节点和节点之间的连接
+      // % find which is the target node
+      const targetIndex = this.findTargetIndexByNodeId(
+        this.getNodeIdFromSerializationString(item),
       )
+      let line: Line
+      if (this.getIsBeginNodeFromSerializationString(item)) {
+        line = new Line(
+          this.getBeginPointFromSerializationString(item),
+          this.getEndPointFromSerializationString(item),
+        )
+      } else {
+        line = new Line(
+          this.getEndPointFromSerializationString(item),
+          this.getBeginPointFromSerializationString(item),
+        )
+      }
+      line.beginNodeConnectType = NodeConnectType.PRE
+      line.endNodeConnectType = NodeConnectType.NEXT
+      this.addLine(line)
+      const connectInfo: ConnectInfo = {
+        pos: [],
+        node: this.graph[targetIndex],
+        line: line,
+        isPre: true,
+      }
+      const connectInfo2: ConnectInfo = {
+        pos: [],
+        node: this.graph[index],
+        line: line,
+        isPre: false,
+      }
+      this.graph[index].connect(connectInfo, ConnectPosition.BEGIN)
+      this.graph[targetIndex].connect(connectInfo2, ConnectPosition.END)
     }
-    line.beginNodeConnectType = NodeConnectType.PRE
-    line.endNodeConnectType = NodeConnectType.NEXT
-    this.addLine(line)
-    const connectInfo: ConnectInfo = {
-      pos: [],
-      node: this.graph[targetIndex],
-      line: line,
-      isPre: true,
-    }
-    const connectInfo2: ConnectInfo = {
-      pos: [],
-      node: this.graph[index],
-      line: line,
-      isPre: false,
-    }
-    this.graph[index].connect(connectInfo, ConnectPosition.BEGIN)
-    this.graph[targetIndex].connect(connectInfo2, ConnectPosition.END)
   }
 }

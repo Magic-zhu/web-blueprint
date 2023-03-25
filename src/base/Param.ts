@@ -6,12 +6,14 @@ import {uuid} from 'src/base/UUID'
 import {WpElement, ClassType} from '../WpElement'
 import {Node} from './Node'
 import {Line} from './Line'
+import {ConnectPosition, ParamSerialization} from '../gtypes'
 
 export interface ParamOptions {
   type: string
   name?: string
   value?: any
   isInput?: boolean
+  indexInParent: number
 }
 
 export interface LinkedObject {
@@ -42,6 +44,8 @@ export class Param {
   label: Label
   input: Input
   parent: Node
+  // @ 在父元素中的索引
+  indexInParent: number
   isConnected: boolean = false
   // tip: when this parameter is the end point
   public linkedLine: Line
@@ -49,15 +53,17 @@ export class Param {
   // tip: when this parameter is the begin point
   public linkedObjects: LinkedObject[] = []
 
-  // tip:relative to the line, beign or end here
-  isBeign: boolean
+  // tip:relative to the line, begin or end here
+  isBegin: boolean
   // tip: input or output
   isInput: boolean
+
   constructor(options: ParamOptions) {
     this.type = options.type
     this.isInput = options.isInput !== undefined ? options.isInput : true
     this.name = options.name !== undefined ? options.name : 'unknown'
     this.value = options.value !== undefined ? options.value : ''
+    this.indexInParent = options.indexInParent
     this.create()
   }
 
@@ -88,7 +94,7 @@ export class Param {
    * @param param
    * @param position - begin or end
    */
-  connect(line: Line, wpElement: Param | Node, position: string) {
+  connect(line: Line, wpElement: Param | Node, position: ConnectPosition) {
     // ! only process param, the connect object could be 'Node'
     if (wpElement.classType === ClassType.NODE) {
       const node = wpElement as Node
@@ -102,14 +108,14 @@ export class Param {
         classType: ClassType.NODE,
       })
 
-      if (position === 'begin') {
-        this.isBeign = true
+      if (position === ConnectPosition.BEGIN) {
+        this.isBegin = true
       } else {
-        this.isBeign = false
+        this.isBegin = false
       }
     }
 
-    // # the normal condition
+    // * the normal condition
     if (wpElement.classType === ClassType.PARAM) {
       const param = wpElement as Param
       if (this.isInput && this.isConnected) return
@@ -134,9 +140,9 @@ export class Param {
       }
 
       if (position === 'begin') {
-        this.isBeign = true
+        this.isBegin = true
       } else {
-        this.isBeign = false
+        this.isBegin = false
       }
 
       // pass the value
@@ -161,7 +167,7 @@ export class Param {
       this.input.show()
       this.point.disConnect()
 
-      this.linkedLine.destory()
+      this.linkedLine.destroy()
       this.linkedParam.disConnect(this.uid)
 
       this.linkedParam = null
@@ -171,7 +177,7 @@ export class Param {
         (item) => item.param.uid === paramId,
       )
       if (index === -1) return
-      this.linkedObjects[index].line.destory()
+      this.linkedObjects[index].line.destroy()
       this.linkedObjects.splice(index, 1)
       if (this.linkedObjects.length === 0) {
         this.isConnected = false
@@ -182,5 +188,66 @@ export class Param {
 
   update(value: any) {
     this.value = value
+  }
+
+  serialize() {
+    if (this.isInput) {
+      const box: ParamSerialization = {
+        paramId: this.uid,
+        nodeId: this.parent.nodeId,
+        beginX: 0,
+        beginY: 0,
+        endX: 0,
+        endY: 0,
+        connectType: 'param',
+        isBegin: this.isBegin,
+        indexInParent: this.indexInParent,
+      }
+      box.beginX = this.linkedLine.begin.x
+      box.beginY = this.linkedLine.begin.y
+      box.endX = this.linkedLine.end.x
+      box.endY = this.linkedLine.end.y
+      return JSON.stringify(box)
+    } else {
+      if (this.linkedObjects.length == 0) return ''
+      let result = ''
+      this.linkedObjects.forEach((item) => {
+        const box: ParamSerialization = {
+          paramId: this.uid,
+          nodeId: this.parent.nodeId,
+          beginX: 0,
+          beginY: 0,
+          endX: 0,
+          endY: 0,
+          connectType: 'param',
+          isBegin: this.isBegin,
+          indexInParent: this.indexInParent,
+        }
+        // tip: process param may connect to node
+        if (item.node) {
+          box.connectType = 'node'
+          if (item.node.equal(item.line.beginNode)) {
+            box.isBegin = true
+          } else {
+            box.isBegin = false
+          }
+        }
+        box.beginX = item.line.begin.x
+        box.beginY = item.line.begin.y
+        box.endX = item.line.end.x
+        box.endY = item.line.end.y
+        result = result + JSON.stringify(box) + '#'
+      })
+      return result
+    }
+  }
+
+  private findIndexInParent(): number {
+    if (!this.parent) return
+    if (this.isInput) {
+      return this.parent.inputPoints.findIndex((item) => item.uid === this.uid)
+    } else {
+      return this.parent.outPutPoints.findIndex((item) => item.uid === this.uid)
+    }
   }
 }
