@@ -1,7 +1,7 @@
-import {Line} from 'src'
-import {Param} from 'src/base/Param'
-import {uuid} from './UUID'
-import {ClassType} from '../WpElement'
+import { Line } from "../"
+import { Param } from "../base/Param"
+import { uuid } from "./UUID"
+import { ClassType } from "../WpElement"
 
 // export enum StaticInputType {
 //   string = 'string',
@@ -20,9 +20,9 @@ export class BaseNode {
   func: (inputPoints: Param[], outPutPoints: Param[]) => {}
 
   // * base attribute
-  nodeName: string = 'Function Name'
-  nodeType: string = 'Function'
-  _nodeLabel: string = ''
+  nodeName: string = "Function Name"
+  nodeType: string = "Function"
+  _nodeLabel: string = ""
   nodeBaseWidth: number = 250
   private _nodeId: string = uuid()
   // * base attribute
@@ -73,10 +73,10 @@ export class BaseNode {
   }
 
   setNodeId(nodeId: string, key: string) {
-    if (key === 'Vy9YnXy136tFIcfb') {
+    if (key === "Vy9YnXy136tFIcfb") {
       this._nodeId = nodeId
     } else {
-      console.error('Invalid Operation')
+      console.error("Invalid Operation")
     }
   }
 

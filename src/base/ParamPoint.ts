@@ -1,26 +1,26 @@
-import {uuid} from 'src/base/UUID'
-import {createSvg} from 'src/dom/create'
+import { uuid } from "../base/UUID"
+import { createSvg } from "../dom/create"
 
 export const getColor = (type: string) => {
   let color: string
   switch (type) {
-    case 'string':
-      color = '#f703cf'
+    case "string":
+      color = "#f703cf"
       break
-    case 'boolean':
-      color = '#8e020b'
+    case "boolean":
+      color = "#8e020b"
       break
-    case 'object':
-      color = '#20a5e8'
+    case "object":
+      color = "#20a5e8"
       break
-    case 'number':
-      color = '#a4fa60'
+    case "number":
+      color = "#a4fa60"
       break
-    case 'process':
-      color = 'white'
+    case "process":
+      color = "white"
       break
-    case 'any':
-      color = '#eeeeee'
+    case "any":
+      color = "#eeeeee"
       break
   }
   return color
@@ -39,29 +39,29 @@ export class ParamPoint {
   }
 
   init() {
-    const svg: SVGElement = createSvg('svg')
-    svg.setAttribute('class', 'wb-inputPoint-' + this.type)
+    const svg: SVGElement = createSvg("svg")
+    svg.setAttribute("class", "wb-inputPoint-" + this.type)
     const color = getColor(this.type)
     this.color = color
 
     // # process node
-    if (this.type === 'process') {
-      const polygon = createSvg('polygon')
-      polygon.setAttribute('points', '0,0 10,5 0,10')
-      polygon.setAttribute('stroke-width', '1px')
-      polygon.setAttribute('stroke', 'white')
-      polygon.setAttribute('fill', 'none')
+    if (this.type === "process") {
+      const polygon = createSvg("polygon")
+      polygon.setAttribute("points", "0,0 10,5 0,10")
+      polygon.setAttribute("stroke-width", "1px")
+      polygon.setAttribute("stroke", "white")
+      polygon.setAttribute("fill", "none")
       this.inside = polygon
       svg.appendChild(polygon)
     } else {
       // # common node
-      const circle = createSvg('circle')
-      circle.setAttribute('cx', '5')
-      circle.setAttribute('cy', '5')
-      circle.setAttribute('r', '4')
-      circle.setAttribute('stroke-width', '1px')
-      circle.setAttribute('fill', 'none')
-      circle.setAttribute('stroke', color)
+      const circle = createSvg("circle")
+      circle.setAttribute("cx", "5")
+      circle.setAttribute("cy", "5")
+      circle.setAttribute("r", "4")
+      circle.setAttribute("stroke-width", "1px")
+      circle.setAttribute("fill", "none")
+      circle.setAttribute("stroke", color)
       this.inside = circle
       svg.appendChild(circle)
     }
@@ -72,10 +72,10 @@ export class ParamPoint {
   update() {}
 
   connect() {
-    this.inside.setAttribute('fill', this.color)
+    this.inside.setAttribute("fill", this.color)
   }
 
   disConnect() {
-    this.inside.setAttribute('fill', 'none')
+    this.inside.setAttribute("fill", "none")
   }
 }

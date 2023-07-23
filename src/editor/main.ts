@@ -1,15 +1,15 @@
-import {Line} from '../base/Line'
-import {Node, NodeSerialization} from '../base/Node'
-import {ConnectPosition, LineType} from 'src/gtypes'
-import IO from '../base/IO'
-import {createSvg} from 'src/dom/create'
-import {mat3, vec2} from 'gl-matrix'
-import {Param} from '../base/Param'
-import {Selector} from './Selector'
-import {intersection_rectangle} from 'stl-typescript'
-import {NodeConnectType} from '../base/Line'
-import {LogMsg} from './LogMsg'
-import {Point} from '../base/Point'
+import { Line } from "../base/Line"
+import { Node, NodeSerialization } from "../base/Node"
+import { ConnectPosition, LineType } from "../gtypes"
+import IO from "../base/IO"
+import { createSvg } from "../dom/create"
+import { mat3, vec2 } from "gl-matrix"
+import { Param } from "../base/Param"
+import { Selector } from "./Selector"
+import { intersection_rectangle } from "stl-typescript"
+import { NodeConnectType } from "../base/Line"
+import { LogMsg } from "./LogMsg"
+import { Point } from "../base/Point"
 import {
   BeginType,
   ClickInfo,
@@ -18,7 +18,7 @@ import {
   MouseDownType,
   NodeMap,
   ConnectInfo,
-} from 'src/gtypes'
+} from "../gtypes"
 
 export class BluePrintEditor {
   container: HTMLElement
@@ -44,7 +44,7 @@ export class BluePrintEditor {
   // @ 临时存放transform数据
   private _transform: ITransform = {
     translate: [0, 0],
-    transformOrigin: '0px 0px',
+    transformOrigin: "0px 0px",
   }
 
   // @ 当前画布事件状态
@@ -68,8 +68,8 @@ export class BluePrintEditor {
 
   constructor(container: HTMLElement, nodeMap: NodeMap = {}) {
     // @ hook
-    IO.emit('beforeCreated')
-    IO.on('LineRemove', (id: string) => {
+    IO.emit("beforeCreated")
+    IO.on("LineRemove", (id: string) => {
       const index = this.lineGraph.findIndex((item) => item.id)
       if (index === -1) return
       const line = this.lineGraph[index]
@@ -77,45 +77,45 @@ export class BluePrintEditor {
       line.destroy()
     })
     IO.on(
-      'NodeActive',
+      "NodeActive",
       (node: Node) => {
         if (this.currentEventType === EditorEventType.LineBegin) return
         this.NodeActiveHandler(node)
       },
-      {only: true},
+      { only: true }
     )
     IO.on(
-      'NodeInactive',
+      "NodeInactive",
       () => {
         if (this.currentEventType !== EditorEventType.LineBegin) {
           this.currentEventType = EditorEventType.Normal
         }
         this.currentTarget = null
       },
-      {only: true},
+      { only: true }
     )
     IO.on(
-      'ConnectPointClick',
+      "ConnectPointClick",
       (info: any) => {
         this.handleConnectPointClick(info)
       },
-      {only: true},
+      { only: true }
     )
     IO.on(
-      'ParamPointClick',
+      "ParamPointClick",
       (info: any) => {
         this.paramPointClickHandler(info)
       },
-      {only: true},
+      { only: true }
     )
     IO.on(
-      'ProcessPointClick',
+      "ProcessPointClick",
       (info: ClickInfo) => {
         this.processPointClickHandler(info)
       },
-      {only: true},
+      { only: true }
     )
-    IO.on('ConnectPointEnter', (info) => {}, {only: true})
+    IO.on("ConnectPointEnter", (info) => {}, { only: true })
     // !! preventDefault
     container.oncontextmenu = function () {
       return false
@@ -126,14 +126,14 @@ export class BluePrintEditor {
     this._orginSize[1] = this.container.getClientRects()[0].height
     this.left = this.container.getClientRects()[0].left
     this.top = this.container.getClientRects()[0].top
-    container.style.position = 'relative'
-    container.style.transform = 'scale(1)'
+    container.style.position = "relative"
+    container.style.transform = "scale(1)"
     this.initLineContainer()
     this.init()
   }
 
   private init() {
-    this.container.addEventListener('mousedown', (ev: MouseEvent) => {
+    this.container.addEventListener("mousedown", (ev: MouseEvent) => {
       this.setMouseDownType(ev.button)
       // @ hook rightclick
       if (this.onRightClick && ev.button === 2) {
@@ -141,7 +141,7 @@ export class BluePrintEditor {
       }
       this.recordPosition(ev.clientX, ev.clientY)
     })
-    document.body.addEventListener('mouseup', (ev) => {
+    document.body.addEventListener("mouseup", (ev) => {
       this._mouseDownType = -1
       this._transform.translate = [...this._translateLast]
       this._mouseDownPosition = []
@@ -155,7 +155,7 @@ export class BluePrintEditor {
     })
 
     // @ 处理鼠标移动事件
-    document.body.addEventListener('mousemove', (ev: MouseEvent) => {
+    document.body.addEventListener("mousemove", (ev: MouseEvent) => {
       // @ 移动画布
       if (this._mouseDownType == MouseDownType.RIGHT) {
         this.translate(ev)
@@ -174,7 +174,7 @@ export class BluePrintEditor {
       if (this.currentEventType === EditorEventType.LineBegin) {
         const [ox, oy] = this.getScaleOffset(
           this.reviseClientX(ev.clientX) - this._translateLast[0],
-          this.reviseClientY(ev.clientY) - this._translateLast[1],
+          this.reviseClientY(ev.clientY) - this._translateLast[1]
         )
         this.currentLine.update(this.currentLine._begin, new Point(ox, oy))
         return
@@ -193,18 +193,18 @@ export class BluePrintEditor {
           this._mouseDownPosition[0],
           this._mouseDownPosition[1],
           ow,
-          oh,
+          oh
         )
         this.SelectHandler(
           this.selector.x,
           this.selector.y,
           this.selector.width,
-          this.selector.height,
+          this.selector.height
         )
       }
     })
     // @ 处理滚轮事件
-    this.container.addEventListener('mousewheel', (ev: any) => {
+    this.container.addEventListener("mousewheel", (ev: any) => {
       this.ScaleHandler(ev)
     })
 
@@ -243,9 +243,9 @@ export class BluePrintEditor {
   }
 
   private initLineContainer() {
-    const svg = createSvg('svg')
-    svg.style.width = this.container.getClientRects()[0].width + 'px'
-    svg.style.height = this.container.getClientRects()[0].height + 'px'
+    const svg = createSvg("svg")
+    svg.style.width = this.container.getClientRects()[0].width + "px"
+    svg.style.height = this.container.getClientRects()[0].height + "px"
     svg.style.left = 0
     svg.style.top = 0
     this.lineContainer = svg
@@ -293,8 +293,8 @@ export class BluePrintEditor {
   // @ 获取缩放坐标偏移量
   private getScaleOffset(x: number, y: number) {
     const originOffset: string[] = this._transform.transformOrigin
-      .replace(/px/g, '')
-      .split(' ')
+      .replace(/px/g, "")
+      .split(" ")
     const xc = +originOffset[0]
     const yc = +originOffset[1]
     // @ 先平移到缩放中心再平移回来
@@ -312,8 +312,8 @@ export class BluePrintEditor {
 
   private getScaleOffset_T(x: number, y: number) {
     const originOffset: string[] = this._transform.transformOrigin
-      .replace(/px/g, '')
-      .split(' ')
+      .replace(/px/g, "")
+      .split(" ")
     const xc = +originOffset[0]
     const yc = +originOffset[1]
     // @ 先平移到缩放中心再平移回来
@@ -344,7 +344,7 @@ export class BluePrintEditor {
       this.beginType = BeginType.NODE
       const t = new Line(
         new Point(info.pos[0], info.pos[1]),
-        new Point(info.pos[0], info.pos[1]),
+        new Point(info.pos[0], info.pos[1])
       )
       // @ 记录连接点是next还是pre
       t.beginNodeConnectType = info.isPre
@@ -358,7 +358,7 @@ export class BluePrintEditor {
         this.currentEventType = EditorEventType.LineEnd
         this.currentLine.update(
           this.currentLine._begin,
-          new Point(info.pos[0], info.pos[1]),
+          new Point(info.pos[0], info.pos[1])
         )
         this.currentLine.beginNode = this.beginNode
         this.currentLine.beginParam = this.beginParam
@@ -366,7 +366,7 @@ export class BluePrintEditor {
         this.beginParam.connect(
           this.currentLine,
           info.node,
-          ConnectPosition.BEGIN,
+          ConnectPosition.BEGIN
         )
         info.line = this.currentLine
         info.line.type = LineType.ParamToNode
@@ -388,7 +388,7 @@ export class BluePrintEditor {
       this.currentLine.endNodeConnectType = endPointConnectType
       this.currentLine.update(
         this.currentLine._begin,
-        new Point(info.pos[0], info.pos[1]),
+        new Point(info.pos[0], info.pos[1])
       )
       this.lineGraph.push(this.currentLine)
       // 连接信息注入
@@ -416,7 +416,7 @@ export class BluePrintEditor {
       const t = new Line(
         new Point(info.pos[0], info.pos[1]),
         new Point(info.pos[0], info.pos[1]),
-        {color: info.param.point.color},
+        { color: info.param.point.color }
       )
 
       // @ 记录连接点是next还是pre
@@ -432,7 +432,7 @@ export class BluePrintEditor {
       // @ 类型不同或者 不是通配类型 则不继续
       if (
         info.param.type !== this.beginParam.type &&
-        info.param.type !== 'any'
+        info.param.type !== "any"
       ) {
         return
       }
@@ -441,7 +441,7 @@ export class BluePrintEditor {
       this.currentEventType = EditorEventType.LineEnd
       this.currentLine.update(
         this.currentLine._begin,
-        new Point(info.pos[0], info.pos[1]),
+        new Point(info.pos[0], info.pos[1])
       )
       this.currentLine.endParam = info.param
       this.lineGraph.push(this.currentLine)
@@ -449,7 +449,7 @@ export class BluePrintEditor {
       this.beginParam.connect(
         this.currentLine,
         info.param,
-        ConnectPosition.BEGIN,
+        ConnectPosition.BEGIN
       )
       this.currentLine.type = LineType.ParamToParam
       info.param.connect(this.currentLine, this.beginParam, ConnectPosition.END)
@@ -469,7 +469,7 @@ export class BluePrintEditor {
       const t = new Line(
         new Point(info.pos[0], info.pos[1]),
         new Point(info.pos[0], info.pos[1]),
-        {color: 'white'},
+        { color: "white" }
       )
       t.beginNodeConnectType = NodeConnectType.NEXT
       this.currentLine = t
@@ -479,7 +479,7 @@ export class BluePrintEditor {
       this.currentEventType = EditorEventType.LineEnd
       this.currentLine.update(
         this.currentLine._begin,
-        new Point(info.pos[0], info.pos[1]),
+        new Point(info.pos[0], info.pos[1])
       )
       this.currentLine.endNode = info.param.parent
       this.currentLine.endParam = info.param
@@ -513,7 +513,7 @@ export class BluePrintEditor {
         tx + this._translateLast[0],
         ty + this._translateLast[1],
         item.width * this.scale,
-        item.height * this.scale,
+        item.height * this.scale
       )
       if (isT) {
         item.selected = true
@@ -555,7 +555,7 @@ export class BluePrintEditor {
       if (this.nodeMap[element.nodeName]) {
         node = this.nodeMap[element.nodeName]
       }
-      node.setNodeId(element.nodeId, 'Vy9YnXy136tFIcfb')
+      node.setNodeId(element.nodeId, "Vy9YnXy136tFIcfb")
       node.nodeName = element.nodeName
       node.nodeLabel = element.nodeLabel
       node.nodeType = element.nodeType
@@ -578,50 +578,50 @@ export class BluePrintEditor {
 
   //** clear all the nodes
   clear() {
-    this.container.innerHTML = ''
+    this.container.innerHTML = ""
     this.graph = []
     this.lineGraph = []
     this.initLineContainer()
   }
 
   private getTypeFromSerializationString(serializationString: string): string {
-    return serializationString.split('-')[1]
+    return serializationString.split("-")[1]
   }
 
   private getNodeIdFromSerializationString(
-    serializationString: string,
+    serializationString: string
   ): string {
-    return serializationString.split('-')[0]
+    return serializationString.split("-")[0]
   }
 
   private getBeginPointFromSerializationString(
-    serializationString: string,
+    serializationString: string
   ): Point {
-    const n = serializationString.split('-')
+    const n = serializationString.split("-")
     return new Point(+n[3], +n[4])
   }
 
   private getEndPointFromSerializationString(
-    serializationString: string,
+    serializationString: string
   ): Point {
-    const n = serializationString.split('-')
+    const n = serializationString.split("-")
     return new Point(+n[5], +n[6])
   }
 
   private getIsBeginNodeFromSerializationString(
-    serializationString: string,
+    serializationString: string
   ): boolean {
-    return serializationString.split('-')[2] === 'false' ? false : true
+    return serializationString.split("-")[2] === "false" ? false : true
   }
 
   private getLineTypeFromSerializationString(
-    serializationString: string,
+    serializationString: string
   ): string {
-    return serializationString.split('-')[7]
+    return serializationString.split("-")[7]
   }
 
   private getParamIndexFromSerializationString(serializationString: string) {
-    return serializationString.split('-')[8]
+    return serializationString.split("-")[8]
   }
 
   private findTargetIndexByNodeId(nodeId: string): number {
@@ -637,18 +637,18 @@ export class BluePrintEditor {
       // * 正常节点和节点之间的连接
       // % find which is the target node
       const targetIndex = this.findTargetIndexByNodeId(
-        this.getNodeIdFromSerializationString(item),
+        this.getNodeIdFromSerializationString(item)
       )
       let line: Line
       if (this.getIsBeginNodeFromSerializationString(item)) {
         line = new Line(
           this.getBeginPointFromSerializationString(item),
-          this.getEndPointFromSerializationString(item),
+          this.getEndPointFromSerializationString(item)
         )
       } else {
         line = new Line(
           this.getEndPointFromSerializationString(item),
-          this.getBeginPointFromSerializationString(item),
+          this.getBeginPointFromSerializationString(item)
         )
       }
       line.beginNodeConnectType = NodeConnectType.PRE

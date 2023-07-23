@@ -1,10 +1,10 @@
-import {Point} from 'src/base/Point'
-import {createSvg} from 'src/dom/create'
-import {Node} from 'src/base/Node'
-import {uuid} from './UUID'
-import {ClassType} from '../WpElement'
-import {LineType} from 'src/gtypes'
-import {Param} from './Param'
+import { Point } from "../base/Point"
+import { createSvg } from "../dom/create"
+import { Node } from "../base/Node"
+import { uuid } from "./UUID"
+import { ClassType } from "../WpElement"
+import { LineType } from "../gtypes"
+import { Param } from "./Param"
 
 export enum NodeConnectType {
   PRE = 0,
@@ -19,7 +19,7 @@ export class Line {
   readonly classType = ClassType.LINE
   _begin: Point
   _end: Point
-  _color: string = 'white'
+  _color: string = "white"
   _width: number
   _height: number
   beginNode: Node
@@ -34,11 +34,11 @@ export class Line {
 
   constructor(begin: Point, end: Point, options: LineOptions = {}) {
     if (options.color) this._color = options.color
-    const Path = createSvg('path')
+    const Path = createSvg("path")
     this.instance = Path
-    Path.setAttribute('stroke-width', '2px')
-    Path.setAttribute('stroke', this.color)
-    Path.setAttribute('fill', 'none')
+    Path.setAttribute("stroke-width", "2px")
+    Path.setAttribute("stroke", this.color)
+    Path.setAttribute("fill", "none")
     this.update(begin, end)
   }
 
@@ -48,7 +48,7 @@ export class Line {
 
   set color(value: string) {
     this._color = value
-    this.instance.setAttribute('stroke', value)
+    this.instance.setAttribute("stroke", value)
   }
 
   get begin() {
@@ -74,7 +74,7 @@ export class Line {
     this._begin = begin
     this._end = end
     this._setSize()
-    this.instance.setAttribute('d', path)
+    this.instance.setAttribute("d", path)
   }
 
   destroy() {

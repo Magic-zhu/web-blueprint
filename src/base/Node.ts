@@ -1,10 +1,10 @@
-import {BaseNode} from 'src/base/baseNode'
-import {createDiv, createSpan, createSvg} from 'src/dom/create'
-import IO from 'src/base/IO'
-import {Line} from './Line'
-import {Point} from 'src/base/Point'
-import {LinkedObject, Param} from './Param'
-import {ConnectInfo, ConnectPosition, LineType} from 'src/gtypes'
+import { BaseNode } from "../base/baseNode"
+import { createDiv, createSpan, createSvg } from "../dom/create"
+import IO from "../base/IO"
+import { Line } from "./Line"
+import { Point } from "../base/Point"
+import { LinkedObject, Param } from "./Param"
+import { ConnectInfo, ConnectPosition, LineType } from "../gtypes"
 
 export interface InputParam {
   type: string
@@ -71,7 +71,7 @@ export class Node extends BaseNode {
   rightBody: HTMLElement
   prePoint: SVGElement
   nextPoint: SVGElement
-  headerClass: string = 'wb-container-base-header'
+  headerClass: string = "wb-container-base-header"
   color: string
 
   // if onmousedown?
@@ -187,9 +187,9 @@ export class Node extends BaseNode {
     }
     this._selected = value
     if (value) {
-      this.instance.className = this.instance.className + ' ' + 'selected'
+      this.instance.className = this.instance.className + " " + "selected"
     } else {
-      this.instance.className = this.instance.className.replace(' selected', '')
+      this.instance.className = this.instance.className.replace(" selected", "")
     }
   }
 
@@ -218,13 +218,13 @@ export class Node extends BaseNode {
 
   initContainer() {
     const div = createDiv()
-    div.className = 'wb-container-base'
+    div.className = "wb-container-base"
     this.instance = div
-    this.instance.addEventListener('mousedown', () => {
-      IO.emit('NodeActive', this)
+    this.instance.addEventListener("mousedown", () => {
+      IO.emit("NodeActive", this)
     })
-    this.instance.addEventListener('mouseup', () => {
-      IO.emit('NodeInactive', this)
+    this.instance.addEventListener("mouseup", () => {
+      IO.emit("NodeInactive", this)
     })
   }
 
@@ -240,11 +240,11 @@ export class Node extends BaseNode {
 
   initBody() {
     const div = createDiv()
-    div.className = 'wb-container-base-body'
+    div.className = "wb-container-base-body"
     const left = createDiv()
-    left.className = 'wb-container-base-body-left'
+    left.className = "wb-container-base-body-left"
     const right = createDiv()
-    right.className = 'wb-container-base-body-right'
+    right.className = "wb-container-base-body-right"
     div.appendChild(left)
     div.appendChild(right)
     this.leftBody = left
@@ -253,25 +253,25 @@ export class Node extends BaseNode {
   }
 
   initPrePoint(ifNeed: boolean) {
-    const svg: SVGElement = createSvg('svg')
-    svg.setAttribute('class', 'wb-prePoint')
+    const svg: SVGElement = createSvg("svg")
+    svg.setAttribute("class", "wb-prePoint")
     if (!ifNeed) {
       this.prePoint = svg
       return
     }
-    const polygon: SVGPolygonElement = createSvg('polygon')
-    polygon.setAttribute('points', '0,0 0,10 5,10 9,5 5,0')
-    polygon.setAttribute('stroke-width', '2px')
-    polygon.setAttribute('stroke', 'white')
-    polygon.setAttribute('fill', 'none')
+    const polygon: SVGPolygonElement = createSvg("polygon")
+    polygon.setAttribute("points", "0,0 0,10 5,10 9,5 5,0")
+    polygon.setAttribute("stroke-width", "2px")
+    polygon.setAttribute("stroke", "white")
+    polygon.setAttribute("fill", "none")
     svg.appendChild(polygon)
-    svg.addEventListener('mousedown', (ev: MouseEvent) => {
+    svg.addEventListener("mousedown", (ev: MouseEvent) => {
       ev.stopPropagation()
     })
-    svg.addEventListener('mouseup', (ev: MouseEvent) => {
+    svg.addEventListener("mouseup", (ev: MouseEvent) => {
       ev.stopPropagation()
     })
-    svg.addEventListener('click', (ev: MouseEvent) => {
+    svg.addEventListener("click", (ev: MouseEvent) => {
       ev.stopPropagation()
       const info = {
         pos: this.getPrePointPosition(),
@@ -280,22 +280,22 @@ export class Node extends BaseNode {
       }
       //  left click
       if (ev.button === 0) {
-        IO.emit('ConnectPointClick', info)
+        IO.emit("ConnectPointClick", info)
         return
       }
       // right click
       if (ev.button === 2) {
-        IO.emit('ConnectPointRightClick', info)
+        IO.emit("ConnectPointRightClick", info)
       }
     })
-    svg.addEventListener('mouseenter', () => {
-      IO.emit('ConnectPointEnter', {
+    svg.addEventListener("mouseenter", () => {
+      IO.emit("ConnectPointEnter", {
         node: this,
         isPre: true,
       })
     })
-    svg.addEventListener('mouseleave', () => {
-      IO.emit('ConnectPointLeave', {
+    svg.addEventListener("mouseleave", () => {
+      IO.emit("ConnectPointLeave", {
         node: this,
         isPre: true,
       })
@@ -304,27 +304,27 @@ export class Node extends BaseNode {
   }
 
   initNextPoint(ifNeed: boolean) {
-    const svg: SVGElement = createSvg('svg')
-    svg.setAttribute('class', 'wb-nextPoint')
+    const svg: SVGElement = createSvg("svg")
+    svg.setAttribute("class", "wb-nextPoint")
     if (!ifNeed) {
       this.nextPoint = svg
       return
     }
-    const polygon: SVGPolygonElement = createSvg('polygon')
-    polygon.setAttribute('points', '0,0 0,10 5,10 9,5 5,0')
-    polygon.setAttribute('stroke-width', '2px')
-    polygon.setAttribute('stroke', 'white')
-    polygon.setAttribute('fill', 'none')
+    const polygon: SVGPolygonElement = createSvg("polygon")
+    polygon.setAttribute("points", "0,0 0,10 5,10 9,5 5,0")
+    polygon.setAttribute("stroke-width", "2px")
+    polygon.setAttribute("stroke", "white")
+    polygon.setAttribute("fill", "none")
     svg.appendChild(polygon)
-    svg.addEventListener('mousedown', (ev: MouseEvent) => {
+    svg.addEventListener("mousedown", (ev: MouseEvent) => {
       ev.stopPropagation()
     })
-    svg.addEventListener('mouseup', (ev: MouseEvent) => {
+    svg.addEventListener("mouseup", (ev: MouseEvent) => {
       ev.stopPropagation()
     })
-    svg.addEventListener('click', (ev: MouseEvent) => {
+    svg.addEventListener("click", (ev: MouseEvent) => {
       ev.stopPropagation()
-      IO.emit('ConnectPointClick', {
+      IO.emit("ConnectPointClick", {
         pos: this.getNextPointPosition(),
         node: this,
         isPre: false,
@@ -333,16 +333,16 @@ export class Node extends BaseNode {
     this.nextPoint = svg
   }
 
-  initInput({type, value, name}, index: number) {
-    const box = new Param({type, value, name, indexInParent: index})
-    box.instance.addEventListener('mousedown', (ev: MouseEvent) => {
+  initInput({ type, value, name }, index: number) {
+    const box = new Param({ type, value, name, indexInParent: index })
+    box.instance.addEventListener("mousedown", (ev: MouseEvent) => {
       ev.stopPropagation()
     })
-    box.instance.addEventListener('mouseup', (ev: MouseEvent) => {
+    box.instance.addEventListener("mouseup", (ev: MouseEvent) => {
       ev.stopPropagation()
     })
-    box.point.instance.addEventListener('click', (ev: MouseEvent) => {
-      IO.emit('ParamPointClick', {
+    box.point.instance.addEventListener("click", (ev: MouseEvent) => {
+      IO.emit("ParamPointClick", {
         pos: this.getParamPosition(index),
         node: this,
         param: box,
@@ -357,7 +357,7 @@ export class Node extends BaseNode {
     this.leftBody.appendChild(param.instance)
   }
 
-  initOutput({type, value, name}, index: number) {
+  initOutput({ type, value, name }, index: number) {
     const box = new Param({
       type,
       value,
@@ -365,21 +365,21 @@ export class Node extends BaseNode {
       isInput: false,
       indexInParent: index,
     })
-    box.instance.addEventListener('mousedown', (ev: MouseEvent) => {
+    box.instance.addEventListener("mousedown", (ev: MouseEvent) => {
       ev.stopPropagation()
     })
-    box.instance.addEventListener('mouseup', (ev: MouseEvent) => {
+    box.instance.addEventListener("mouseup", (ev: MouseEvent) => {
       ev.stopPropagation()
     })
-    box.point.instance.addEventListener('click', (ev: MouseEvent) => {
-      if (box.type !== 'process') {
-        IO.emit('ParamPointClick', {
+    box.point.instance.addEventListener("click", (ev: MouseEvent) => {
+      if (box.type !== "process") {
+        IO.emit("ParamPointClick", {
           pos: this.getParamPosition(index, false),
           node: this,
           param: box,
         })
       } else {
-        IO.emit('ProcessPointClick', {
+        IO.emit("ProcessPointClick", {
           pos: this.getParamPosition(index, false),
           node: this,
           param: box,
@@ -398,7 +398,7 @@ export class Node extends BaseNode {
   initLabel(labelText: string) {
     const label = createSpan()
     this.label = label
-    label.setAttribute('class', 'wb-container-base-header-label')
+    label.setAttribute("class", "wb-container-base-header-label")
     this.header.append(label)
     this.nodeLabel = labelText
   }
@@ -407,12 +407,12 @@ export class Node extends BaseNode {
     if (info.isPre) {
       this.preNodes.push(info.node)
       const inside: any = this.prePoint.childNodes[0]
-      inside.setAttribute('fill', 'white')
+      inside.setAttribute("fill", "white")
       this.preLines.push(info.line)
     } else {
       this.nextNodes.push(info.node)
       const inside: any = this.nextPoint.childNodes[0]
-      inside.setAttribute('fill', 'white')
+      inside.setAttribute("fill", "white")
       this.nextLines.push(info.line)
     }
     if (position === ConnectPosition.BEGIN) {
@@ -486,7 +486,7 @@ export class Node extends BaseNode {
         return item.beginNode.nodeId === id || item.endNode.nodeId === id
       })
       if (lineIndex === -1) return
-      IO.emit('LineRemove', this.preLines[lineIndex].id)
+      IO.emit("LineRemove", this.preLines[lineIndex].id)
       this.preLines.splice(lineIndex, 1)
     } else {
       const index = this.nextNodes.findIndex((item) => item.nodeId === id)
@@ -497,7 +497,7 @@ export class Node extends BaseNode {
         return item.beginNode.nodeId === id || item.endNode.nodeId === id
       })
       if (lineIndex === -1) return
-      IO.emit('LineRemove', this.nextLines[lineIndex].id)
+      IO.emit("LineRemove", this.nextLines[lineIndex].id)
       this.nextLines.splice(lineIndex, 1)
     }
     this.callRelativeNodeDisconnect(relativeNode, !isPre)
@@ -513,14 +513,14 @@ export class Node extends BaseNode {
     const child1 = this.prePoint.childNodes[0] as SVGAElement
     const child2 = this.nextPoint.childNodes[0] as SVGAElement
     if (this.preLines.length === 0) {
-      child1.setAttribute('fill', 'none')
+      child1.setAttribute("fill", "none")
     } else {
-      child1.setAttribute('fill', 'white')
+      child1.setAttribute("fill", "white")
     }
     if (this.nextLines.length === 0) {
-      child2.setAttribute('fill', 'none')
+      child2.setAttribute("fill", "none")
     } else {
-      child2.setAttribute('fill', 'white')
+      child2.setAttribute("fill", "white")
     }
   }
 
@@ -540,14 +540,14 @@ export class Node extends BaseNode {
     // * record the preNode relationship
     container.preNodeIds = this.preNodes.map((node, index) => {
       return `${node.nodeId}-node-${this.getSerializationStringFromLine(
-        this.preLines[index],
+        this.preLines[index]
       )}`
     })
 
     // * record the nextNode relationship
     container.nextNodeIds = this.nextNodes.map((node, index) => {
       return `${node.nodeId}-node-${this.getSerializationStringFromLine(
-        this.nextLines[index],
+        this.nextLines[index]
       )}`
     })
 
@@ -562,7 +562,7 @@ export class Node extends BaseNode {
     container.outputParamsIds = this.outPutPoints.map((param) => {
       return param.serialize()
     })
-    console.log('序列化信息', container)
+    console.log("序列化信息", container)
     return JSON.stringify(container)
   }
 
@@ -570,22 +570,27 @@ export class Node extends BaseNode {
     const isBeginNode = this.equal(line.beginNode)
     let t =
       isBeginNode +
-      '-' +
+      "-" +
       line.begin.x +
-      '-' +
+      "-" +
       line.begin.y +
-      '-' +
+      "-" +
       line.end.x +
-      '-' +
+      "-" +
       line.end.y +
-      '-' +
+      "-" +
       line.type
     if (line.type === LineType.ParamToNode) {
       const index = line.beginParam
         ? line.beginParam.indexInParent
         : line.endParam.indexInParent
-      t = t + '-' + index
+      t = t + "-" + index
     }
     return t
+  }
+
+  setNodeName(val: string) {
+    this.header.innerText = val
+    this.nodeName = val
   }
 }

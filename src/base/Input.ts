@@ -3,8 +3,8 @@ import {
   createInputNumberBox,
   createInputTextBox,
   createCheckBox,
-} from 'src/dom/create'
-import { Param } from './Param'
+} from "../dom/create"
+import { Param } from "./Param"
 export interface InputOptions {
   type: string
 }
@@ -21,20 +21,20 @@ export class Input {
 
   create() {
     const box = createDiv()
-    box.setAttribute('class', 'wb-input-box')
+    box.setAttribute("class", "wb-input-box")
     let inputBox: HTMLElement
     switch (this.type) {
-      case 'number':
+      case "number":
         inputBox = createInputNumberBox()
-        inputBox.setAttribute('class', 'wb-input-number')
+        inputBox.setAttribute("class", "wb-input-number")
         break
-      case 'string':
+      case "string":
         inputBox = createInputTextBox()
-        inputBox.setAttribute('class', 'wb-input-string')
+        inputBox.setAttribute("class", "wb-input-string")
         break
-      case 'boolean':
+      case "boolean":
         inputBox = createCheckBox()
-        inputBox.setAttribute('class', 'wb-input-checkbox')
+        inputBox.setAttribute("class", "wb-input-checkbox")
         break
       default:
         inputBox = createDiv()
@@ -59,10 +59,10 @@ export class Input {
   }
 
   hidden() {
-    this.instance.style.display = 'none'
+    this.instance.style.display = "none"
   }
 
   show() {
-    this.instance.style.display = ''
+    this.instance.style.display = ""
   }
 }

@@ -1,12 +1,12 @@
-import {Label} from './Label'
-import {ParamPoint} from './ParamPoint'
-import {Input} from './Input'
-import {createDiv} from 'src/dom/create'
-import {uuid} from 'src/base/UUID'
-import {WpElement, ClassType} from '../WpElement'
-import {Node} from './Node'
-import {Line} from './Line'
-import {ConnectPosition, ParamSerialization} from '../gtypes'
+import { Label } from "./Label"
+import { ParamPoint } from "./ParamPoint"
+import { Input } from "./Input"
+import { createDiv } from "../dom/create"
+import { uuid } from "../base/UUID"
+import { WpElement, ClassType } from "../WpElement"
+import { Node } from "./Node"
+import { Line } from "./Line"
+import { ConnectPosition, ParamSerialization } from "../gtypes"
 
 export interface ParamOptions {
   type: string
@@ -28,9 +28,9 @@ export class Param {
   readonly classType = ClassType.PARAM
   readonly uid: string = uuid()
   instance: HTMLElement
-  type: string = ''
-  name: string = ''
-  private _value: any = ''
+  type: string = ""
+  name: string = ""
+  private _value: any = ""
   public get value(): any {
     if (this.isConnected && this.isInput) {
       return this.linkedParam.value
@@ -61,18 +61,18 @@ export class Param {
   constructor(options: ParamOptions) {
     this.type = options.type
     this.isInput = options.isInput !== undefined ? options.isInput : true
-    this.name = options.name !== undefined ? options.name : 'unknown'
-    this.value = options.value !== undefined ? options.value : ''
+    this.name = options.name !== undefined ? options.name : "unknown"
+    this.value = options.value !== undefined ? options.value : ""
     this.indexInParent = options.indexInParent
     this.create()
   }
 
   private create() {
     this.instance = createDiv()
-    this.instance.setAttribute('class', 'wb-param-base')
-    this.point = new ParamPoint({type: this.type})
-    this.label = new Label({text: this.name})
-    this.input = new Input({type: this.type})
+    this.instance.setAttribute("class", "wb-param-base")
+    this.point = new ParamPoint({ type: this.type })
+    this.label = new Label({ text: this.name })
+    this.input = new Input({ type: this.type })
     // tip: set parent
     this.input.parent = this
     if (this.isInput) {
@@ -139,7 +139,7 @@ export class Param {
         this.linkedParam = param
       }
 
-      if (position === 'begin') {
+      if (position === "begin") {
         this.isBegin = true
       } else {
         this.isBegin = false
@@ -162,7 +162,7 @@ export class Param {
    */
   disConnect(paramId?: string) {
     if (this.isInput) {
-      this.value = ''
+      this.value = ""
       this.isConnected = false
       this.input.show()
       this.point.disConnect()
@@ -174,7 +174,7 @@ export class Param {
       this.linkedLine = null
     } else {
       const index = this.linkedObjects.findIndex(
-        (item) => item.param.uid === paramId,
+        (item) => item.param.uid === paramId
       )
       if (index === -1) return
       this.linkedObjects[index].line.destroy()
@@ -199,7 +199,7 @@ export class Param {
         beginY: 0,
         endX: 0,
         endY: 0,
-        connectType: 'param',
+        connectType: "param",
         isBegin: this.isBegin,
         indexInParent: this.indexInParent,
       }
@@ -209,8 +209,8 @@ export class Param {
       box.endY = this.linkedLine.end.y
       return JSON.stringify(box)
     } else {
-      if (this.linkedObjects.length == 0) return ''
-      let result = ''
+      if (this.linkedObjects.length == 0) return ""
+      let result = ""
       this.linkedObjects.forEach((item) => {
         const box: ParamSerialization = {
           paramId: this.uid,
@@ -219,13 +219,13 @@ export class Param {
           beginY: 0,
           endX: 0,
           endY: 0,
-          connectType: 'param',
+          connectType: "param",
           isBegin: this.isBegin,
           indexInParent: this.indexInParent,
         }
         // tip: process param may connect to node
         if (item.node) {
-          box.connectType = 'node'
+          box.connectType = "node"
           if (item.node.equal(item.line.beginNode)) {
             box.isBegin = true
           } else {
@@ -236,7 +236,7 @@ export class Param {
         box.beginY = item.line.begin.y
         box.endX = item.line.end.x
         box.endY = item.line.end.y
-        result = result + JSON.stringify(box) + '#'
+        result = result + JSON.stringify(box) + "#"
       })
       return result
     }
