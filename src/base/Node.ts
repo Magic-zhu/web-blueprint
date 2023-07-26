@@ -278,15 +278,10 @@ export class Node extends BaseNode {
         node: this,
         isPre: true,
       }
-      //  left click
-      if (ev.button === 0) {
-        IO.emit("ConnectPointClick", info)
-        return
-      }
-      // right click
-      if (ev.button === 2) {
-        IO.emit("ConnectPointRightClick", info)
-      }
+      IO.emit("ConnectPointClick", info)
+    })
+    svg.addEventListener("contextmenu", (ev: MouseEvent) => {
+      IO.emit("PreConnectPointRightClick", ev)
     })
     svg.addEventListener("mouseenter", () => {
       IO.emit("ConnectPointEnter", {
@@ -324,11 +319,15 @@ export class Node extends BaseNode {
     })
     svg.addEventListener("click", (ev: MouseEvent) => {
       ev.stopPropagation()
-      IO.emit("ConnectPointClick", {
+      const info = {
         pos: this.getNextPointPosition(),
         node: this,
         isPre: false,
-      })
+      }
+      IO.emit("ConnectPointClick", info)
+    })
+    svg.addEventListener("contextmenu", (ev: MouseEvent) => {
+      IO.emit("NextConnectPointRightClick", ev, this)
     })
     this.nextPoint = svg
   }
@@ -510,13 +509,17 @@ export class Node extends BaseNode {
   }
 
   private updatePreOrNextConnectedStatus() {
-    const child1 = this.prePoint.childNodes[0] as SVGAElement
-    const child2 = this.nextPoint.childNodes[0] as SVGAElement
-    if (this.preLines.length === 0) {
-      child1.setAttribute("fill", "none")
-    } else {
-      child1.setAttribute("fill", "white")
+    // ! maybe undefined
+    const child1 = this.prePoint.children[0] as SVGAElement
+    const child2 = this.nextPoint.children[0] as SVGAElement
+    if (child1) {
+      if (this.preLines.length === 0) {
+        child1.setAttribute("fill", "none")
+      } else {
+        child1.setAttribute("fill", "white")
+      }
     }
+
     if (this.nextLines.length === 0) {
       child2.setAttribute("fill", "none")
     } else {

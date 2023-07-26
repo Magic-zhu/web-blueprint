@@ -64,7 +64,10 @@ export class BluePrintEditor {
   onRightClick: Function
 
   // @ 是否允许缩放画布
-  public scaleDisabled: boolean = false
+  public scaleDisabled: boolean = true
+
+  //  @ 暴露给外部订阅hook
+  public hook = IO
 
   constructor(container: HTMLElement, nodeMap: NodeMap = {}) {
     // @ hook
@@ -117,7 +120,8 @@ export class BluePrintEditor {
     )
     IO.on("ConnectPointEnter", (info) => {}, { only: true })
     // !! preventDefault
-    container.oncontextmenu = function () {
+    container.oncontextmenu = function (ev) {
+      IO.emit("GlobalConextMenu", ev)
       return false
     }
     this.container = container
