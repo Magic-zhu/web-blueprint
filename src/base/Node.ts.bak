@@ -282,8 +282,6 @@ export class Node extends BaseNode {
     })
     svg.addEventListener("contextmenu", (ev: MouseEvent) => {
       IO.emit("PreConnectPointRightClick", ev)
-      ev.stopPropagation()
-      ev.preventDefault()
     })
     svg.addEventListener("mouseenter", () => {
       IO.emit("ConnectPointEnter", {
@@ -330,8 +328,6 @@ export class Node extends BaseNode {
     })
     svg.addEventListener("contextmenu", (ev: MouseEvent) => {
       IO.emit("NextConnectPointRightClick", ev, this)
-      ev.stopPropagation()
-      ev.preventDefault()
     })
     this.nextPoint = svg
   }

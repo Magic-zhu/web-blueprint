@@ -121,7 +121,7 @@ export class BluePrintEditor {
     IO.on("ConnectPointEnter", (info) => {}, { only: true })
     // !! preventDefault
     container.oncontextmenu = function (ev) {
-      IO.emit("GlobalConextMenu", ev)
+      IO.emit("GlobalContextMenu", ev)
       return false
     }
     this.container = container

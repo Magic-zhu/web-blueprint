@@ -30,6 +30,11 @@
   cursor: normal;
   user-select: none;
 }
+
+.wb-container-base-header:hover{
+  cursor: move;
+}
+
 .wb-container-base-header .wb-container-base-header-label {
   font-size: 12px;
   margin-left: 10px;
