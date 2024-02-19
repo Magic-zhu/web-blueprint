@@ -31,7 +31,7 @@ export class BluePrintEditor {
   // @ 当前画布的缩放系数
   private scale: number = 1
   // @ 画布原始大小
-  private _orginSize: number[] = []
+  private _originSize: number[] = []
   // @ 画布距离body位置
   private left: number = 0
   private top: number = 0
@@ -126,8 +126,8 @@ export class BluePrintEditor {
     }
     this.container = container
     this.nodeMap = nodeMap
-    this._orginSize[0] = this.container.getClientRects()[0].width
-    this._orginSize[1] = this.container.getClientRects()[0].height
+    this._originSize[0] = this.container.getClientRects()[0].width
+    this._originSize[1] = this.container.getClientRects()[0].height
     this.left = this.container.getClientRects()[0].left
     this.top = this.container.getClientRects()[0].top
     container.style.position = "relative"
@@ -200,8 +200,8 @@ export class BluePrintEditor {
           oh
         )
         this.SelectHandler(
-          this.selector.x,
-          this.selector.y,
+          this.selector.x -this.left,
+          this.selector.y - this.top,
           this.selector.width,
           this.selector.height
         )
